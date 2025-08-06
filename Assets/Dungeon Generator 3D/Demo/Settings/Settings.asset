@@ -50,10 +50,6 @@ MonoBehaviour:
     doors: []
     doorsDisplacements: []
     flooring:
-    - gameObject: {fileID: 8761019777689142071, guid: 37676378d3a766e48b94a3576bee84ab, type: 3}
-      name: Floor
-    - gameObject: {fileID: 8761019777689142071, guid: 28cb2c29381165b45a60ad903190f12d, type: 3}
-      name: Floor2
     - gameObject: {fileID: 8761019777689142071, guid: 4bf04e05eaa130a49a62a559eb2a0a96, type: 3}
       name: Floor3
     player: {fileID: 28599014315746945, guid: ee45ab2275d212043bc0e851ceaaed22, type: 3}
