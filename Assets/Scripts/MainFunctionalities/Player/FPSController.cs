@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Cinemachine;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,7 +12,7 @@ public class FPSController : MonoBehaviour
     [Header("References")]
     [SerializeField] Transform cameraHolder;
     [SerializeField] Transform cameraTransform;
-
+    [SerializeField] CinemachineCamera cinemachineCam;
 
 
     [Space]
@@ -45,6 +46,12 @@ public class FPSController : MonoBehaviour
 
     void Start()
     {
+        cinemachineCam = GameObject.FindGameObjectWithTag("Cinemachine").GetComponent<CinemachineCamera>();
+        CameraTarget cameraTarget = new CameraTarget();
+        cameraTarget.TrackingTarget = cameraHolder;
+        cinemachineCam.Target= cameraTarget;
+
+        cameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
         characterController = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
