@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8306b579e4bf8304f9d8a20f97072b1d, type: 3}
+  m_Name: Settings
+  m_EditorClassIdentifier: 
+  generation:
+    minRooms: 10
+    maxRooms: 15
+    amountOfAdjacentRoomsToConnect: 3
+    minRoomWidth: 8
+    maxRoomWidth: 12
+    minRoomHeight: 8
+    maxRoomHeight: 12
+    minBossRoomWidth: 10
+    maxBossRoomWidth: 12
+    minBossRoomHeight: 10
+    maxBossRoomHeight: 12
+    areaWidth: 100
+    areaHeight: 100
+    minDistanceBetweenRooms: 1
+    walls:
+    - gameObject: {fileID: 4725644372996588504, guid: a6ecfd50965a1004fb3126b8d3abceb9, type: 3}
+      name: Wall
+    - gameObject: {fileID: 4725644372996588504, guid: 1fefd7556d46c794b861edb1384ec670, type: 3}
+      name: Wall 1
+    - gameObject: {fileID: 4725644372996588504, guid: a69ca0336c61418499a21aa9df4056da, type: 3}
+      name: Wall 2
+    outerCorners:
+    - gameObject: {fileID: 696436432277967871, guid: 2fc06225ece7ca84698a46ad4c6b69af, type: 3}
+      name: Outer Corner
+    innerCorners:
+    - gameObject: {fileID: 2240145463788491059, guid: 2ed5a4465f6143a4ab6fef17185ade38, type: 3}
+      name: Inner Corner
+    deleteInnerCorners: 0
+    uCorners:
+    - gameObject: {fileID: 3197583449942763538, guid: 6109fc31b1a329b4caf7842c6c35bce2, type: 3}
+      name: Square
+    squareCorners:
+    - gameObject: {fileID: 3746928169460061138, guid: 57f0bd45a7244c44eb261157c3e80cf5, type: 3}
+      name: Square Corner
+    doors: []
+    doorsDisplacements: []
+    flooring:
+    - gameObject: {fileID: 8761019777689142071, guid: 4bf04e05eaa130a49a62a559eb2a0a96, type: 3}
+      name: Floor3
+    player: {fileID: 28599014315746945, guid: ee45ab2275d212043bc0e851ceaaed22, type: 3}
+    minEnemiesPerRoom: 0
+    maxEnemiesPerRoom: 0
+    enemies: []
+    bosses: []
+    breakables: []
+    staticObjects: []
+    wallObjects: []
+    wallObjConsequitiveDistance: 0
+    wallObjDisplacements: []
+    cornerObjectsRate: 0
+    destroyablesRate: 0
+    middleObjects: []
+    middleObjectsRate: 0
