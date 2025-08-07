@@ -1,19 +1,28 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
+    [Header("Target Settings")]
     public Transform player; // El jugador al que perseguir
-    public float detectionRange = 10f; // Rango de detección
-    public float attackRange = 2f; // Rango de ataque
-    public float visionAngle = 45f; // Ángulo del cono de visión
-    public float visionHeight = 1.5f; // Altura a la que el raycast verifica la visión
+    public Vector3 targetPosition; // El siguiente punto al que se moverá el enemigo
     public float areaX = 50;
     public float areaZ = 50;
+
+    [Header("Detection Settings")]
+    public float detectionRange = 2f; // Rango de detección
+    public float attackRange = 2f; // Rango de ataque
+    public float visionDistance = 10f; // Rango de detección
+    public float visionAngle = 45f; // Ángulo del cono de visión
+    public float visionHeight = 1.5f; // Altura a la que el raycast verifica la visión
+
+    [Header("Movement Settings")]
+    public float patrolSpeed = 4f; // Velocidad de patrulla
+    public float chaseSpeed = 7f; // Velocidad de patrulla
     public LayerMask obstacleLayer; // Capa de obstáculos para el raycast
 
     private NavMeshAgent agent;
-    private Vector3 targetPosition; // El siguiente punto al que se moverá el enemigo
     private enum State { Patrol, Chase, Attack }
     private State currentState = State.Patrol;
 
@@ -25,7 +34,8 @@ public class EnemyAI : MonoBehaviour
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;  // Mejor evasión de obstáculos
         agent.avoidancePriority = Random.Range(0, 99); // Prioridad de evasión aleatoria
 
-        SetRandomDestination(); // Iniciar con un destino aleatorio dentro de la malla de navegación
+
+        StartCoroutine(InitializeNavMeshAgent()); // Iniciar la corutina para inicializar el agente de navegación
     }
 
     void Update()
@@ -47,15 +57,17 @@ public class EnemyAI : MonoBehaviour
 
     void Patrol()
     {
+        if (!NVIsRebaked() || !agent.isOnNavMesh) return;
+        agent.speed = patrolSpeed; // Velocidad de patrulla
         // Si el enemigo está lo suficientemente cerca del jugador, comienza la persecución
-        if (Vector3.Distance(transform.position, player.position) < detectionRange && HasClearLineOfSight())
+        if (Vector3.Distance(transform.position, player.position) < detectionRange && IsPlayerOnSight())
         {
             currentState = State.Chase;
             return;
         }
 
         // Si el enemigo ha llegado al destino o ha chocado con un obstáculo, asigna un nuevo punto aleatorio dentro de la malla de navegación
-        if (!agent.pathPending && agent.remainingDistance < 0.5f)
+        if (!agent.pathPending && agent.remainingDistance < agent.stoppingDistance+0.1f)
         {
             SetRandomDestination();
         }
@@ -64,7 +76,7 @@ public class EnemyAI : MonoBehaviour
     void Chase()
     {
         agent.SetDestination(player.position); // El enemigo sigue al jugador
-
+        agent.speed = chaseSpeed; // Velocidad de persecución
         // Si está dentro del rango de ataque, cambia al estado de ataque
         if (Vector3.Distance(transform.position, player.position) < attackRange)
         {
@@ -72,7 +84,7 @@ public class EnemyAI : MonoBehaviour
         }
 
         // Si el enemigo pierde la línea de visión, vuelve a patrullar
-        if (Vector3.Distance(transform.position, player.position) > detectionRange || !HasClearLineOfSight())
+        if (Vector3.Distance(transform.position, player.position) > detectionRange || !IsPlayerOnSight())
         {
             currentState = State.Patrol;
         }
@@ -96,29 +108,77 @@ public class EnemyAI : MonoBehaviour
 
         // Usamos NavMesh.SamplePosition para asegurarnos de que el punto está dentro de la malla de navegación
         NavMeshHit hit;
-        if (NavMesh.SamplePosition(randomPoint, out hit, 1f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(randomPoint, out hit, 10f, NavMesh.AllAreas))
         {
-            targetPosition = hit.position; // Asigna el punto válido dentro de la malla
-            agent.SetDestination(targetPosition); // Mueve al enemigo hacia el nuevo destino
+            if (!IsNearOtherTarget(hit.position))
+            {
+                targetPosition = hit.position; // Asigna el punto válido dentro de la malla
+                agent.SetDestination(targetPosition); // Mueve al enemigo hacia el nuevo destino
+            }
+            else { 
+                SetRandomDestination(); // Si hay otro enemigo cerca del destino, intenta encontrar otro destino
+            }
         }
     }
 
-    // Método para comprobar si hay una línea de visión clara al jugador utilizando raycasting
-    bool HasClearLineOfSight()
+    private bool IsNearOtherTarget(Vector3 newPos)
     {
-        Vector3 direction = (player.position - transform.position).normalized;
-        RaycastHit hit;
-
-        // Realizar un raycast hacia el jugador, desde el enemigo hasta la altura de visión
-        if (Physics.Raycast(transform.position + Vector3.up * visionHeight, direction, out hit, detectionRange, obstacleLayer))
+        Debug.Log("Comprobando si hay otro enemigo cerca del destino: " + targetPosition);
+        foreach (EnemyAI enemy in FindObjectsByType<EnemyAI>(FindObjectsSortMode.None))
         {
-            // Si el raycast golpea algo que no es el jugador, no hay línea de visión clara
-            if (hit.transform != player)
+            if (enemy != this && Vector3.Distance(enemy.targetPosition, newPos) < 10f)
             {
-                return false;
+                return true; // Hay otro enemigo cerca del destino
             }
         }
-        return true;
+        return false; // No hay otros enemigos cerca del destino
+    }
+
+    // Método para comprobar si hay una línea de visión clara al jugador utilizando raycasting
+    
+    bool IsPlayerOnSight()
+    {
+        Vector3 directionToPlayer = (player.transform.position - transform.position).normalized;
+        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+        // Verifies if Player is inside vision distance
+        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+        // Verifies if Player is inside vision angle
+        if (angleToPlayer < visionAngle / 2)
+        {
+            if (distanceToPlayer < visionDistance)
+            {
+                // Perform a raycast to check if there is a clear line of sight
+                if (!Physics.Raycast(transform.position + Vector3.up * visionHeight, directionToPlayer, distanceToPlayer, obstacleLayer))
+                {
+                    return true;
+                }
+            }
+        }
+        if (distanceToPlayer < detectionRange)
+        {
+            if (!Physics.Raycast(transform.position, directionToPlayer, distanceToPlayer, obstacleLayer))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    IEnumerator InitializeNavMeshAgent() { 
+        yield return new WaitUntil(()=> GameObject.FindAnyObjectByType<RebakeNavmesh>().rebaked);
+        agent.enabled = true; // Habilitar el agente de navegación una vez que la malla de navegación esté lista
+        SetRandomDestination(); // Iniciar con un destino aleatorio dentro de la malla de navegación
+    }
+
+    bool NVIsRebaked() {
+        if (FindAnyObjectByType<RebakeNavmesh>().rebaked)
+        {
+            return true; // La malla de navegación ha sido rebaked
+        }
+        else
+        {
+            return false; // La malla de navegación no ha sido rebaked
+        }
     }
 
     // Dibujar Gizmos para visualizar el área de detección, el cono de visión y el siguiente destino

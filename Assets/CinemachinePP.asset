@@ -139,10 +139,10 @@ MonoBehaviour:
   active: 0
   temperature:
     m_OverrideState: 1
-    m_Value: 12.4
+    m_Value: 100
   tint:
     m_OverrideState: 1
-    m_Value: -53.1
+    m_Value: -100
 --- !u!114 &-1691626974679778152
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -256,11 +256,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 0
   lift:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {x: 1, y: 0.59957117, z: 0.89704514, w: -0.0013079343}
   gamma:
-    m_OverrideState: 1
-    m_Value: {x: 0.4323721, y: 0, z: 1, w: -1}
+    m_OverrideState: 0
+    m_Value: {x: 0, y: 1, z: 0.054819107, w: -1}
   gain:
     m_OverrideState: 1
     m_Value: {x: 0.81086665, y: 0.78810817, z: 1, w: -1}
