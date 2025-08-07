@@ -2,7 +2,7 @@
 - Project name: Erebus-Division
 - Unity version: Unity 6000.0.32f1
 - Active game object:
-  - Name: Spot Light
-  - Tag: Untagged
+  - Name: Enemy
+  - Tag: Enemy
   - Layer: Default
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->

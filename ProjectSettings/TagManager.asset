@@ -9,6 +9,7 @@ TagManager:
   - OuterCorner
   - Room
   - Cinemachine
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -16,9 +17,9 @@ TagManager:
   - PP
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Dungeon
+  - Enemy
+  - Player
   - 
   - 
   - 

@@ -54,9 +54,17 @@ MonoBehaviour:
       name: Floor3
     player: {fileID: 28599014315746945, guid: ee45ab2275d212043bc0e851ceaaed22, type: 3}
     minEnemiesPerRoom: 0
-    maxEnemiesPerRoom: 0
-    enemies: []
-    bosses: []
+    maxEnemiesPerRoom: 2
+    enemies:
+    - gameObject: {fileID: 8448374231061267344, guid: 3ce6692f39ac12849a68ffc990d13e2a, type: 3}
+      name: Enemy
+    - gameObject: {fileID: 8448374231061267344, guid: 3ce6692f39ac12849a68ffc990d13e2a, type: 3}
+      name: Enemy1
+    - gameObject: {fileID: 8448374231061267344, guid: 3ce6692f39ac12849a68ffc990d13e2a, type: 3}
+      name: Enemy2
+    bosses:
+    - gameObject: {fileID: 8448374231061267344, guid: 3ce6692f39ac12849a68ffc990d13e2a, type: 3}
+      name: Boss
     breakables: []
     staticObjects: []
     wallObjects: []
