@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Cinemachine;
 using Unity.Collections;
 using UnityEngine;
@@ -52,7 +53,6 @@ public class FPSController : MonoBehaviour
     [Header("State Variables")]
     [SerializeField] bool canMove = true;
     [SerializeField] bool isRotatingJumpscare = false;
-    [SerializeField] bool forceRotation = false;
 
     [Space]
     [Header("Read Only Variables"), ReadOnly]
@@ -65,12 +65,17 @@ public class FPSController : MonoBehaviour
 
     void Start()
     {
-        cinemachineCam = GameObject.FindGameObjectWithTag("Cinemachine").GetComponent<CinemachineCamera>();
+        List<CinemachineCamera> cinemachines = FindObjectsByType<CinemachineCamera>(FindObjectsSortMode.InstanceID).ToList();
+        cinemachineCam = GameObject.FindGameObjectWithTag("MainCinemachine").GetComponent<CinemachineCamera>();
         cinemachineInputAxisController = cinemachineCam.GetComponent<CinemachineInputAxisController>();
         cinemachinePanTilt = cinemachineCam.GetComponent<CinemachinePanTilt>();
 
-        cameraTarget.TrackingTarget = cameraHolder;
-        cinemachineCam.Target= cameraTarget;
+
+        foreach (var virtualCamera in cinemachines)
+        {
+            cameraTarget.TrackingTarget = cameraHolder;
+            virtualCamera.Target = cameraTarget;
+        }
 
         cameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
         characterController = GetComponent<CharacterController>();
@@ -84,7 +89,7 @@ public class FPSController : MonoBehaviour
         #region Handles Rotation
         //characterController.Move(moveDirection * Time.deltaTime);
 
-        if (canMove && !isRotatingJumpscare && !forceRotation)
+        if (canMove && !isRotatingJumpscare)
         {
             // Rotar el cuerpo del jugador (solo en Y) para que siga a la cámara
             Vector3 lookDirection = cameraTransform.forward;
@@ -127,7 +132,6 @@ public class FPSController : MonoBehaviour
     public IEnumerator RotateCameraPlayer(Transform targetTransform)
     {
         isRotatingJumpscare = true;
-        forceRotation = true;
 
         // Deshabilitar el control de entrada
         foreach (var controller in cinemachineInputAxisController.Controllers)
@@ -243,9 +247,12 @@ public class FPSController : MonoBehaviour
     void SetPanTilt(Vector2 pan, Vector2 tilt, bool wrapx=false, bool wrapy=false) 
     { 
         cinemachinePanTilt.PanAxis.Range = pan;
-        cinemachinePanTilt.TiltAxis.Range = tilt;
+        //cinemachinePanTilt.TiltAxis.Range = tilt;
         cinemachinePanTilt.PanAxis.Wrap = wrapx;
         cinemachinePanTilt.TiltAxis.Wrap = wrapy;
+    }
+    public void GiveBackControlToPlayer() { 
+        ClampPanTilt(xPan, yTilt, wrapX, wrapY);
     }
 
     public void ChangeMovementVariables(float walkSpeed, float runSpeed, float jumpPower, bool alteredMovement) { 

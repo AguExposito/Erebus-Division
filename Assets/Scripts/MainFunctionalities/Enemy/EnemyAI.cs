@@ -29,6 +29,8 @@ public class EnemyAI : MonoBehaviour
 
     private NavMeshAgent agent;
     private Vector3 tempPos;
+    public bool endCombat;
+
     public enum State { Patrol, Chase, Attack }
 
     void Start()
@@ -111,12 +113,30 @@ public class EnemyAI : MonoBehaviour
 
     void Attack()
     {
+        if (endCombat) { 
+            FinishedEncounter();
+            endCombat = false;
+            return;
+        }
         if (isAttacking) return;
         Time.timeScale = 0; // Pausa el juego al atacar
         isAttacking = true; // Cambia el estado a atacando
         StartCoroutine( player.GetComponent<FPSController>().RotateCameraPlayer(transform)); // Desactiva el controlador del jugador
         attackRange = 0;
         Debug.Log("Atacando al jugador!");
+    }
+
+    void FinishedEncounter() {
+        Time.timeScale = 1; // Reanuda el juego
+        player.GetComponent<FPSController>().GiveBackControlToPlayer(); // Reactiva el controlador del jugador
+        StartCoroutine(ChaseDelay());
+    }
+
+    IEnumerator ChaseDelay() { 
+        yield return new WaitForSeconds(2f);
+        isAttacking = false; // Cambia el estado a no atacando
+        attackRange = 2f;
+        currentState = State.Chase;
     }
 
     // Método para asignar un destino aleatorio dentro de la malla de navegación (mazmorras)

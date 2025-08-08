@@ -10,6 +10,7 @@ TagManager:
   - Room
   - Cinemachine
   - Enemy
+  - MainCinemachine
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Dungeon
   - Enemy
   - Player
-  - 
+  - Cinemachine
   - 
   - 
   - 
