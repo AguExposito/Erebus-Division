@@ -21,10 +21,15 @@ public class EnemyAI : MonoBehaviour
     public float patrolSpeed = 4f; // Velocidad de patrulla
     public float chaseSpeed = 7f; // Velocidad de patrulla
     public LayerMask obstacleLayer; // Capa de obstáculos para el raycast
+    public State currentState = State.Patrol;
+
+    [Header("Status")]
+    public bool isDead = false; // Estado de muerte del enemigo
+    public bool isAttacking = false; // Estado de muerte del enemigo
 
     private NavMeshAgent agent;
-    private enum State { Patrol, Chase, Attack }
-    private State currentState = State.Patrol;
+    private Vector3 tempPos;
+    public enum State { Patrol, Chase, Attack }
 
     void Start()
     {
@@ -60,7 +65,7 @@ public class EnemyAI : MonoBehaviour
         if (!NVIsRebaked() || !agent.isOnNavMesh) return;
         agent.speed = patrolSpeed; // Velocidad de patrulla
         // Si el enemigo está lo suficientemente cerca del jugador, comienza la persecución
-        if (Vector3.Distance(transform.position, player.position) < detectionRange && IsPlayerOnSight())
+        if (Vector3.Distance(transform.position, player.position) < visionDistance && IsPlayerOnSight())
         {
             currentState = State.Chase;
             return;
@@ -84,15 +89,33 @@ public class EnemyAI : MonoBehaviour
         }
 
         // Si el enemigo pierde la línea de visión, vuelve a patrullar
-        if (Vector3.Distance(transform.position, player.position) > detectionRange || !IsPlayerOnSight())
+        if (Vector3.Distance(transform.position, player.position) > visionDistance || !IsPlayerOnSight())
         {
-            currentState = State.Patrol;
+            if (tempPos == Vector3.zero)
+            {
+                tempPos = player.position;
+                agent.SetDestination(tempPos);
+                StartCoroutine(LookingForPlayer());
+            }
         }
+    }
+
+    IEnumerator LookingForPlayer() {
+        Debug.Log("Buscando Player");
+        yield return new WaitUntil(()=> agent.remainingDistance < agent.stoppingDistance+0.1f);
+        Debug.Log("Esperando Delay...");
+        yield return new WaitForSeconds(3f);
+        tempPos = Vector3.zero;
+        currentState = State.Patrol;
     }
 
     void Attack()
     {
-        // Aquí va la lógica para atacar al jugador (puede ser restar vida, por ejemplo)
+        if (isAttacking) return;
+        Time.timeScale = 0; // Pausa el juego al atacar
+        isAttacking = true; // Cambia el estado a atacando
+        StartCoroutine( player.GetComponent<FPSController>().RotateCameraPlayer(transform)); // Desactiva el controlador del jugador
+        attackRange = 0;
         Debug.Log("Atacando al jugador!");
     }
 
@@ -197,7 +220,7 @@ public class EnemyAI : MonoBehaviour
 
         // 2. Cono de visión: Representado como líneas que forman un triángulo
         Gizmos.color = Color.yellow;
-        Vector3 forward = transform.forward * detectionRange;
+        Vector3 forward = transform.forward * visionDistance;
         Vector3 leftBound = Quaternion.Euler(0, -visionAngle / 2, 0) * forward;
         Vector3 rightBound = Quaternion.Euler(0, visionAngle / 2, 0) * forward;
 
