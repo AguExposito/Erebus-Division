@@ -1,4 +1,6 @@
+using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -20,6 +22,10 @@ public class EnemyAI : MonoBehaviour
     [Header("Movement Settings")]
     public float patrolSpeed = 4f; // Velocidad de patrulla
     public float chaseSpeed = 7f; // Velocidad de patrulla
+    public float rotationDuration = 0.25f; // Velocidad de patrulla
+    public float acceleration = 8f; 
+    public float angularVelocity = 300f;
+    public float multiplier = 1f; // Multiplicador para la velocidad del enemigo
     public LayerMask obstacleLayer; // Capa de obstáculos para el raycast
     public State currentState = State.Patrol;
 
@@ -29,9 +35,15 @@ public class EnemyAI : MonoBehaviour
 
     private NavMeshAgent agent;
     private Vector3 tempPos;
+
     public bool endCombat;
 
     public enum State { Patrol, Chase, Attack }
+
+    private float timeElapsed = 0f; // Tiempo transcurrido para la rotación
+
+    public static float attackers = 0; // Contador de enemigos atacantes
+    public static List<EnemyAI> enemies = new List<EnemyAI>(); // Lista de enemigos
 
     void Start()
     {
@@ -41,6 +53,8 @@ public class EnemyAI : MonoBehaviour
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;  // Mejor evasión de obstáculos
         agent.avoidancePriority = Random.Range(0, 99); // Prioridad de evasión aleatoria
 
+        enemies.Add(this); // Agregar este enemigo a la lista de enemigos
+        Debug.Log("Enemigo agregado a la lista de enemigos: " + enemies.Count);
 
         StartCoroutine(InitializeNavMeshAgent()); // Iniciar la corutina para inicializar el agente de navegación
     }
@@ -65,7 +79,7 @@ public class EnemyAI : MonoBehaviour
     void Patrol()
     {
         if (!NVIsRebaked() || !agent.isOnNavMesh) return;
-        agent.speed = patrolSpeed; // Velocidad de patrulla
+        agent.speed = patrolSpeed * multiplier; // Velocidad de patrulla
         // Si el enemigo está lo suficientemente cerca del jugador, comienza la persecución
         if (Vector3.Distance(transform.position, player.position) < visionDistance && IsPlayerOnSight())
         {
@@ -83,7 +97,7 @@ public class EnemyAI : MonoBehaviour
     void Chase()
     {
         agent.SetDestination(player.position); // El enemigo sigue al jugador
-        agent.speed = chaseSpeed; // Velocidad de persecución
+        agent.speed = chaseSpeed * multiplier; // Velocidad de persecución
         // Si está dentro del rango de ataque, cambia al estado de ataque
         if (Vector3.Distance(transform.position, player.position) < attackRange)
         {
@@ -113,18 +127,79 @@ public class EnemyAI : MonoBehaviour
 
     void Attack()
     {
-        if (endCombat) { 
+        if (endCombat)
+        {
             FinishedEncounter();
+            CompletelyStopAgent(false);
             endCombat = false;
             return;
         }
         if (isAttacking) return;
-        Time.timeScale = 0; // Pausa el juego al atacar
+
         isAttacking = true; // Cambia el estado a atacando
-        StartCoroutine( player.GetComponent<FPSController>().RotateCameraPlayer(transform)); // Desactiva el controlador del jugador
+        attackers++; // Incrementa el contador de atacantes
+        Debug.Log("Atacantes: " + attackers);
+
+        CompletelyStopAgent(true);
+        SetAgentSpeed();
+
+        StartCoroutine(player.GetComponent<FPSController>().RotateCameraPlayer(transform)); // Desactiva el controlador del jugador
+        StartCoroutine(RotateEnemyToPlayer()); // Rotar hacia jugador
         attackRange = 0;
         Debug.Log("Atacando al jugador!");
     }
+
+    private void CompletelyStopAgent(bool isStop)
+    {
+        if (agent == null) return; // Verifica si el agente de navegación está asignado
+        if (isStop)
+        {
+            agent.isStopped = true; // Detiene el agente de navegación
+            multiplier = 0; // Detiene el agente de navegación
+            agent.ResetPath(); // Resetea la ruta del agente
+            agent.velocity = Vector3.zero; // Detiene el movimiento del agente
+            agent.angularSpeed = 0; // Detiene la rotación del agente
+            agent.acceleration = 0; // Detiene la aceleración del agente
+            agent.updateRotation = false; // Desactiva la rotación automática del agente
+            agent.updatePosition = false; // Desactiva la actualización de la posición del agente
+            agent.SetDestination(transform.position); // Establece la posición actual como destino para detener el movimiento
+        }
+        else 
+        {
+            agent.isStopped = false; // Reanuda el agente de navegación
+            agent.angularSpeed = angularVelocity; // Reanuda la rotación del agente
+            agent.acceleration = acceleration; // Reanuda la aceleración del agente
+            agent.updateRotation = true; // Reanuda la rotación automática del agente
+            agent.updatePosition = true; // Reanuda la actualización de la posición del agente
+        }
+    }
+
+    public void SetAgentSpeed()
+    {
+        foreach (var enemy in enemies)
+        {
+            if (enemy.isAttacking) continue;
+            switch (attackers)
+            {
+                case 0:
+                    enemy.multiplier = 1;
+                    break;
+                case 1:
+                    enemy.multiplier = 0.66f;
+                    break;
+                case 2:
+                    enemy.multiplier = 0.33f;
+                    break;
+                case 3:
+                    enemy.multiplier = 0;
+                    break;
+                default:
+                    enemy.multiplier = 0;
+                    break;
+            }
+        }
+    }
+
 
     void FinishedEncounter() {
         Time.timeScale = 1; // Reanuda el juego
@@ -137,6 +212,41 @@ public class EnemyAI : MonoBehaviour
         isAttacking = false; // Cambia el estado a no atacando
         attackRange = 2f;
         currentState = State.Chase;
+    }
+
+    IEnumerator RotateEnemyToPlayer() {
+
+        // Obtener la dirección hacia el objetivo
+        Vector3 directionToTarget = player.position - transform.position;
+        directionToTarget.y = 0; // Mantener solo la dirección horizontal
+
+        // Calcular el ángulo de rotación (solo en Y)
+        float targetPlayerAngle = Mathf.Atan2(directionToTarget.x, directionToTarget.z) * Mathf.Rad2Deg;
+
+        // Obtener la rotación inicial
+        float initialPlayerAngle = transform.eulerAngles.y;
+
+        // Normalizar los ángulos para evitar rotaciones largas
+        float angleDifference = Mathf.DeltaAngle(initialPlayerAngle, targetPlayerAngle);
+        targetPlayerAngle = initialPlayerAngle + angleDifference;
+
+        timeElapsed = 0f;
+
+        // Rotar el player primero
+        while (timeElapsed < rotationDuration)
+        {
+            timeElapsed += Time.unscaledDeltaTime;
+            float t = timeElapsed / rotationDuration;
+
+            // Interpolar la rotación del player
+            float currentAngle = Mathf.LerpAngle(initialPlayerAngle, targetPlayerAngle, t);
+            transform.rotation = Quaternion.Euler(0, currentAngle, 0);
+
+            yield return null;
+        }
+
+        // Asegurar que el player esté exactamente en la posición final
+        transform.rotation = Quaternion.Euler(0, targetPlayerAngle, 0);
     }
 
     // Método para asignar un destino aleatorio dentro de la malla de navegación (mazmorras)

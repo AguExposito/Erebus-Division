@@ -99,7 +99,7 @@ public class FPSController : MonoBehaviour
 
         #endregion
 
-        if (Time.timeScale == 0) return; // If the game is paused, skip the update
+        if (Time.timeScale == 0 || !canMove) return; // If the game is paused, skip the update
 
         #region Handles Movment & Jumping
         Vector2 input = moveInput.action.ReadValue<Vector2>();
@@ -132,6 +132,7 @@ public class FPSController : MonoBehaviour
     public IEnumerator RotateCameraPlayer(Transform targetTransform)
     {
         isRotatingJumpscare = true;
+        canMove = false;
 
         // Deshabilitar el control de entrada
         foreach (var controller in cinemachineInputAxisController.Controllers)
@@ -212,7 +213,7 @@ public class FPSController : MonoBehaviour
         cinemachinePanTilt.TiltAxis.Value = targetTiltAngle;
 
         // Aplicar las restricciones de encuentro
-        ClampPanTilt(xPanE, yTiltE, wrapXE, wrapYE);
+        //ClampPanTilt(xPanE, yTiltE, wrapXE, wrapYE);
 
         // Sincronizar la rotación del player con la cámara
         Vector3 finalLookDirection = (targetTransform.position - transform.position).normalized;
