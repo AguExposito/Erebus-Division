@@ -2,7 +2,7 @@
 - Project name: Erebus-Division
 - Unity version: Unity 6000.0.32f1
 - Active game object:
-  - Name: SceneLoader
+  - Name: Puntero
   - Tag: Untagged
-  - Layer: Default
+  - Layer: UI
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->

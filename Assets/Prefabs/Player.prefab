@@ -88,13 +88,13 @@ MonoBehaviour:
   alteredMovement: 0
   lookSpeed: 70
   rotationDuration: 0.5
-  xPanE: {x: -60, y: 60}
+  xPanE: 60
   wrapXE: 0
-  yTiltE: {x: -45, y: 45}
+  yTiltE: 70
   wrapYE: 0
-  xPan: {x: -180, y: 180}
+  xPan: 180
   wrapX: 1
-  yTilt: {x: -70, y: 70}
+  yTilt: 70
   wrapY: 0
   canMove: 1
   isRotatingJumpscare: 0
