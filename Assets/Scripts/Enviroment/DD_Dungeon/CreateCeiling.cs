@@ -5,6 +5,7 @@ public class CreateCeiling : MonoBehaviour
     [Header("Ceiling Settings")]
     [SerializeField] GameObject ceilingTile;
     [SerializeField] GenerationSettings generationSettings;
+    [SerializeField] Transform ceilingParent;
     
     [Header("Optimization Settings")]
     [SerializeField] Vector3 tileSize = new Vector3(2f, 0.2f, 2f); // Larger tiles for better performance
@@ -16,6 +17,7 @@ public class CreateCeiling : MonoBehaviour
     
     private void Start()
     {
+        ceilingParent = Instantiate(new GameObject("CeilingParent"), transform).transform;
         if (!ValidateComponents())
             return;
             
@@ -87,7 +89,7 @@ public class CreateCeiling : MonoBehaviour
                     z * tileSize.z + tileSize.z * 0.5f
                 );
                 
-                GameObject newTile = Instantiate(ceilingTile, position, Quaternion.identity, transform);
+                GameObject newTile = Instantiate(ceilingTile, position, Quaternion.identity, ceilingParent);
                 newTile.name = $"CeilingTile_{x}_{z}";
             }
         }
@@ -116,7 +118,7 @@ public class CreateCeiling : MonoBehaviour
                     z * tileSize.z + tileSize.z * 0.5f
                 );
                 
-                GameObject newTile = Instantiate(ceilingTile, position, Quaternion.identity, transform);
+                GameObject newTile = Instantiate(ceilingTile, position, Quaternion.identity, ceilingParent);
                 newTile.name = $"CeilingTile_{x}_{z}";
                 
                 tilesCreated++;

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5226693923469979508}
   - component: {fileID: 5621329319332908308}
   - component: {fileID: 1425115995545481009}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -76,6 +76,8 @@ MonoBehaviour:
   cameraHolder: {fileID: 8415442329870552889}
   cameraTransform: {fileID: 0}
   cinemachineCam: {fileID: 0}
+  cinemachineInputAxisController: {fileID: 0}
+  cinemachinePanTilt: {fileID: 0}
   runInput: {fileID: -7471211009204490832, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   jumpInput: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   moveInput: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
@@ -85,8 +87,17 @@ MonoBehaviour:
   gravity: 9.81
   alteredMovement: 0
   lookSpeed: 70
-  lookXLimit: 70
+  rotationDuration: 0.5
+  xPanE: {x: -60, y: 60}
+  wrapXE: 0
+  yTiltE: {x: -45, y: 45}
+  wrapYE: 0
+  xPan: {x: -180, y: 180}
+  wrapX: 1
+  yTilt: {x: -70, y: 70}
+  wrapY: 0
   canMove: 1
+  isRotatingJumpscare: 0
   moveDirection: {x: 0, y: 0, z: 0}
   rotationX: 0
   characterController: {fileID: 5621329319332908308}
@@ -101,7 +112,7 @@ GameObject:
   - component: {fileID: 3027794946037690504}
   - component: {fileID: 191119852304487189}
   - component: {fileID: 4012734158529771258}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -185,7 +196,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1393790592124648734}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Items
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -216,7 +227,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8415442329870552889}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
