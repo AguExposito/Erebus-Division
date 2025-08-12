@@ -50,7 +50,7 @@ public class EnemyAI : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform; // Asignar el jugador por su etiqueta
         agent = GetComponent<NavMeshAgent>();
 
-        agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;  // Mejor evasión de obstáculos
+        //agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;  // Mejor evasión de obstáculos
         agent.avoidancePriority = Random.Range(0, 99); // Prioridad de evasión aleatoria
 
         enemies.Add(this); // Agregar este enemigo a la lista de enemigos
@@ -178,7 +178,11 @@ public class EnemyAI : MonoBehaviour
     {
         foreach (var enemy in enemies)
         {
-            if (enemy.isAttacking) continue;
+            if (enemy.isAttacking)
+            {
+                agent.GetComponent<NavMeshObstacle>().enabled = true;
+                continue;
+            }
             switch (attackers)
             {
                 case 0:
@@ -186,6 +190,7 @@ public class EnemyAI : MonoBehaviour
                     break;
                 case 1:
                     enemy.multiplier = 0.66f;
+
                     break;
                 case 2:
                     enemy.multiplier = 0.33f;
@@ -194,7 +199,7 @@ public class EnemyAI : MonoBehaviour
                     enemy.multiplier = 0;
                     break;
                 default:
-                    enemy.multiplier = 0;
+                    enemy.multiplier = 1;
                     break;
             }
         }

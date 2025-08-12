@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4281023737225243381}
   - component: {fileID: 4643135886487960516}
   - component: {fileID: 8385932387103738280}
+  - component: {fileID: 5348592338851124501}
   m_Layer: 0
   m_Name: EnemyVolumeBlend
   m_TagString: Untagged
@@ -71,3 +72,17 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 3
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5348592338851124501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8750694273807983101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36e4711fcfe0ae3499099b789c55b7b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  originalFOV: 80
+  targetFOV: 110

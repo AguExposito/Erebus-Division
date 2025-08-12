@@ -261,7 +261,8 @@ public class FPSController : MonoBehaviour
         this.runSpeed = runSpeed;
         this.jumpPower = jumpPower;
         this.alteredMovement = alteredMovement;
-    }
+    }   
+
     private void OnEnable()
     {
         jumpInput.action.Enable();
