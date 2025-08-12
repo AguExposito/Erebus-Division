@@ -45,7 +45,7 @@ Light:
   m_Type: 2
   m_Color: {r: 0.6981132, g: 0, b: 0, a: 1}
   m_Intensity: 1
-  m_Range: 7
+  m_Range: 4
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 7218772872401369312}
   - component: {fileID: 318345432010727598}
   - component: {fileID: 7962222216546832386}
+  - component: {fileID: 8809372927485123795}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
@@ -319,6 +320,22 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!208 &8809372927485123795
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8448374231061267344}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.8, y: 1, z: 0.8}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &7983445069950044024
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -6,13 +6,15 @@ public class VolumeOnTriggerEnter : MonoBehaviour
 {
     public float originalFOV=80;
     public float targetFOV =110;
+    public float enterDuration =0.5f;
+    public float exitDuration =2f;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             Debug.Log("Player entered the trigger zone");
             StopCoroutine("ChangeFOV");
-            StartCoroutine(ChangeFOV(targetFOV, 0.5f));
+            StartCoroutine(ChangeFOV(targetFOV, enterDuration));
         }
     }
     private void OnTriggerExit(Collider other)
@@ -20,7 +22,7 @@ public class VolumeOnTriggerEnter : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             StopCoroutine("ChangeFOV");
-            StartCoroutine(ChangeFOV(originalFOV, 0.5f));
+            StartCoroutine(ChangeFOV(originalFOV, exitDuration));
         }
     }
 
