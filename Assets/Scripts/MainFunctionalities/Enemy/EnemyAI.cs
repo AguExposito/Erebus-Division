@@ -6,12 +6,17 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
+    [Header("References")]
+    public Outline outline;
+
+    [Space]
     [Header("Target Settings")]
     public Transform player; // El jugador al que perseguir
     public Vector3 targetPosition; // El siguiente punto al que se moverá el enemigo
     public float areaX = 50;
     public float areaZ = 50;
 
+    [Space]
     [Header("Detection Settings")]
     public float detectionRange = 2f; // Rango de detección
     public float attackRange = 2f; // Rango de ataque
@@ -19,6 +24,7 @@ public class EnemyAI : MonoBehaviour
     public float visionAngle = 45f; // Ángulo del cono de visión
     public float visionHeight = 1.5f; // Altura a la que el raycast verifica la visión
 
+    [Space]
     [Header("Movement Settings")]
     public float patrolSpeed = 4f; // Velocidad de patrulla
     public float chaseSpeed = 7f; // Velocidad de patrulla
@@ -29,18 +35,20 @@ public class EnemyAI : MonoBehaviour
     public LayerMask obstacleLayer; // Capa de obstáculos para el raycast
     public State currentState = State.Patrol;
 
+    [Space]
     [Header("Status")]
     public bool isDead = false; // Estado de muerte del enemigo
     public bool isAttacking = false; // Estado de muerte del enemigo
 
-    private NavMeshAgent agent;
-    private Vector3 tempPos;
 
+    [Space]
     public bool endCombat;
 
     public enum State { Patrol, Chase, Attack }
 
     private float timeElapsed = 0f; // Tiempo transcurrido para la rotación
+    private NavMeshAgent agent;
+    private Vector3 tempPos;
 
     public static float attackers = 0; // Contador de enemigos atacantes
     public static List<EnemyAI> enemies = new List<EnemyAI>(); // Lista de enemigos
@@ -136,6 +144,7 @@ public class EnemyAI : MonoBehaviour
         }
         if (isAttacking) return;
 
+        gameObject.tag = "AttackingEnemy";
         isAttacking = true; // Cambia el estado a atacando
         attackers++; // Incrementa el contador de atacantes
         Debug.Log("Atacantes: " + attackers);

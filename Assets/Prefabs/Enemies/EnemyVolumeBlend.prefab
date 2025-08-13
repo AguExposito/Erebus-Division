@@ -50,7 +50,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 4
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 302351a67a5d7ed4a8a451ee2863eaff, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 9a7a6d54f226032449a6c13382c23845, type: 2}
 --- !u!135 &8385932387103738280
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -86,3 +86,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   originalFOV: 80
   targetFOV: 110
+  enterDuration: 0.5
+  exitDuration: 2

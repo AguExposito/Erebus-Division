@@ -2356,7 +2356,7 @@ GameObject:
   - component: {fileID: 12523191942535121}
   - component: {fileID: 77290285704735724}
   - component: {fileID: 627304538082607854}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: Manthing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3779,6 +3779,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04c272111e3641c4c87a4c3cdd73aeb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 627304538082607854}
   player: {fileID: 0}
   targetPosition: {x: 0, y: 0, z: 0}
   areaX: 200
