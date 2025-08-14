@@ -1,0 +1,1 @@
+{"slotused1":true,"agentName1":"Penguin","health1":1,"dmg1":1,"dodge1":4,"stressMax1":3,"slotused2":true,"agentName2":"Matt","health2":4,"dmg2":2,"dodge2":4,"stressMax2":4}
