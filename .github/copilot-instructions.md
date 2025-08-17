@@ -2,7 +2,7 @@
 - Project name: Erebus-Division
 - Unity version: Unity 6000.0.32f1
 - Active game object:
-  - Name: B3
+  - Name: Base HumanLPlatform
   - Tag: Untagged
-  - Layer: HUD
+  - Layer: Enemy
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->

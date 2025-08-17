@@ -2826,7 +2826,7 @@ GameObject:
   - component: {fileID: 8331928618714426167}
   - component: {fileID: 9051528747197174560}
   - component: {fileID: 3899853525661511225}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3669,6 +3669,7 @@ GameObject:
   - component: {fileID: 1258360060347817428}
   - component: {fileID: 2907557910596628823}
   - component: {fileID: 7858789465927506858}
+  - component: {fileID: 759169568300887450}
   - component: {fileID: 6073368733883958520}
   - component: {fileID: -8997229680493356083}
   m_Layer: 7
@@ -3802,6 +3803,26 @@ MonoBehaviour:
   isDead: 0
   isAttacking: 0
   endCombat: 0
+--- !u!114 &759169568300887450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9105223555461756354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9212899b3edfa7542873ff9ed328d2ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 0
+  maxHealth: 0
+  randomMaxHealth: {x: 15, y: 20}
+  randomAttackPower: {x: 3, y: 5}
+  baseHitChance: 0.8
+  baseDodgeChance: 0.25
+  entityNameTMP: {fileID: 0}
+  entityName: ManThing
 --- !u!54 &6073368733883958520
 Rigidbody:
   m_ObjectHideFlags: 0

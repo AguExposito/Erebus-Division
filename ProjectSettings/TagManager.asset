@@ -12,6 +12,7 @@ TagManager:
   - Enemy
   - MainCinemachine
   - AttackingEnemy
+  - EncounterHUD
   layers:
   - Default
   - TransparentFX

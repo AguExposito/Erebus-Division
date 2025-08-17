@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using Unity.Cinemachine;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(CharacterController))]
 public class FPSController : MonoBehaviour
@@ -16,13 +18,19 @@ public class FPSController : MonoBehaviour
     [SerializeField] CinemachineCamera cinemachineCam;
     [SerializeField] CinemachineInputAxisController cinemachineInputAxisController;
     [SerializeField] CinemachinePanTilt cinemachinePanTilt;
+    [SerializeField] GameObject encounterHUD;
 
 
     [Space]
     [Header("Inputs")]
+    InputSystem_Actions playerInput;
     [SerializeField] InputActionReference runInput;
     [SerializeField] InputActionReference jumpInput;
     [SerializeField] InputActionReference moveInput;
+    [SerializeField] InputActionReference attackInput;
+    [SerializeField] InputActionReference sackInput;
+    [SerializeField] InputActionReference dialogueInput;
+    [SerializeField] InputActionReference fleeInput;
 
     [Space]
     [Header("Movement Variables")]
@@ -53,18 +61,32 @@ public class FPSController : MonoBehaviour
     [Header("State Variables")]
     [SerializeField] bool canMove = true;
     [SerializeField] bool isRotatingJumpscare = false;
+    [SerializeField] bool isInCombat = false;
+    [SerializeField] bool isAttackHUD = false;
+    [SerializeField] bool isSackHUD = false;
+    [SerializeField] bool isDialogueHUD = false;
+    [SerializeField] bool isFleeHUD = false;
 
     [Space]
     [Header("Read Only Variables"), ReadOnly]
     [SerializeField] Vector3 moveDirection = Vector3.zero;
     [SerializeField] float rotationX = 0;
     [SerializeField] CharacterController characterController;
+
     private Quaternion targetRotation;
     private float timeElapsed;
     private CameraTarget cameraTarget = new CameraTarget();
+    private List<Image> enemyHealthBar = new List<Image>();
+    private TextMeshProUGUI enemyName;
+    public bool encounterHUDActive = false;
+
 
     void Start()
     {
+        playerInput = new InputSystem_Actions();
+        playerInput.Enable();
+        playerInput.Encounter.Disable();
+
         List<CinemachineCamera> cinemachines = FindObjectsByType<CinemachineCamera>(FindObjectsSortMode.InstanceID).ToList();
         cinemachineCam = GameObject.FindGameObjectWithTag("MainCinemachine").GetComponent<CinemachineCamera>();
         cinemachineInputAxisController = cinemachineCam.GetComponent<CinemachineInputAxisController>();
@@ -78,13 +100,74 @@ public class FPSController : MonoBehaviour
         }
 
         cameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
+
+        FindEncounterHUD();
+
         characterController = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
+    private void FindEncounterHUD()
+    {
+        encounterHUD = GameObject.FindGameObjectWithTag("EncounterHUD");
+        if (encounterHUD != null)
+        {
+            for (int i = 0; i < encounterHUD.transform.GetChild(0).childCount; i++)
+            {
+                if (encounterHUD.transform.GetChild(0).GetChild(i).GetComponent<Image>() != null)
+                {
+                    enemyHealthBar.Add(encounterHUD.transform.GetChild(0).GetChild(i).GetComponent<Image>());
+                }
+                else
+                {
+                    if (enemyName == null)
+                    {
+                        enemyName = encounterHUD.transform.GetChild(0).GetChild(i).GetComponent<TextMeshProUGUI>();
+                    }
+                }
+            }
+        }
+        encounterHUD.SetActive(false);
+    }
 
     void Update()
     {
+        #region Handles HUDs
+        if (isInCombat)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, 10f, LayerMask.GetMask("Enemy")))
+            {
+                if (hit.transform.CompareTag("AttackingEnemy"))
+                {
+                    if (hit.transform.GetComponentInParent<EntityInterface>())
+                    {
+                        hit.transform.GetComponentInParent<EntityInterface>().OnRaycastEnter();
+                        encounterHUDActive = true;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("EntityInterface not found on the hit object.");
+                    }
+                }
+
+            }
+            else if (encounterHUD != null)
+            {
+                encounterHUD.SetActive(false);
+                encounterHUDActive = false;
+            }
+
+            if (attackInput.action.ReadValue<float>() > 0.1 && playerInput.Encounter.enabled && !isAttackHUD)
+            {
+                isAttackHUD = true;
+            }
+            if (isAttackHUD)
+            {
+                
+            }
+        }
+        #endregion
 
         #region Handles Rotation
         //characterController.Move(moveDirection * Time.deltaTime);
@@ -231,6 +314,11 @@ public class FPSController : MonoBehaviour
             controller.Enabled = true;
         }
 
+        encounterHUD.SetActive(true);
+        isInCombat = true;
+        playerInput.Player.Disable();
+        playerInput.Encounter.Enable();
+
         isRotatingJumpscare = false;
         timeElapsed = 0f;
     }
@@ -268,11 +356,19 @@ public class FPSController : MonoBehaviour
         jumpInput.action.Enable();
         runInput.action.Enable();
         moveInput.action.Enable();
+        attackInput.action.Enable();
+        sackInput.action.Enable();
+        dialogueInput.action.Enable();
+        fleeInput.action.Enable();
     }
     private void OnDisable()
     {
         jumpInput.action.Disable();
         runInput.action.Disable();
         moveInput.action.Disable();
+        attackInput.action.Disable();
+        sackInput.action.Disable();
+        dialogueInput.action.Disable();
+        fleeInput.action.Disable();
     }
 }

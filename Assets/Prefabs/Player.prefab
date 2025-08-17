@@ -78,9 +78,15 @@ MonoBehaviour:
   cinemachineCam: {fileID: 0}
   cinemachineInputAxisController: {fileID: 0}
   cinemachinePanTilt: {fileID: 0}
+  encounterHUD: {fileID: 0}
+  playerInput: {fileID: 0}
   runInput: {fileID: -7471211009204490832, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   jumpInput: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   moveInput: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  attackInput: {fileID: 1748840317040963771, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  sackInput: {fileID: -2075617142125421389, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  dialogueInput: {fileID: -527395638209295639, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  fleeInput: {fileID: -2871069443960112996, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   walkSpeed: 5
   runSpeed: 8
   jumpPower: 3

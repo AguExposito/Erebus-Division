@@ -498,6 +498,136 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             ]
         },
         {
+            ""name"": ""Encounter"",
+            ""id"": ""6bd14b7a-7a96-4b67-ae24-28c343ad279a"",
+            ""actions"": [
+                {
+                    ""name"": ""Look"",
+                    ""type"": ""Value"",
+                    ""id"": ""8f674773-362c-4f4e-ab51-9fe2ac9108fe"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""83493a93-1237-4c79-baef-103f620b3000"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Sack"",
+                    ""type"": ""Button"",
+                    ""id"": ""7525eeb0-e0c7-4382-a8c7-55e52b60eb17"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dialogue"",
+                    ""type"": ""Button"",
+                    ""id"": ""41ce0b48-ad48-4a04-beac-5fa2f9912065"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Flee"",
+                    ""type"": ""Button"",
+                    ""id"": ""0e87a245-cdb3-443a-8428-9aedde7dc384"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""8ad28158-2373-475a-8ef2-6a7fe76b4124"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bc78c232-c7ca-4cf8-aeb5-036e889477c6"",
+                    ""path"": ""<Pointer>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse;Touch"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a071c043-457f-46dd-bca5-faeea656dfd1"",
+                    ""path"": ""<Joystick>/{Hatswitch}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Joystick"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""87dc8733-6c57-4bd4-844b-d37eb8584361"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Sack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""759a846b-437b-4364-9f50-98ac8c5f511c"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dialogue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f46b6f25-b164-4d76-8982-f86645dcee97"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Flee"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b236dcda-7af3-45c2-b8ef-b5c3dce5bf9f"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""UI"",
             ""id"": ""272f6d14-89ba-496f-b7ff-215263d3219f"",
             ""actions"": [
@@ -1088,6 +1218,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Previous = m_Player.FindAction("Previous", throwIfNotFound: true);
         m_Player_Next = m_Player.FindAction("Next", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
+        // Encounter
+        m_Encounter = asset.FindActionMap("Encounter", throwIfNotFound: true);
+        m_Encounter_Look = m_Encounter.FindAction("Look", throwIfNotFound: true);
+        m_Encounter_Attack = m_Encounter.FindAction("Attack", throwIfNotFound: true);
+        m_Encounter_Sack = m_Encounter.FindAction("Sack", throwIfNotFound: true);
+        m_Encounter_Dialogue = m_Encounter.FindAction("Dialogue", throwIfNotFound: true);
+        m_Encounter_Flee = m_Encounter.FindAction("Flee", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1105,6 +1242,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     ~@InputSystem_Actions()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Player.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Encounter.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Encounter.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, InputSystem_Actions.UI.Disable() has not been called.");
     }
 
@@ -1273,6 +1411,84 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // Encounter
+    private readonly InputActionMap m_Encounter;
+    private List<IEncounterActions> m_EncounterActionsCallbackInterfaces = new List<IEncounterActions>();
+    private readonly InputAction m_Encounter_Look;
+    private readonly InputAction m_Encounter_Attack;
+    private readonly InputAction m_Encounter_Sack;
+    private readonly InputAction m_Encounter_Dialogue;
+    private readonly InputAction m_Encounter_Flee;
+    public struct EncounterActions
+    {
+        private @InputSystem_Actions m_Wrapper;
+        public EncounterActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Look => m_Wrapper.m_Encounter_Look;
+        public InputAction @Attack => m_Wrapper.m_Encounter_Attack;
+        public InputAction @Sack => m_Wrapper.m_Encounter_Sack;
+        public InputAction @Dialogue => m_Wrapper.m_Encounter_Dialogue;
+        public InputAction @Flee => m_Wrapper.m_Encounter_Flee;
+        public InputActionMap Get() { return m_Wrapper.m_Encounter; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(EncounterActions set) { return set.Get(); }
+        public void AddCallbacks(IEncounterActions instance)
+        {
+            if (instance == null || m_Wrapper.m_EncounterActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_EncounterActionsCallbackInterfaces.Add(instance);
+            @Look.started += instance.OnLook;
+            @Look.performed += instance.OnLook;
+            @Look.canceled += instance.OnLook;
+            @Attack.started += instance.OnAttack;
+            @Attack.performed += instance.OnAttack;
+            @Attack.canceled += instance.OnAttack;
+            @Sack.started += instance.OnSack;
+            @Sack.performed += instance.OnSack;
+            @Sack.canceled += instance.OnSack;
+            @Dialogue.started += instance.OnDialogue;
+            @Dialogue.performed += instance.OnDialogue;
+            @Dialogue.canceled += instance.OnDialogue;
+            @Flee.started += instance.OnFlee;
+            @Flee.performed += instance.OnFlee;
+            @Flee.canceled += instance.OnFlee;
+        }
+
+        private void UnregisterCallbacks(IEncounterActions instance)
+        {
+            @Look.started -= instance.OnLook;
+            @Look.performed -= instance.OnLook;
+            @Look.canceled -= instance.OnLook;
+            @Attack.started -= instance.OnAttack;
+            @Attack.performed -= instance.OnAttack;
+            @Attack.canceled -= instance.OnAttack;
+            @Sack.started -= instance.OnSack;
+            @Sack.performed -= instance.OnSack;
+            @Sack.canceled -= instance.OnSack;
+            @Dialogue.started -= instance.OnDialogue;
+            @Dialogue.performed -= instance.OnDialogue;
+            @Dialogue.canceled -= instance.OnDialogue;
+            @Flee.started -= instance.OnFlee;
+            @Flee.performed -= instance.OnFlee;
+            @Flee.canceled -= instance.OnFlee;
+        }
+
+        public void RemoveCallbacks(IEncounterActions instance)
+        {
+            if (m_Wrapper.m_EncounterActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IEncounterActions instance)
+        {
+            foreach (var item in m_Wrapper.m_EncounterActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_EncounterActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public EncounterActions @Encounter => new EncounterActions(this);
 
     // UI
     private readonly InputActionMap m_UI;
@@ -1447,6 +1663,14 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnPrevious(InputAction.CallbackContext context);
         void OnNext(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+    }
+    public interface IEncounterActions
+    {
+        void OnLook(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
+        void OnSack(InputAction.CallbackContext context);
+        void OnDialogue(InputAction.CallbackContext context);
+        void OnFlee(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
