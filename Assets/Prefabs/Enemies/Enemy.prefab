@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 318345432010727598}
   - component: {fileID: 7962222216546832386}
   - component: {fileID: 8809372927485123795}
+  - component: {fileID: -109013917978358873}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
@@ -271,6 +272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04c272111e3641c4c87a4c3cdd73aeb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 0}
   player: {fileID: 0}
   targetPosition: {x: 0, y: 0, z: 0}
   areaX: 200
@@ -336,6 +338,28 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 0
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &-109013917978358873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8448374231061267344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9212899b3edfa7542873ff9ed328d2ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 0
+  maxHealth: 0
+  randomMaxHealth: {x: 0, y: 0}
+  randomAttackPower: {x: 0, y: 0}
+  baseHitChance: 0
+  baseDodgeChance: 0
+  entityNameTMP: {fileID: 0}
+  entityName: 
+  encounterHUD: {fileID: 0}
+  enemyHealthBar: []
 --- !u!1001 &7983445069950044024
 PrefabInstance:
   m_ObjectHideFlags: 0

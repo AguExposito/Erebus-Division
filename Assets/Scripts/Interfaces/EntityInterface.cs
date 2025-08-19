@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using static EnemyPart;
 
-public class EntityInterface : MonoBehaviour
+public abstract class EntityInterface : MonoBehaviour
 {
     public float health;
     public float maxHealth;
@@ -14,12 +16,14 @@ public class EntityInterface : MonoBehaviour
     public TextMeshProUGUI entityNameTMP;
     public string entityName;
 
-    private GameObject encounterHUD;
-    private List<Image> enemyHealthBar = new List<Image>();
+    public GameObject encounterHUD;
+    public List<Image> enemyHealthBar = new List<Image>();
 
-    private void Awake()
+    private void Start()
     {
-        FindEncounterHUD();
+        encounterHUD = GameManager.instance.encounterHUD;
+        enemyHealthBar = GameManager.instance.enemyHealthBar;
+        entityNameTMP = GameManager.instance.entityNameTMP;
     }
     private void OnEnable()
     {
@@ -56,41 +60,18 @@ public class EntityInterface : MonoBehaviour
             // Attack missed
         }
     }
-    public void FindEncounterHUD()
-    {
-        encounterHUD = GameObject.FindGameObjectWithTag("EncounterHUD");
-        if (encounterHUD != null)
-        {
-            for (int i = 0; i < encounterHUD.transform.GetChild(0).childCount; i++)
-            {
-                if (encounterHUD.transform.GetChild(0).GetChild(i).GetComponent<Image>() != null)
-                {
-                    enemyHealthBar.Add(encounterHUD.transform.GetChild(0).GetChild(i).GetComponent<Image>());
-                }
-                else
-                {
-                    if (entityNameTMP == null)
-                    {
-                        entityNameTMP = encounterHUD.transform.GetChild(0).GetChild(i).GetComponent<TextMeshProUGUI>();
-                    }
-                }
-            }
-        }
-    }
+
+
     public void OnRaycastEnter()
     {
-        if (encounterHUD != null)
+        for (int i = 0; i < enemyHealthBar.Count; i++)
         {
-            encounterHUD.SetActive(true);
-            for (int i = 0; i < enemyHealthBar.Count; i++)
-            {
-                enemyHealthBar[i].fillAmount = health / maxHealth;
-            }
-            if (entityNameTMP != null)
-            {
-                entityNameTMP.text = entityName;
-            }
+            enemyHealthBar[i].fillAmount = health / maxHealth;
         }
+        if (entityNameTMP != null)
+        {
+            entityNameTMP.text = entityName;
+        }        
     }
 
 }

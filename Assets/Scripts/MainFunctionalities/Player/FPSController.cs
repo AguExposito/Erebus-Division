@@ -13,12 +13,15 @@ using UnityEngine.UI;
 public class FPSController : MonoBehaviour
 {
     [Header("References")]
+    [SerializeField] PlayerStats playerStats;
+
+    [Space]
+    [Header("Camera References")]
     [SerializeField] Transform cameraHolder;
     [SerializeField] Transform cameraTransform;
     [SerializeField] CinemachineCamera cinemachineCam;
     [SerializeField] CinemachineInputAxisController cinemachineInputAxisController;
     [SerializeField] CinemachinePanTilt cinemachinePanTilt;
-    [SerializeField] GameObject encounterHUD;
 
 
     [Space]
@@ -73,11 +76,8 @@ public class FPSController : MonoBehaviour
     [SerializeField] float rotationX = 0;
     [SerializeField] CharacterController characterController;
 
-    private Quaternion targetRotation;
     private float timeElapsed;
     private CameraTarget cameraTarget = new CameraTarget();
-    private List<Image> enemyHealthBar = new List<Image>();
-    private TextMeshProUGUI enemyName;
     public bool encounterHUDActive = false;
 
 
@@ -101,33 +101,11 @@ public class FPSController : MonoBehaviour
 
         cameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
 
-        FindEncounterHUD();
-
         characterController = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-    }
-    private void FindEncounterHUD()
-    {
-        encounterHUD = GameObject.FindGameObjectWithTag("EncounterHUD");
-        if (encounterHUD != null)
-        {
-            for (int i = 0; i < encounterHUD.transform.GetChild(0).childCount; i++)
-            {
-                if (encounterHUD.transform.GetChild(0).GetChild(i).GetComponent<Image>() != null)
-                {
-                    enemyHealthBar.Add(encounterHUD.transform.GetChild(0).GetChild(i).GetComponent<Image>());
-                }
-                else
-                {
-                    if (enemyName == null)
-                    {
-                        enemyName = encounterHUD.transform.GetChild(0).GetChild(i).GetComponent<TextMeshProUGUI>();
-                    }
-                }
-            }
-        }
-        encounterHUD.SetActive(false);
+
+        GameManager.instance.encounterHUD.SetActive(false);
     }
 
     void Update()
@@ -135,36 +113,51 @@ public class FPSController : MonoBehaviour
         #region Handles HUDs
         if (isInCombat)
         {
-            RaycastHit hit;
-            if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, 10f, LayerMask.GetMask("Enemy")))
+            RaycastHit[] hits= Physics.RaycastAll(cameraTransform.position, cameraTransform.forward, 10f, LayerMask.GetMask("Enemy"));
+
+            foreach (var hit in hits)
             {
                 if (hit.transform.CompareTag("AttackingEnemy"))
                 {
                     if (hit.transform.GetComponentInParent<EntityInterface>())
                     {
                         hit.transform.GetComponentInParent<EntityInterface>().OnRaycastEnter();
+                        GameManager.instance.encounterHUD.SetActive(true);
                         encounterHUDActive = true;
                     }
                     else
                     {
                         Debug.LogWarning("EntityInterface not found on the hit object.");
                     }
+
+                    if (isAttackHUD)
+                    {
+                        if(hit.collider.TryGetComponent<EnemyPart>(out EnemyPart enemyPart))
+                        {
+                            if (enemyPart != null)
+                            {
+                                GameManager.instance.critChance.text = Math.Round(enemyPart.critChanceMultiplier, 2) + "%";
+                                GameManager.instance.hitChance.text = Math.Round(enemyPart.hitChanceMultiplier, 2) + "%";
+                                GameManager.instance.bodyPart.text = enemyPart.partType.ToString();
+                                GameManager.instance.bodyPartState.text = enemyPart.partStatus.ToString();
+                            }
+                        }
+                    }
                 }
 
+                
+                
             }
-            else if (encounterHUD != null)
+            if (GameManager.instance.encounterHUD != null && hits.Length==0)
             {
-                encounterHUD.SetActive(false);
+                GameManager.instance.encounterHUD.SetActive(false);
                 encounterHUDActive = false;
             }
+
 
             if (attackInput.action.ReadValue<float>() > 0.1 && playerInput.Encounter.enabled && !isAttackHUD)
             {
                 isAttackHUD = true;
-            }
-            if (isAttackHUD)
-            {
-                
             }
         }
         #endregion
@@ -314,7 +307,7 @@ public class FPSController : MonoBehaviour
             controller.Enabled = true;
         }
 
-        encounterHUD.SetActive(true);
+        GameManager.instance.encounterHUD.SetActive(true);
         isInCombat = true;
         playerInput.Player.Disable();
         playerInput.Encounter.Enable();

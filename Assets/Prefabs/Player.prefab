@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5226693923469979508}
   - component: {fileID: 5621329319332908308}
   - component: {fileID: 1425115995545481009}
+  - component: {fileID: 8186183575420528387}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -73,13 +74,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e6a3cfa634841040906a76f6a102895, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerStats: {fileID: 8186183575420528387}
   cameraHolder: {fileID: 8415442329870552889}
   cameraTransform: {fileID: 0}
   cinemachineCam: {fileID: 0}
   cinemachineInputAxisController: {fileID: 0}
   cinemachinePanTilt: {fileID: 0}
-  encounterHUD: {fileID: 0}
-  playerInput: {fileID: 0}
   runInput: {fileID: -7471211009204490832, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   jumpInput: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   moveInput: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
@@ -104,9 +104,42 @@ MonoBehaviour:
   wrapY: 0
   canMove: 1
   isRotatingJumpscare: 0
+  isInCombat: 0
+  isAttackHUD: 0
+  isSackHUD: 0
+  isDialogueHUD: 0
+  isFleeHUD: 0
   moveDirection: {x: 0, y: 0, z: 0}
   rotationX: 0
   characterController: {fileID: 5621329319332908308}
+  encounterHUDActive: 0
+--- !u!114 &8186183575420528387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28599014315746945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 286ea8b5949e4a049b8041cf795c1c63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 0
+  maxHealth: 0
+  randomMaxHealth: {x: 0, y: 0}
+  randomAttackPower: {x: 0, y: 0}
+  baseHitChance: 0
+  baseDodgeChance: 0
+  entityNameTMP: {fileID: 0}
+  entityName: 
+  encounterHUD: {fileID: 0}
+  enemyHealthBar: []
+  fpsController: {fileID: 1425115995545481009}
+  critChance: {fileID: 0}
+  hitChance: {fileID: 0}
+  bodyPart: {fileID: 0}
+  bodyPartState: {fileID: 0}
 --- !u!1 &4198323653780529454
 GameObject:
   m_ObjectHideFlags: 0

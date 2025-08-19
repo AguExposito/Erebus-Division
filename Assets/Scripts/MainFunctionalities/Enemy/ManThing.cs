@@ -5,5 +5,6 @@ using UnityEngine.UI;
 
 public class ManThing : EntityInterface
 {
+    
 
 }

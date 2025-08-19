@@ -13,6 +13,10 @@ TagManager:
   - MainCinemachine
   - AttackingEnemy
   - EncounterHUD
+  - Body
+  - Legs
+  - Head
+  - Arms
   layers:
   - Default
   - TransparentFX
