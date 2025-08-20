@@ -96,14 +96,6 @@ MonoBehaviour:
   alteredMovement: 0
   lookSpeed: 70
   rotationDuration: 0.5
-  xPanE: 60
-  wrapXE: 0
-  yTiltE: 70
-  wrapYE: 0
-  xPan: 180
-  wrapX: 1
-  yTilt: 70
-  wrapY: 0
   canMove: 1
   isRotatingJumpscare: 0
   isInCombat: 0
@@ -128,7 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
-  randomMaxHealth: {x: 0, y: 0}
+  randomMaxHealth: {x: 15, y: 20}
   maxHealth: 0
   randomAttackPower: {x: 7, y: 13}
   baseAttackPower: 10
@@ -137,10 +129,14 @@ MonoBehaviour:
   baseDodgeChance: 15
   critChance: 0
   hitChance: 0
+  targetEnemyPart: {fileID: 0}
   entityNameTMP: {fileID: 0}
   entityName: 
   encounterHUD: {fileID: 0}
   enemyHealthBar: []
+  isItsTurn: 0
+  playerHealthBar: {fileID: 0}
+  playerFear: {fileID: 0}
 --- !u!1 &4198323653780529454
 GameObject:
   m_ObjectHideFlags: 0

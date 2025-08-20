@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour
     public GameObject encounterHUD;
     public List<Image> enemyHealthBar = new List<Image>();
     public TextMeshProUGUI entityNameTMP;
+    [Space]
+    public Image playerHealth;
+    public Image playerFear;
 
     [Space]
     public TextMeshProUGUI critChance;

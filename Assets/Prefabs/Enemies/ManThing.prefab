@@ -4035,14 +4035,19 @@ MonoBehaviour:
   randomAttackPower: {x: 3, y: 5}
   baseAttackPower: 10
   baseCritChance: 10
-  baseHitChance: 8
+  baseHitChance: 100
   baseDodgeChance: 25
-  critChance: 0
-  hitChance: 0
+  critChance: 15
+  hitChance: 100
+  targetEnemyPart: {fileID: 0}
   entityNameTMP: {fileID: 0}
   entityName: ManThing
   encounterHUD: {fileID: 0}
   enemyHealthBar: []
+  isItsTurn: 0
+  playerEntityInterface: {fileID: 0}
+  hitChanceMinMax: {x: 60, y: 100}
+  critChanceMinMax: {x: 0, y: 20}
 --- !u!54 &6073368733883958520
 Rigidbody:
   m_ObjectHideFlags: 0

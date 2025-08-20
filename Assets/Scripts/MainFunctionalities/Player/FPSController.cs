@@ -26,7 +26,7 @@ public class FPSController : MonoBehaviour
 
     [Space]
     [Header("Inputs")]
-    InputSystem_Actions playerInput;
+    public InputSystem_Actions playerInput;
     [SerializeField] InputActionReference runInput;
     [SerializeField] InputActionReference jumpInput;
     [SerializeField] InputActionReference moveInput;
@@ -50,18 +50,6 @@ public class FPSController : MonoBehaviour
     [Header("Camera Variables")]
     [SerializeField] public float lookSpeed;
     [SerializeField] float rotationDuration=0.5f;
-
-    [Header("Encounter Restrictions")]
-    [SerializeField] float xPanE = 60;
-    [SerializeField] bool wrapXE = false;
-    [SerializeField] float yTiltE = 70;
-    [SerializeField] bool wrapYE = false;
-
-    [Header("Default Restrictions")]
-    [SerializeField] float xPan = 180;
-    [SerializeField] bool wrapX = true;
-    [SerializeField] float yTilt = 70;
-    [SerializeField] bool wrapY = false;
 
     [Space]
     [Header("State Variables")]
@@ -88,6 +76,20 @@ public class FPSController : MonoBehaviour
         playerInput = new InputSystem_Actions();
         playerInput.Enable();
         playerInput.Encounter.Disable();
+        playerInput.Player.Enable();
+        
+        // Inicializar los InputActionReference del modo Player (modo inicial)
+        if (moveInput?.action != null) moveInput.action.Enable();
+        if (runInput?.action != null) runInput.action.Enable();
+        if (jumpInput?.action != null) jumpInput.action.Enable();
+        
+        // Deshabilitar los InputActionReference del modo Encounter
+        if (attackInput?.action != null) attackInput.action.Disable();
+        if (satchelInput?.action != null) satchelInput.action.Disable();
+        if (dialogueInput?.action != null) dialogueInput.action.Disable();
+        if (fleeInput?.action != null) fleeInput.action.Disable();
+        if (interactInput?.action != null) interactInput.action.Disable();
+        if (goBackInput?.action != null) goBackInput.action.Disable();
 
         List<CinemachineCamera> cinemachines = FindObjectsByType<CinemachineCamera>(FindObjectsSortMode.InstanceID).ToList();
         cinemachineCam = GameObject.FindGameObjectWithTag("MainCinemachine").GetComponent<CinemachineCamera>();
@@ -108,6 +110,8 @@ public class FPSController : MonoBehaviour
         Cursor.visible = false;
 
         GameManager.instance.encounterHUD.SetActive(false);
+        TurnManager.instance.AddTurn(playerStats);
+        playerStats.isItsTurn = true;
     }
 
     void Update()
@@ -119,11 +123,11 @@ public class FPSController : MonoBehaviour
 
             foreach (var hit in hits)
             {
-                if (hit.transform.CompareTag("AttackingEnemy"))
+                if (hit.transform.CompareTag("AttackingEnemy") && isInCombat)
                 {
                     EntityInterface entityInterface=null;
 
-                    if (hit.transform.GetComponentInParent<EntityInterface>())
+                    if (hit.transform.GetComponentInParent<EntityInterface>() && isInCombat)
                     {
                         hit.transform.GetComponentInParent<EntityInterface>().OnRaycastEnter();
                         entityInterface = hit.transform.GetComponentInParent<EntityInterface>();
@@ -135,7 +139,7 @@ public class FPSController : MonoBehaviour
                         Debug.LogWarning("EntityInterface not found on the hit object.");
                     }
 
-                    if (isAttackHUD && entityInterface!=null)
+                    if (isAttackHUD && entityInterface!=null && isInCombat)
                     {
                         if(hit.collider.TryGetComponent<EnemyPart>(out EnemyPart enemyPart))
                         {
@@ -145,16 +149,19 @@ public class FPSController : MonoBehaviour
                             {
                                 playerStats.critChance = (float)Math.Round(enemyPart.critChanceMultiplier * playerStats.baseCritChance, 1);
                                 playerStats.hitChance = (float)Math.Round(enemyPart.hitChanceMultiplier * playerStats.baseHitChance, 1);
+                                playerStats.targetEnemyPart = enemyPart;
 
                                 GameManager.instance.critChance.text = playerStats.critChance + "%";
                                 GameManager.instance.hitChance.text = playerStats.hitChance + "%";
                                 GameManager.instance.bodyPart.text = enemyPart.partType.ToString();
                                 GameManager.instance.bodyPartState.text = enemyPart.partStatus.ToString();
 
-                                if (interactInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled) 
-                                {
 
+                                if (interactInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled && playerStats.isItsTurn && isInCombat) 
+                                {
                                     playerStats.Attack(entityInterface);
+                                    playerInput.Encounter.Disable();
+                                    playerInput.Player.Disable();
                                 }
                             }
                         }
@@ -165,13 +172,13 @@ public class FPSController : MonoBehaviour
                 
             }
 
-            if (GameManager.instance.encounterHUD != null && hits.Length==0)
+            if (GameManager.instance.encounterHUD != null && hits.Length==0 && isInCombat)
             {
                 GameManager.instance.encounterHUD.SetActive(false);
                 encounterHUDActive = false;
             }
 
-            if (attackInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled)
+            if (attackInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled && isInCombat)
             {
                 if (!isAttackHUD && encounterHUDActive)
                 {
@@ -182,6 +189,10 @@ public class FPSController : MonoBehaviour
                     isAttackHUD = false;
                     GameManager.instance.enemyInfo.SetActive(false);
                 }
+            }
+            if (!playerInput.Encounter.enabled && playerStats.isItsTurn && isInCombat)
+            {
+                playerInput.Encounter.Enable();
             }
         }
         #endregion
@@ -312,9 +323,6 @@ public class FPSController : MonoBehaviour
         cinemachinePanTilt.PanAxis.Value = targetPanAngle;
         cinemachinePanTilt.TiltAxis.Value = targetTiltAngle;
 
-        // Aplicar las restricciones de encuentro
-        //ClampPanTilt(xPanE, yTiltE, wrapXE, wrapYE);
-
         // Sincronizar la rotación del player con la cámara
         Vector3 finalLookDirection = (targetTransform.position - transform.position).normalized;
         finalLookDirection.y = 0;
@@ -333,32 +341,58 @@ public class FPSController : MonoBehaviour
 
         GameManager.instance.encounterHUD.SetActive(true);
         isInCombat = true;
+        
+        // Deshabilitar el action map de Player
         playerInput.Player.Disable();
+        
+        // Habilitar el action map de Encounter
         playerInput.Encounter.Enable();
+        
+        // Deshabilitar los InputActionReference del modo Player
+        if (moveInput?.action != null) moveInput.action.Disable();
+        if (runInput?.action != null) runInput.action.Disable();
+        if (jumpInput?.action != null) jumpInput.action.Disable();
+        
+        // Habilitar los InputActionReference del modo Encounter
+        if (attackInput?.action != null) attackInput.action.Enable();
+        if (satchelInput?.action != null) satchelInput.action.Enable();
+        if (dialogueInput?.action != null) dialogueInput.action.Enable();
+        if (fleeInput?.action != null) fleeInput.action.Enable();
+        if (interactInput?.action != null) interactInput.action.Enable();
+        if (goBackInput?.action != null) goBackInput.action.Enable();
 
         isRotatingJumpscare = false;
         timeElapsed = 0f;
     }
-    void ClampPanTilt(float pan, float tilt, bool wrapx = false, bool wrapy = false) {
-        float tempPanX = cinemachinePanTilt.PanAxis.Value - pan;
-        float tempPanY = cinemachinePanTilt.PanAxis.Value + pan;
-        Vector2 tempPan= new Vector2(tempPanX, tempPanY);
+    public void GiveBackControlToPlayer()
+    {
+        isInCombat = false;
+        GameManager.instance.encounterHUD.SetActive(false);
+        GameManager.instance.enemyInfo.SetActive(false);
+        encounterHUDActive = false;
+        isAttackHUD = false;
         
-        float tempTiltX = cinemachinePanTilt.TiltAxis.Value - tilt;
-        float tempTiltY = cinemachinePanTilt.TiltAxis.Value + tilt;
-        Vector2 tempTilt= new Vector2(tempTiltX, tempTiltY);
-
-        SetPanTilt(tempPan, tempTilt, wrapx, wrapy);
-    }
-    void SetPanTilt(Vector2 pan, Vector2 tilt, bool wrapx=false, bool wrapy=false) 
-    { 
-        cinemachinePanTilt.PanAxis.Range = pan;
-        //cinemachinePanTilt.TiltAxis.Range = tilt;
-        cinemachinePanTilt.PanAxis.Wrap = wrapx;
-        cinemachinePanTilt.TiltAxis.Wrap = wrapy;
-    }
-    public void GiveBackControlToPlayer() { 
-        ClampPanTilt(xPan, yTilt, wrapX, wrapY);
+        // Deshabilitar el action map de Encounter
+        playerInput.Encounter.Disable();
+        
+        // Habilitar el action map de Player
+        playerInput.Player.Enable();
+        
+        // Habilitar solo los InputActionReference del modo Player
+        if (moveInput?.action != null) moveInput.action.Enable();
+        if (runInput?.action != null) runInput.action.Enable();
+        if (jumpInput?.action != null) jumpInput.action.Enable();
+        
+        // Deshabilitar los InputActionReference del modo Encounter
+        if (attackInput?.action != null) attackInput.action.Disable();
+        if (satchelInput?.action != null) satchelInput.action.Disable();
+        if (dialogueInput?.action != null) dialogueInput.action.Disable();
+        if (fleeInput?.action != null) fleeInput.action.Disable();
+        if (interactInput?.action != null) interactInput.action.Disable();
+        if (goBackInput?.action != null) goBackInput.action.Disable();
+        
+        // Restaurar el control de movimiento
+        canMove = true;
     }
 
     public void ChangeMovementVariables(float walkSpeed, float runSpeed, float jumpPower, bool alteredMovement) { 
@@ -370,22 +404,36 @@ public class FPSController : MonoBehaviour
 
     private void OnEnable()
     {
-        jumpInput.action.Enable();
-        runInput.action.Enable();
-        moveInput.action.Enable();
-        attackInput.action.Enable();
-        satchelInput.action.Enable();
-        dialogueInput.action.Enable();
-        fleeInput.action.Enable();
+        // Habilitar inputs según el modo actual
+        if (!isInCombat)
+        {
+            // Modo Player
+            if (moveInput?.action != null) moveInput.action.Enable();
+            if (runInput?.action != null) runInput.action.Enable();
+            if (jumpInput?.action != null) jumpInput.action.Enable();
+        }
+        else
+        {
+            // Modo Encounter
+            if (attackInput?.action != null) attackInput.action.Enable();
+            if (satchelInput?.action != null) satchelInput.action.Enable();
+            if (dialogueInput?.action != null) dialogueInput.action.Enable();
+            if (fleeInput?.action != null) fleeInput.action.Enable();
+            if (interactInput?.action != null) interactInput.action.Enable();
+            if (goBackInput?.action != null) goBackInput.action.Enable();
+        }
     }
+    
     private void OnDisable()
     {
-        jumpInput.action.Disable();
-        runInput.action.Disable();
-        moveInput.action.Disable();
-        attackInput.action.Disable();
-        satchelInput.action.Disable();
-        dialogueInput.action.Disable();
-        fleeInput.action.Disable();
+        if (jumpInput?.action != null) jumpInput.action.Disable();
+        if (runInput?.action != null) runInput.action.Disable();
+        if (moveInput?.action != null) moveInput.action.Disable();
+        if (attackInput?.action != null) attackInput.action.Disable();
+        if (satchelInput?.action != null) satchelInput.action.Disable();
+        if (dialogueInput?.action != null) dialogueInput.action.Disable();
+        if (fleeInput?.action != null) fleeInput.action.Disable();
+        if (interactInput?.action != null) interactInput.action.Disable();
+        if (goBackInput?.action != null) goBackInput.action.Disable();
     }
 }

@@ -41,9 +41,6 @@ public class EnemyAI : MonoBehaviour
     public bool isAttacking = false; // Estado de muerte del enemigo
 
 
-    [Space]
-    public bool endCombat;
-
     public enum State { Patrol, Chase, Attack }
 
     private float timeElapsed = 0f; // Tiempo transcurrido para la rotación
@@ -135,13 +132,6 @@ public class EnemyAI : MonoBehaviour
 
     void Attack()
     {
-        if (endCombat)
-        {
-            FinishedEncounter();
-            CompletelyStopAgent(false);
-            endCombat = false;
-            return;
-        }
         if (isAttacking) return;
 
         gameObject.tag = "AttackingEnemy";
@@ -155,7 +145,33 @@ public class EnemyAI : MonoBehaviour
         StartCoroutine(player.GetComponent<FPSController>().RotateCameraPlayer(transform)); // Desactiva el controlador del jugador
         StartCoroutine(RotateEnemyToPlayer()); // Rotar hacia jugador
         attackRange = 0;
+
+        TurnManager.instance.AddTurn(GetComponent<EntityInterface>()); // Agrega este enemigo al turno del TurnManager
+
         Debug.Log("Atacando al jugador!");
+    }
+
+    public void Flee()
+    {
+        FinishedEncounter();
+        CompletelyStopAgent(false);
+        return;
+    }
+
+    public void EndEncounter()
+    {
+        if (isDead) return; // Si el enemigo ya está muerto, no hacer nada
+        isDead = true; // Cambia el estado a muerto
+        attackers--; // Decrementa el contador de atacantes
+
+        enemies.Remove(this); // Elimina este enemigo de la lista de enemigos
+
+        if (attackers <= 0) 
+        { 
+            FinishedEncounter(); // Termina el encuentro si no hay más atacantes
+        }
+
+        Destroy(gameObject);
     }
 
     private void CompletelyStopAgent(bool isStop)
@@ -218,7 +234,7 @@ public class EnemyAI : MonoBehaviour
     void FinishedEncounter() {
         Time.timeScale = 1; // Reanuda el juego
         player.GetComponent<FPSController>().GiveBackControlToPlayer(); // Reactiva el controlador del jugador
-        StartCoroutine(ChaseDelay());
+        if(!isDead) StartCoroutine(ChaseDelay());
     }
 
     IEnumerator ChaseDelay() { 

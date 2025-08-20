@@ -19,6 +19,7 @@ public abstract class EntityInterface : MonoBehaviour
     [Space]
     public float critChance;
     public float hitChance;
+    public EnemyPart targetEnemyPart;
 
     [Space]
     public TextMeshProUGUI entityNameTMP;
@@ -26,6 +27,9 @@ public abstract class EntityInterface : MonoBehaviour
 
     public GameObject encounterHUD;
     public List<Image> enemyHealthBar = new List<Image>();
+
+    [Space]
+    public bool isItsTurn = false;
 
     private void Start()
     {
@@ -38,24 +42,7 @@ public abstract class EntityInterface : MonoBehaviour
         maxHealth = Random.Range(randomMaxHealth.x, randomMaxHealth.y);
         health = maxHealth;
     }
-    public void TakeDamage(float damage)
-    {
-        health -= damage;
-        Debug.Log($"{entityName} took {damage} damage. Remaining health: {health}");
-        for (int i = 0; i < enemyHealthBar.Count; i++)
-        {
-            enemyHealthBar[i].fillAmount = health / maxHealth;
-        }
-        if (health < 0)
-        {
-            health = 0;
-            for (int i = 0; i < enemyHealthBar.Count; i++)
-            {
-                enemyHealthBar[i].fillAmount = 0;
-            }
-            //Death logic can go here
-        }
-    }
+    public abstract void TakeDamage(float damage);
     public void Attack(EntityInterface target)
     {
         float randHitChance = Random.Range(0f, 100f);
@@ -65,6 +52,19 @@ public abstract class EntityInterface : MonoBehaviour
             if (dodgeChance > target.baseDodgeChance)
             {
                 float attackPower = Random.Range(randomAttackPower.x, randomAttackPower.y);
+
+                if (targetEnemyPart != null) { 
+                    baseAttackPower = attackPower * targetEnemyPart.damageMultiplier;
+                    targetEnemyPart = null;
+                }
+
+                float critChanceRoll = Random.Range(0f, 100f);
+                if (critChanceRoll <= critChance)
+                {
+                    Debug.Log("Critical Hit!");
+                    baseAttackPower *= Random.Range(1.5f,2);
+                }
+
                 target.TakeDamage(attackPower);
             }
             else
@@ -76,11 +76,18 @@ public abstract class EntityInterface : MonoBehaviour
         {
             Debug.LogWarning("Attack Missed!");
         }
+        TurnManager.instance.EndTurn(this);
     }
 
 
     public void OnRaycastEnter()
     {
+        if (encounterHUD==null || enemyHealthBar==null || entityNameTMP==null) {
+            encounterHUD = GameManager.instance.encounterHUD;
+            enemyHealthBar = GameManager.instance.enemyHealthBar;
+            entityNameTMP = GameManager.instance.entityNameTMP;
+        }
+
         for (int i = 0; i < enemyHealthBar.Count; i++)
         {
             enemyHealthBar[i].fillAmount = health / maxHealth;
@@ -90,5 +97,6 @@ public abstract class EntityInterface : MonoBehaviour
             entityNameTMP.text = entityName;
         }        
     }
+
 
 }
