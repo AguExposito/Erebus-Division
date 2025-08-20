@@ -8,11 +8,19 @@ using static EnemyPart;
 public abstract class EntityInterface : MonoBehaviour
 {
     public float health;
-    public float maxHealth;
     public Vector2 randomMaxHealth;
+    public float maxHealth;
     public Vector2 randomAttackPower;
+    public float baseAttackPower;
+    public float baseCritChance;
     public float baseHitChance;
     public float baseDodgeChance;
+
+    [Space]
+    public float critChance;
+    public float hitChance;
+
+    [Space]
     public TextMeshProUGUI entityNameTMP;
     public string entityName;
 
@@ -33,18 +41,27 @@ public abstract class EntityInterface : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
+        Debug.Log($"{entityName} took {damage} damage. Remaining health: {health}");
+        for (int i = 0; i < enemyHealthBar.Count; i++)
+        {
+            enemyHealthBar[i].fillAmount = health / maxHealth;
+        }
         if (health < 0)
         {
             health = 0;
+            for (int i = 0; i < enemyHealthBar.Count; i++)
+            {
+                enemyHealthBar[i].fillAmount = 0;
+            }
             //Death logic can go here
         }
     }
     public void Attack(EntityInterface target)
     {
-        float hitChance = Random.Range(0f, 1f);
-        if (hitChance <= baseHitChance)
+        float randHitChance = Random.Range(0f, 100f);
+        if (randHitChance <= hitChance)
         {
-            float dodgeChance = Random.Range(0f, 1f);
+            float dodgeChance = Random.Range(0f, 100f);
             if (dodgeChance > target.baseDodgeChance)
             {
                 float attackPower = Random.Range(randomAttackPower.x, randomAttackPower.y);
@@ -52,12 +69,12 @@ public abstract class EntityInterface : MonoBehaviour
             }
             else
             {
-                // Target dodged the attack
+                Debug.LogWarning("Attack Dodged!");
             }
         }
         else
         {
-            // Attack missed
+            Debug.LogWarning("Attack Missed!");
         }
     }
 

@@ -30,10 +30,13 @@ public class FPSController : MonoBehaviour
     [SerializeField] InputActionReference runInput;
     [SerializeField] InputActionReference jumpInput;
     [SerializeField] InputActionReference moveInput;
+    [Space]
     [SerializeField] InputActionReference attackInput;
-    [SerializeField] InputActionReference sackInput;
+    [SerializeField] InputActionReference satchelInput;
     [SerializeField] InputActionReference dialogueInput;
     [SerializeField] InputActionReference fleeInput;
+    [SerializeField] InputActionReference interactInput;
+    [SerializeField] InputActionReference goBackInput;
 
     [Space]
     [Header("Movement Variables")]
@@ -66,7 +69,7 @@ public class FPSController : MonoBehaviour
     [SerializeField] bool isRotatingJumpscare = false;
     [SerializeField] bool isInCombat = false;
     [SerializeField] bool isAttackHUD = false;
-    [SerializeField] bool isSackHUD = false;
+    [SerializeField] bool isSatchelHUD = false;
     [SerializeField] bool isDialogueHUD = false;
     [SerializeField] bool isFleeHUD = false;
 
@@ -79,7 +82,6 @@ public class FPSController : MonoBehaviour
     private float timeElapsed;
     private CameraTarget cameraTarget = new CameraTarget();
     public bool encounterHUDActive = false;
-
 
     void Start()
     {
@@ -119,9 +121,12 @@ public class FPSController : MonoBehaviour
             {
                 if (hit.transform.CompareTag("AttackingEnemy"))
                 {
+                    EntityInterface entityInterface=null;
+
                     if (hit.transform.GetComponentInParent<EntityInterface>())
                     {
                         hit.transform.GetComponentInParent<EntityInterface>().OnRaycastEnter();
+                        entityInterface = hit.transform.GetComponentInParent<EntityInterface>();
                         GameManager.instance.encounterHUD.SetActive(true);
                         encounterHUDActive = true;
                     }
@@ -130,16 +135,27 @@ public class FPSController : MonoBehaviour
                         Debug.LogWarning("EntityInterface not found on the hit object.");
                     }
 
-                    if (isAttackHUD)
+                    if (isAttackHUD && entityInterface!=null)
                     {
                         if(hit.collider.TryGetComponent<EnemyPart>(out EnemyPart enemyPart))
                         {
+                            entityInterface = hit.transform.GetComponentInParent<EntityInterface>(true);
+
                             if (enemyPart != null)
                             {
-                                GameManager.instance.critChance.text = Math.Round(enemyPart.critChanceMultiplier, 2) + "%";
-                                GameManager.instance.hitChance.text = Math.Round(enemyPart.hitChanceMultiplier, 2) + "%";
+                                playerStats.critChance = (float)Math.Round(enemyPart.critChanceMultiplier * playerStats.baseCritChance, 1);
+                                playerStats.hitChance = (float)Math.Round(enemyPart.hitChanceMultiplier * playerStats.baseHitChance, 1);
+
+                                GameManager.instance.critChance.text = playerStats.critChance + "%";
+                                GameManager.instance.hitChance.text = playerStats.hitChance + "%";
                                 GameManager.instance.bodyPart.text = enemyPart.partType.ToString();
                                 GameManager.instance.bodyPartState.text = enemyPart.partStatus.ToString();
+
+                                if (interactInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled) 
+                                {
+
+                                    playerStats.Attack(entityInterface);
+                                }
                             }
                         }
                     }
@@ -148,16 +164,24 @@ public class FPSController : MonoBehaviour
                 
                 
             }
+
             if (GameManager.instance.encounterHUD != null && hits.Length==0)
             {
                 GameManager.instance.encounterHUD.SetActive(false);
                 encounterHUDActive = false;
             }
 
-
-            if (attackInput.action.ReadValue<float>() > 0.1 && playerInput.Encounter.enabled && !isAttackHUD)
+            if (attackInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled)
             {
-                isAttackHUD = true;
+                if (!isAttackHUD && encounterHUDActive)
+                {
+                    isAttackHUD = true;
+                    GameManager.instance.enemyInfo.SetActive(true);
+                }
+                else {
+                    isAttackHUD = false;
+                    GameManager.instance.enemyInfo.SetActive(false);
+                }
             }
         }
         #endregion
@@ -350,7 +374,7 @@ public class FPSController : MonoBehaviour
         runInput.action.Enable();
         moveInput.action.Enable();
         attackInput.action.Enable();
-        sackInput.action.Enable();
+        satchelInput.action.Enable();
         dialogueInput.action.Enable();
         fleeInput.action.Enable();
     }
@@ -360,7 +384,7 @@ public class FPSController : MonoBehaviour
         runInput.action.Disable();
         moveInput.action.Disable();
         attackInput.action.Disable();
-        sackInput.action.Disable();
+        satchelInput.action.Disable();
         dialogueInput.action.Disable();
         fleeInput.action.Disable();
     }

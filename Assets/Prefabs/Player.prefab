@@ -84,9 +84,11 @@ MonoBehaviour:
   jumpInput: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   moveInput: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   attackInput: {fileID: 1748840317040963771, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  sackInput: {fileID: -2075617142125421389, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  satchelInput: {fileID: -2075617142125421389, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   dialogueInput: {fileID: -527395638209295639, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   fleeInput: {fileID: -2871069443960112996, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  interactInput: {fileID: 3886633273262969709, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  goBackInput: {fileID: -758940298528542082, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   walkSpeed: 5
   runSpeed: 8
   jumpPower: 3
@@ -106,7 +108,7 @@ MonoBehaviour:
   isRotatingJumpscare: 0
   isInCombat: 0
   isAttackHUD: 0
-  isSackHUD: 0
+  isSatchelHUD: 0
   isDialogueHUD: 0
   isFleeHUD: 0
   moveDirection: {x: 0, y: 0, z: 0}
@@ -126,20 +128,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
-  maxHealth: 0
   randomMaxHealth: {x: 0, y: 0}
-  randomAttackPower: {x: 0, y: 0}
-  baseHitChance: 0
-  baseDodgeChance: 0
+  maxHealth: 0
+  randomAttackPower: {x: 7, y: 13}
+  baseAttackPower: 10
+  baseCritChance: 10
+  baseHitChance: 85
+  baseDodgeChance: 15
+  critChance: 0
+  hitChance: 0
   entityNameTMP: {fileID: 0}
   entityName: 
   encounterHUD: {fileID: 0}
   enemyHealthBar: []
-  fpsController: {fileID: 1425115995545481009}
-  critChance: {fileID: 0}
-  hitChance: {fileID: 0}
-  bodyPart: {fileID: 0}
-  bodyPartState: {fileID: 0}
 --- !u!1 &4198323653780529454
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI hitChance;
     public TextMeshProUGUI bodyPart;
     public TextMeshProUGUI bodyPartState;
+    public GameObject enemyInfo;
 
 
     private void Awake()

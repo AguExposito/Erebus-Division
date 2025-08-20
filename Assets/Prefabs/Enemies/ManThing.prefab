@@ -1172,7 +1172,7 @@ MonoBehaviour:
   partStatus: 1
   hitChanceMultMinMax: {x: 0.6, y: 0.8}
   hitChanceMultiplier: 1
-  critChanceMultMinMax: {x: 0, y: 0}
+  critChanceMultMinMax: {x: 0, y: 0.2}
   critChanceMultiplier: 1
   damageMultiplier: 1
 --- !u!1 &3662403039019963551
@@ -3804,7 +3804,7 @@ MonoBehaviour:
   partStatus: 1
   hitChanceMultMinMax: {x: 0.6, y: 0.8}
   hitChanceMultiplier: 1
-  critChanceMultMinMax: {x: 0, y: 0}
+  critChanceMultMinMax: {x: 0, y: 0.2}
   critChanceMultiplier: 1
   damageMultiplier: 1
 --- !u!1 &8880751245457068013
@@ -4030,11 +4030,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
-  maxHealth: 0
   randomMaxHealth: {x: 15, y: 20}
+  maxHealth: 0
   randomAttackPower: {x: 3, y: 5}
-  baseHitChance: 0.8
-  baseDodgeChance: 0.25
+  baseAttackPower: 10
+  baseCritChance: 10
+  baseHitChance: 8
+  baseDodgeChance: 25
+  critChance: 0
+  hitChance: 0
   entityNameTMP: {fileID: 0}
   entityName: ManThing
   encounterHUD: {fileID: 0}

@@ -520,7 +520,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Sack"",
+                    ""name"": ""Satchel"",
                     ""type"": ""Button"",
                     ""id"": ""7525eeb0-e0c7-4382-a8c7-55e52b60eb17"",
                     ""expectedControlType"": """",
@@ -541,6 +541,24 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Flee"",
                     ""type"": ""Button"",
                     ""id"": ""0e87a245-cdb3-443a-8428-9aedde7dc384"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""ecbce66f-2220-4593-ac05-dc186bfc290b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""GoBack"",
+                    ""type"": ""Button"",
+                    ""id"": ""f4f8e30e-583e-46fa-ab9f-8ea8e5786abb"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -588,7 +606,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Sack"",
+                    ""action"": ""Satchel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -622,6 +640,39 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2e0478e3-3a19-454d-b160-86e730a087c6"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""84ef12d0-f5d5-4141-8494-53830614acbd"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4cfcd1b1-42d9-44ef-83e9-49a7af233cbc"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GoBack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1222,9 +1273,11 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Encounter = asset.FindActionMap("Encounter", throwIfNotFound: true);
         m_Encounter_Look = m_Encounter.FindAction("Look", throwIfNotFound: true);
         m_Encounter_Attack = m_Encounter.FindAction("Attack", throwIfNotFound: true);
-        m_Encounter_Sack = m_Encounter.FindAction("Sack", throwIfNotFound: true);
+        m_Encounter_Satchel = m_Encounter.FindAction("Satchel", throwIfNotFound: true);
         m_Encounter_Dialogue = m_Encounter.FindAction("Dialogue", throwIfNotFound: true);
         m_Encounter_Flee = m_Encounter.FindAction("Flee", throwIfNotFound: true);
+        m_Encounter_Interact = m_Encounter.FindAction("Interact", throwIfNotFound: true);
+        m_Encounter_GoBack = m_Encounter.FindAction("GoBack", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1417,18 +1470,22 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private List<IEncounterActions> m_EncounterActionsCallbackInterfaces = new List<IEncounterActions>();
     private readonly InputAction m_Encounter_Look;
     private readonly InputAction m_Encounter_Attack;
-    private readonly InputAction m_Encounter_Sack;
+    private readonly InputAction m_Encounter_Satchel;
     private readonly InputAction m_Encounter_Dialogue;
     private readonly InputAction m_Encounter_Flee;
+    private readonly InputAction m_Encounter_Interact;
+    private readonly InputAction m_Encounter_GoBack;
     public struct EncounterActions
     {
         private @InputSystem_Actions m_Wrapper;
         public EncounterActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Look => m_Wrapper.m_Encounter_Look;
         public InputAction @Attack => m_Wrapper.m_Encounter_Attack;
-        public InputAction @Sack => m_Wrapper.m_Encounter_Sack;
+        public InputAction @Satchel => m_Wrapper.m_Encounter_Satchel;
         public InputAction @Dialogue => m_Wrapper.m_Encounter_Dialogue;
         public InputAction @Flee => m_Wrapper.m_Encounter_Flee;
+        public InputAction @Interact => m_Wrapper.m_Encounter_Interact;
+        public InputAction @GoBack => m_Wrapper.m_Encounter_GoBack;
         public InputActionMap Get() { return m_Wrapper.m_Encounter; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1444,15 +1501,21 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Attack.started += instance.OnAttack;
             @Attack.performed += instance.OnAttack;
             @Attack.canceled += instance.OnAttack;
-            @Sack.started += instance.OnSack;
-            @Sack.performed += instance.OnSack;
-            @Sack.canceled += instance.OnSack;
+            @Satchel.started += instance.OnSatchel;
+            @Satchel.performed += instance.OnSatchel;
+            @Satchel.canceled += instance.OnSatchel;
             @Dialogue.started += instance.OnDialogue;
             @Dialogue.performed += instance.OnDialogue;
             @Dialogue.canceled += instance.OnDialogue;
             @Flee.started += instance.OnFlee;
             @Flee.performed += instance.OnFlee;
             @Flee.canceled += instance.OnFlee;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
+            @GoBack.started += instance.OnGoBack;
+            @GoBack.performed += instance.OnGoBack;
+            @GoBack.canceled += instance.OnGoBack;
         }
 
         private void UnregisterCallbacks(IEncounterActions instance)
@@ -1463,15 +1526,21 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Attack.started -= instance.OnAttack;
             @Attack.performed -= instance.OnAttack;
             @Attack.canceled -= instance.OnAttack;
-            @Sack.started -= instance.OnSack;
-            @Sack.performed -= instance.OnSack;
-            @Sack.canceled -= instance.OnSack;
+            @Satchel.started -= instance.OnSatchel;
+            @Satchel.performed -= instance.OnSatchel;
+            @Satchel.canceled -= instance.OnSatchel;
             @Dialogue.started -= instance.OnDialogue;
             @Dialogue.performed -= instance.OnDialogue;
             @Dialogue.canceled -= instance.OnDialogue;
             @Flee.started -= instance.OnFlee;
             @Flee.performed -= instance.OnFlee;
             @Flee.canceled -= instance.OnFlee;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
+            @GoBack.started -= instance.OnGoBack;
+            @GoBack.performed -= instance.OnGoBack;
+            @GoBack.canceled -= instance.OnGoBack;
         }
 
         public void RemoveCallbacks(IEncounterActions instance)
@@ -1668,9 +1737,11 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     {
         void OnLook(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
-        void OnSack(InputAction.CallbackContext context);
+        void OnSatchel(InputAction.CallbackContext context);
         void OnDialogue(InputAction.CallbackContext context);
         void OnFlee(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
+        void OnGoBack(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
