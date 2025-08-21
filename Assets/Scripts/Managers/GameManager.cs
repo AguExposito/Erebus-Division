@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     [Header("HUD References")]
     public GameObject encounterHUD;
     public List<Image> enemyHealthBar = new List<Image>();
+    public Image healthVignette;
     public TextMeshProUGUI entityNameTMP;
     [Space]
     public Image playerHealth;
