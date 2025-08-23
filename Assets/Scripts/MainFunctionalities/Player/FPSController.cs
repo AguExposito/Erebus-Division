@@ -109,7 +109,7 @@ public class FPSController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        GameManager.instance.encounterHUD.SetActive(false);
+        GameManagerDD.instance.encounterHUD.SetActive(false);
         TurnManager.instance.AddTurn(playerStats);
         playerStats.isItsTurn = true;
     }
@@ -131,7 +131,7 @@ public class FPSController : MonoBehaviour
                     {
                         hit.transform.GetComponentInParent<EntityInterface>().OnRaycastEnter();
                         entityInterface = hit.transform.GetComponentInParent<EntityInterface>();
-                        GameManager.instance.encounterHUD.SetActive(true);
+                        GameManagerDD.instance.encounterHUD.SetActive(true);
                         encounterHUDActive = true;
                     }
                     else
@@ -151,10 +151,10 @@ public class FPSController : MonoBehaviour
                                 playerStats.hitChance = (float)Math.Round(enemyPart.hitChanceMultiplier * playerStats.baseHitChance, 1);
                                 playerStats.targetEnemyPart = enemyPart;
 
-                                GameManager.instance.critChance.text = playerStats.critChance + "%";
-                                GameManager.instance.hitChance.text = playerStats.hitChance + "%";
-                                GameManager.instance.bodyPart.text = enemyPart.partType.ToString();
-                                GameManager.instance.bodyPartState.text = enemyPart.partStatus.ToString();
+                                GameManagerDD.instance.critChance.text = playerStats.critChance + "%";
+                                GameManagerDD.instance.hitChance.text = playerStats.hitChance + "%";
+                                GameManagerDD.instance.bodyPart.text = enemyPart.partType.ToString();
+                                GameManagerDD.instance.bodyPartState.text = enemyPart.partStatus.ToString();
 
 
                                 if (interactInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled && playerStats.isItsTurn && isInCombat) 
@@ -172,9 +172,9 @@ public class FPSController : MonoBehaviour
                 
             }
 
-            if (GameManager.instance.encounterHUD != null && hits.Length==0 && isInCombat)
+            if (GameManagerDD.instance.encounterHUD != null && hits.Length==0 && isInCombat)
             {
-                GameManager.instance.encounterHUD.SetActive(false);
+                GameManagerDD.instance.encounterHUD.SetActive(false);
                 encounterHUDActive = false;
             }
 
@@ -183,11 +183,11 @@ public class FPSController : MonoBehaviour
                 if (!isAttackHUD && encounterHUDActive)
                 {
                     isAttackHUD = true;
-                    GameManager.instance.enemyInfo.SetActive(true);
+                    GameManagerDD.instance.enemyInfo.SetActive(true);
                 }
                 else {
                     isAttackHUD = false;
-                    GameManager.instance.enemyInfo.SetActive(false);
+                    GameManagerDD.instance.enemyInfo.SetActive(false);
                 }
             }
             if (!playerInput.Encounter.enabled && playerStats.isItsTurn && isInCombat)
@@ -339,7 +339,7 @@ public class FPSController : MonoBehaviour
             controller.Enabled = true;
         }
 
-        GameManager.instance.encounterHUD.SetActive(true);
+        GameManagerDD.instance.encounterHUD.SetActive(true);
         isInCombat = true;
         
         // Deshabilitar el action map de Player
@@ -367,8 +367,8 @@ public class FPSController : MonoBehaviour
     public void GiveBackControlToPlayer()
     {
         isInCombat = false;
-        GameManager.instance.encounterHUD.SetActive(false);
-        GameManager.instance.enemyInfo.SetActive(false);
+        GameManagerDD.instance.encounterHUD.SetActive(false);
+        GameManagerDD.instance.enemyInfo.SetActive(false);
         encounterHUDActive = false;
         isAttackHUD = false;
         

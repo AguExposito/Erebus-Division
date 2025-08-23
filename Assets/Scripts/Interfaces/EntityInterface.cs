@@ -33,9 +33,9 @@ public abstract class EntityInterface : MonoBehaviour
 
     private void Start()
     {
-        encounterHUD = GameManager.instance.encounterHUD;
-        enemyHealthBar = GameManager.instance.enemyHealthBar;
-        entityNameTMP = GameManager.instance.entityNameTMP;
+        encounterHUD = GameManagerDD.instance.encounterHUD;
+        enemyHealthBar = GameManagerDD.instance.enemyHealthBar;
+        entityNameTMP = GameManagerDD.instance.entityNameTMP;
     }
     private void OnEnable()
     {
@@ -83,9 +83,9 @@ public abstract class EntityInterface : MonoBehaviour
     public void OnRaycastEnter()
     {
         if (encounterHUD==null || enemyHealthBar==null || entityNameTMP==null) {
-            encounterHUD = GameManager.instance.encounterHUD;
-            enemyHealthBar = GameManager.instance.enemyHealthBar;
-            entityNameTMP = GameManager.instance.entityNameTMP;
+            encounterHUD = GameManagerDD.instance.encounterHUD;
+            enemyHealthBar = GameManagerDD.instance.enemyHealthBar;
+            entityNameTMP = GameManagerDD.instance.entityNameTMP;
         }
 
         for (int i = 0; i < enemyHealthBar.Count; i++)

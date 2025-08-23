@@ -12,9 +12,9 @@ public class PlayerStats : EntityInterface
 
     private void Start()
     {
-        playerHealthBar=GameManager.instance.playerHealth;
-        playerFear = GameManager.instance.playerFear;
-        color = GameManager.instance.healthVignette.color;
+        playerHealthBar=GameManagerDD.instance.playerHealth;
+        playerFear = GameManagerDD.instance.playerFear;
+        color = GameManagerDD.instance.healthVignette.color;
     }
     public override void TakeDamage(float damage)
     {          
@@ -24,7 +24,7 @@ public class PlayerStats : EntityInterface
 
         // El alpha será máximo 0.5 cuando la vida sea 0, y 0 cuando la vida sea máxima
         float alpha = 0.5f * (1f - (health / maxHealth));
-        GameManager.instance.healthVignette.color = new Color(color.r, color.g, color.b, alpha);
+        GameManagerDD.instance.healthVignette.color = new Color(color.r, color.g, color.b, alpha);
 
         if (health < 0)
         {
