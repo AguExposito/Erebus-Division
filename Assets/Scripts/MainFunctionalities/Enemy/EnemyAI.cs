@@ -8,6 +8,7 @@ public class EnemyAI : MonoBehaviour
 {
     [Header("References")]
     public Outline outline;
+    public AnimationManager animationManager;
 
     [Space]
     [Header("Target Settings")]
@@ -39,7 +40,8 @@ public class EnemyAI : MonoBehaviour
     [Header("Status")]
     public bool isDead = false; // Estado de muerte del enemigo
     public bool isAttacking = false; // Estado de muerte del enemigo
-
+    public bool isScreaming = false; // Estado de grito del enemigo
+    public bool isChasing = false; // Flag para verificar si se ha iniciado el Chase
 
     public enum State { Patrol, Chase, Attack }
 
@@ -99,25 +101,56 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+
     void Chase()
     {
-        agent.SetDestination(player.position); // El enemigo sigue al jugador
-        agent.speed = chaseSpeed * multiplier; // Velocidad de persecución
-        // Si está dentro del rango de ataque, cambia al estado de ataque
-        if (Vector3.Distance(transform.position, player.position) < attackRange)
+        // Comienza la corutina solo si no ha sido iniciada previamente
+        if (!isChasing)
         {
-            currentState = State.Attack;
+            isChasing = true; // Marcamos que se ha comenzado el Chase
+            isScreaming = true; // Establecemos que está gritando
+            agent.speed = 0; // Detenemos el agente
+            StartCoroutine(WaitEndOfScream()); // Iniciamos la corutina
         }
 
-        // Si el enemigo pierde la línea de visión, vuelve a patrullar
-        if (Vector3.Distance(transform.position, player.position) > visionDistance || !IsPlayerOnSight())
+        // Después de que el grito haya terminado, el enemigo sigue al jugador
+        if (!isScreaming)
         {
-            if (tempPos == Vector3.zero)
+            agent.SetDestination(player.position); // El enemigo sigue al jugador
+            agent.speed = chaseSpeed * multiplier; // Velocidad de persecución
+
+            // Si está dentro del rango de ataque, cambia al estado de ataque
+            if (Vector3.Distance(transform.position, player.position) < attackRange)
             {
-                tempPos = player.position;
-                agent.SetDestination(tempPos);
-                StartCoroutine(LookingForPlayer());
+                currentState = State.Attack;
             }
+
+            // Si el enemigo pierde la línea de visión, vuelve a patrullar
+            if (Vector3.Distance(transform.position, player.position) > visionDistance || !IsPlayerOnSight())
+            {
+                if (tempPos == Vector3.zero)
+                {
+                    tempPos = player.position;
+                    agent.SetDestination(tempPos);
+                    StartCoroutine(LookingForPlayer());
+                }
+            }
+        }
+    }
+
+
+    IEnumerator WaitEndOfScream()
+    {
+        AnimationClip screamClip = animationManager.GetAnimationClip("Scream");
+        if (screamClip != null)
+        {
+            yield return new WaitForSeconds(screamClip.length);
+            isScreaming = false;
+        }
+        else
+        {
+            Debug.LogWarning("Scream animation not found!");
+            yield return null;
         }
     }
 

@@ -209,7 +209,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 51.73
+      value: 51.62
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
       propertyPath: m_LocalPosition.y
@@ -217,7 +217,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 52.7
+      value: 52.83
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
       propertyPath: m_LocalRotation.w
@@ -534,6 +534,9 @@ PrefabInstance:
       addedObject: {fileID: 6742973562417594654}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 4728798104827659688}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1969379731784516143}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
       insertIndex: -1
@@ -766,10 +769,10 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2468558929277774888}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 01facdb4b445bdb4993d610ac6be7253, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
   m_Controller: {fileID: 9100000, guid: bde1b693a7bcc6c41975a074caa4cb8b, type: 2}
   m_CullingMode: 1
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -779,6 +782,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4728798104827659688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2468558929277774888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e1dcda2112c22a449f71a188dd56e89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  navMeshAgent: {fileID: 5718338995167752000}
+  enemyAI: {fileID: 6806435462161383078}
 --- !u!136 &1969379731784516143
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -837,6 +854,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outline: {fileID: 8765404758490228345}
+  animationManager: {fileID: 4728798104827659688}
   player: {fileID: 0}
   targetPosition: {x: 0, y: 0, z: 0}
   areaX: 200
@@ -847,7 +865,7 @@ MonoBehaviour:
   visionAngle: 60
   visionHeight: 1.5
   patrolSpeed: 4
-  chaseSpeed: 7
+  chaseSpeed: 10
   rotationDuration: 0.25
   acceleration: 8
   angularVelocity: 300
@@ -858,6 +876,7 @@ MonoBehaviour:
   currentState: 0
   isDead: 0
   isAttacking: 0
+  isScreaming: 0
 --- !u!114 &4030781612172089812
 MonoBehaviour:
   m_ObjectHideFlags: 0
