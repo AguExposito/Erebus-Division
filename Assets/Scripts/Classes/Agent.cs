@@ -55,7 +55,7 @@ public class Agent : MonoBehaviour
         }
         else { Debug.Log("YOU CHEATER SCUM!"); }
     }
-
+    //function to load and set the stats of the hired agents
     public void LoadStats(string agentName, int health, int dmg, int dodge, int stressMax)
     {
         this._agentName = agentName;
@@ -69,5 +69,52 @@ public class Agent : MonoBehaviour
         this._stressMax = stressMax;
         this.StressMax = _stressMax;
         gameObject.name = "Agent: " + _agentName;
+    }
+
+    public void EditStats(string statToEdit)
+    {
+        int minStats = 1;
+        switch (statToEdit)
+        {
+            case "health":
+                this._health += 1;
+                this.Health = _health;
+                break;
+            case "-health":
+                if (_health <= minStats) { return; }
+                this._health -= 1;
+                this.Health = _health;
+                break;
+            case "dmg":
+                this._dmg += 1;
+                this.Dmg = _dmg;
+                break;
+            case "-dmg":
+                if (_dmg <= minStats) { return; }
+                this._dmg -= 1;
+                this.Dmg = _dmg;
+                break;
+            case "dodge":
+                this._dodge += 1;
+                this.Dodge = _dodge;
+                break;
+            case "-dodge":
+                if (_dodge <= minStats) { return; }
+                this._dodge -= 1;
+                this.Dodge = _dodge;
+                break;
+            case "stress":
+                this._stressMax += 1;
+                this.StressMax = _stressMax;
+                break;
+            case "-stress":
+                if (_stressMax <= minStats) { return; }
+                this._stressMax -= 1;
+                this.StressMax = _stressMax;
+                break;
+            default:
+
+                break;
+        }
     }
 }
