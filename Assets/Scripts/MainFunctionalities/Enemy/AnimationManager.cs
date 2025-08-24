@@ -5,7 +5,7 @@ public class AnimationManager : MonoBehaviour
 {
     public NavMeshAgent navMeshAgent;
     public EnemyAI enemyAI;
-    Animator anim;
+    public Animator anim;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -17,7 +17,6 @@ public class AnimationManager : MonoBehaviour
     void Update()
     {
         anim.SetFloat("Speed", navMeshAgent.velocity.magnitude); 
-        anim.SetBool("Chasing", enemyAI.currentState == EnemyAI.State.Chase);
     }
 
     public AnimationClip GetAnimationClip(string clipName)

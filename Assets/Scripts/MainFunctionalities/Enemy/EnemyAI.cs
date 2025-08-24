@@ -107,7 +107,7 @@ public class EnemyAI : MonoBehaviour
         // Comienza la corutina solo si no ha sido iniciada previamente
         if (!isChasing)
         {
-            isChasing = true; // Marcamos que se ha comenzado el Chase
+            ChaseState(true); // Marcamos que se ha comenzado el Chase
             isScreaming = true; // Establecemos que está gritando
             agent.speed = 0; // Detenemos el agente
             StartCoroutine(WaitEndOfScream()); // Iniciamos la corutina
@@ -138,6 +138,11 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    private void ChaseState(bool state)
+    {
+        isChasing = state;
+        animationManager.anim.SetBool("Chasing", state);
+    }
 
     IEnumerator WaitEndOfScream()
     {
@@ -168,7 +173,7 @@ public class EnemyAI : MonoBehaviour
         if (isAttacking) return;
 
         gameObject.tag = "AttackingEnemy";
-        isAttacking = true; // Cambia el estado a atacando
+        AttackState(true);
         attackers++; // Incrementa el contador de atacantes
         Debug.Log("Atacantes: " + attackers);
 
@@ -182,6 +187,12 @@ public class EnemyAI : MonoBehaviour
         TurnManager.instance.AddTurn(GetComponent<EntityInterface>()); // Agrega este enemigo al turno del TurnManager
 
         Debug.Log("Atacando al jugador!");
+    }
+
+    private void AttackState(bool state)
+    {
+        isAttacking = state; // Cambia el estado a atacando
+        animationManager.anim.SetBool("InCombat", state);
     }
 
     public void Flee()
@@ -272,7 +283,7 @@ public class EnemyAI : MonoBehaviour
 
     IEnumerator ChaseDelay() { 
         yield return new WaitForSeconds(2f);
-        isAttacking = false; // Cambia el estado a no atacando
+        AttackState(false);
         attackRange = 2f;
         currentState = State.Chase;
     }
