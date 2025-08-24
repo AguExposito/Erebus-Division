@@ -2146,7 +2146,7 @@ GameObject:
   - component: {fileID: 478434602}
   - component: {fileID: 478434601}
   - component: {fileID: 478434604}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: HR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4733,7 +4733,7 @@ GameObject:
   - component: {fileID: 923505435}
   - component: {fileID: 923505434}
   - component: {fileID: 923505437}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Workshop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6543,7 +6543,7 @@ GameObject:
   - component: {fileID: 1369084423}
   - component: {fileID: 1369084422}
   - component: {fileID: 1369084425}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Barracks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8905,7 +8905,7 @@ GameObject:
   - component: {fileID: 1828387469}
   - component: {fileID: 1828387468}
   - component: {fileID: 1828387467}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Storage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10719,7 +10719,7 @@ GameObject:
   - component: {fileID: 2037937453}
   - component: {fileID: 2037937455}
   - component: {fileID: 2037937456}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Elevator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
