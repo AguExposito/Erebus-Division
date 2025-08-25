@@ -395,6 +395,36 @@ public class FPSController : MonoBehaviour
         canMove = true;
     }
 
+    public void Flee()
+    {
+        // 1. Eliminar todos los enemigos del turnero
+        List<EntityInterface> toRemove = new List<EntityInterface>(TurnManager.instance.entitiesTurns);
+
+        foreach (EntityInterface entity in toRemove)
+        {
+            if (entity != playerStats)
+            {
+                // Puedes hacer que los enemigos reaccionen si querés
+                if (entity.TryGetComponent<EnemyAI>(out EnemyAI enemy))
+                {
+                    enemy.OnPlayerFled(); // O destruye al enemigo, etc.
+                }
+            }
+
+            TurnManager.instance.RemoveTurn(entity);
+        }
+
+        // 2. Eliminar al jugador del turnero
+        TurnManager.instance.RemoveTurn(playerStats);
+        playerStats.isItsTurn = false;
+
+        // 3. Restaurar control al jugador
+        GiveBackControlToPlayer();
+
+        Debug.Log("Player fled the battle!");
+    }
+
+
     public void ChangeMovementVariables(float walkSpeed, float runSpeed, float jumpPower, bool alteredMovement) { 
         this.walkSpeed = walkSpeed;
         this.runSpeed = runSpeed;

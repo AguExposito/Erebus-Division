@@ -121,6 +121,59 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!1 &2200885053585166086
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 734502467068345115}
+  - component: {fileID: 2998397498812616685}
+  m_Layer: 0
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &734502467068345115
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2200885053585166086}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2957112234796922514}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2998397498812616685
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2200885053585166086}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5, y: 2.25, z: 0.25}
+  m_Center: {x: 0, y: 1.2, z: 0}
 --- !u!1001 &572968172925617983
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -528,6 +581,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
       insertIndex: 1
       addedObject: {fileID: 3824793315165761798}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
+      insertIndex: 3
+      addedObject: {fileID: 734502467068345115}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
       insertIndex: -1
@@ -583,6 +639,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -7657966619581158213, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2999646828150142442}
+    - targetCorrespondingSourceObject: {fileID: -7657966619581158213, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5660318399106637038}
     - targetCorrespondingSourceObject: {fileID: 8817898888258712963, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1981726501795217602}
@@ -830,10 +889,10 @@ NavMeshAgent:
   m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.2
-  m_Speed: 4
-  m_Acceleration: 8
+  m_Speed: 5
+  m_Acceleration: 1e+11
   avoidancePriority: 50
-  m_AngularSpeed: 1000
+  m_AngularSpeed: 1e+19
   m_StoppingDistance: 2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 0
@@ -865,11 +924,11 @@ MonoBehaviour:
   visionDistance: 15
   visionAngle: 60
   visionHeight: 1.5
-  patrolSpeed: 4
+  patrolSpeed: 5
   chaseSpeed: 10
   rotationDuration: 0.25
-  acceleration: 8
-  angularVelocity: 300
+  acceleration: 1e+11
+  angularVelocity: 1e+19
   multiplier: 1
   obstacleLayer:
     serializedVersion: 2
@@ -1031,6 +1090,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5, y: 1, z: 0.3}
   m_Center: {x: 0, y: 0.2, z: 0}
+--- !u!114 &5660318399106637038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4267745017510346178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb5591ff58da5c42a3acb68df13e124, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partType: 1
+  partStatus: 1
+  hitChanceMultMinMax: {x: 0.5, y: 0.8}
+  hitChanceMultiplier: 1
+  critChanceMultMinMax: {x: 0.25, y: 0.8}
+  critChanceMultiplier: 1
+  damageMultiplier: 1
 --- !u!1 &5315414183556813341 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -1781356600409242780, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}

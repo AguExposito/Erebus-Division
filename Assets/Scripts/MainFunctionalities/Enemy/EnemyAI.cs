@@ -149,8 +149,9 @@ public class EnemyAI : MonoBehaviour
         AnimationClip screamClip = animationManager.GetAnimationClip("Scream");
         if (screamClip != null)
         {
-            yield return new WaitForSeconds(screamClip.length);
+            yield return new WaitForSeconds(screamClip.length/1.5f);
             isScreaming = false;
+            Debug.LogWarning("SCREAM ENDED");
         }
         else
         {
@@ -195,12 +196,30 @@ public class EnemyAI : MonoBehaviour
         animationManager.anim.SetBool("InCombat", state);
     }
 
-    public void Flee()
+    public void OnPlayerFled()
     {
+        attackers = 0;
         FinishedEncounter();
-        CompletelyStopAgent(false);
-        return;
+        StartCoroutine(ResumeMovementAfterDelay(1f));
     }
+
+    private IEnumerator ResumeMovementAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        foreach (EnemyAI enemy in enemies)
+        {
+            if (enemy != null && !enemy.isDead)
+            {
+                enemy.CompletelyStopAgent(false); // Reactiva la navegación
+                enemy.AttackState(false);         // Sale del modo combate
+                enemy.attackRange = 2f;
+                enemy.currentState = State.Patrol;
+            }
+        }
+    }
+
+
 
     public void EndEncounter()
     {
@@ -224,7 +243,7 @@ public class EnemyAI : MonoBehaviour
         if (isStop)
         {
             agent.isStopped = true; // Detiene el agente de navegación
-            multiplier = 0; // Detiene el agente de navegación
+            SetAgentSpeed();
             agent.ResetPath(); // Resetea la ruta del agente
             agent.velocity = Vector3.zero; // Detiene el movimiento del agente
             agent.angularSpeed = 0; // Detiene la rotación del agente
@@ -236,6 +255,7 @@ public class EnemyAI : MonoBehaviour
         else 
         {
             agent.isStopped = false; // Reanuda el agente de navegación
+            SetAgentSpeed();
             agent.angularSpeed = angularVelocity; // Reanuda la rotación del agente
             agent.acceleration = acceleration; // Reanuda la aceleración del agente
             agent.updateRotation = true; // Reanuda la rotación automática del agente
