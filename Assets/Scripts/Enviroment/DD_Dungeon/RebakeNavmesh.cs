@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class RebakeNavmesh : MonoBehaviour
 {
+    public static RebakeNavmesh Instance;
     public bool rebaked=false;
     void Start()
     {
         StartCoroutine(RebakeNavMesh());
     }
 
-    private IEnumerator RebakeNavMesh()
+    public IEnumerator RebakeNavMesh()
     {
         // Esperar un fotograma para asegurarse de que todo esté cargado antes de realizar el rebake
         yield return new WaitForSeconds(1);

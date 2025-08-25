@@ -199,6 +199,8 @@ public class EnemyAI : MonoBehaviour
     public void OnPlayerFled()
     {
         attackers = 0;
+        agent.GetComponent<NavMeshObstacle>().enabled = false;
+        RebakeNavmesh.Instance.RebakeNavMesh();
         FinishedEncounter();
         StartCoroutine(ResumeMovementAfterDelay(1f));
     }

@@ -6,7 +6,7 @@ public class TurnManager : MonoBehaviour
 {
     public static TurnManager instance;
     public List<EntityInterface> entitiesTurns = new List<EntityInterface>();
-
+    public float encounterThreathLevel;
     private void Awake()
     {
         instance = this;
@@ -15,11 +15,13 @@ public class TurnManager : MonoBehaviour
     public void AddTurn(EntityInterface entity) {
         if (entitiesTurns.Contains(entity)) return;
         entitiesTurns.Add(entity);
+        encounterThreathLevel=UpdateThreathLevel();
     }
     public void RemoveTurn(EntityInterface entity)
     {
         if (!entitiesTurns.Contains(entity)) return;
         entitiesTurns.Remove(entity);
+        encounterThreathLevel = UpdateThreathLevel();
     }
     public void EndTurn(EntityInterface entity) {
         if (!entitiesTurns.Contains(entity) || entitiesTurns.IndexOf(entity)!=0) return;
@@ -39,5 +41,14 @@ public class TurnManager : MonoBehaviour
         {
             manThing.CheckTurn();
         }
+    }
+
+    public float UpdateThreathLevel() {
+        float tempTlvl=0;
+        foreach (var entity in entitiesTurns)
+        {
+            tempTlvl+= entity.threathLevel;
+        }
+        return tempTlvl;
     }
 }

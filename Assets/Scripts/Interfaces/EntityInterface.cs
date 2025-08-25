@@ -15,6 +15,7 @@ public abstract class EntityInterface : MonoBehaviour
     public float baseCritChance;
     public float baseHitChance;
     public float baseDodgeChance;
+    public float threathLevel;
 
     [Space]
     public float critChance;

@@ -958,6 +958,7 @@ MonoBehaviour:
   baseCritChance: 10
   baseHitChance: 100
   baseDodgeChance: 25
+  threathLevel: 20
   critChance: 15
   hitChance: 100
   targetEnemyPart: {fileID: 0}

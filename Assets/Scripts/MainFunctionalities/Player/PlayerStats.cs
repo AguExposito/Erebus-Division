@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -5,14 +6,17 @@ using UnityEngine.UI;
 
 public class PlayerStats : EntityInterface
 {
+    [SerializeField] FPSController fPSController;
     [SerializeField] Image playerHealthBar;
     [SerializeField] Image playerFear;
     Color color;
     float alphaColor;
+    public float fleeChance = 100;
 
     private void Start()
     {
-        playerHealthBar=GameManagerDD.instance.playerHealth;
+        fPSController = gameObject.GetComponent<FPSController>();
+        playerHealthBar =GameManagerDD.instance.playerHealth;
         playerFear = GameManagerDD.instance.playerFear;
         color = GameManagerDD.instance.healthVignette.color;
     }
@@ -31,5 +35,43 @@ public class PlayerStats : EntityInterface
             health = 0;
             playerHealthBar.fillAmount = 0;
         }    
+    }
+
+    public void Flee()
+    {
+        float fleeRandom = Random.Range(0, 100f);
+        float baseFleeChance = (health / maxHealth)*100;
+        float threathLevel = TurnManager.instance.encounterThreathLevel;
+        fleeChance = fleeChance>0? baseFleeChance- threathLevel:0;
+        if (fleeRandom < fleeChance)
+        {
+            // 1. Eliminar todos los enemigos del turnero
+            List<EntityInterface> toRemove = new List<EntityInterface>(TurnManager.instance.entitiesTurns);
+
+            foreach (EntityInterface entity in toRemove)
+            {
+                // Puedes hacer que los enemigos reaccionen si querés
+                if (entity.TryGetComponent<EnemyAI>(out EnemyAI enemy))
+                {
+                    enemy.OnPlayerFled(); // O destruye al enemigo, etc.
+                }               
+
+                TurnManager.instance.RemoveTurn(entity);
+            }
+
+            // 2. Eliminar al jugador del turnero
+            TurnManager.instance.RemoveTurn(this);
+            this.isItsTurn = false;
+
+            //Restaurar control al jugador
+            fPSController.GiveBackControlToPlayer();
+
+            Debug.Log("Player fled the battle!");
+        }
+        else 
+        {
+            TurnManager.instance.EndTurn(this);
+            Debug.LogWarning("Flee Failed!"); 
+        }
     }
 }
