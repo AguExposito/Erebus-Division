@@ -185,6 +185,7 @@ public class EnemyAI : MonoBehaviour
 
         CompletelyStopAgent(true);
         SetAgentSpeed();
+        ChaseState(false); // Desactiva el estado de Chase
 
         StartCoroutine(player.GetComponent<FPSController>().RotateCameraPlayer(transform)); // Desactiva el controlador del jugador
         StartCoroutine(RotateEnemyToPlayer()); // Rotar hacia jugador
@@ -212,6 +213,7 @@ public class EnemyAI : MonoBehaviour
         FinishedEncounter();
         //StartCoroutine(WaitForNavMeshRebakeAndResume());
     }
+    bool canEnableCarve=false;
     private IEnumerator HandleAgentObstacle() {
         obstacle.carving = false;
         yield return null;
@@ -219,8 +221,9 @@ public class EnemyAI : MonoBehaviour
         agent.enabled = true;
         agent.Warp(gameObject.transform.position);
         yield return null;
-        yield return new WaitUntil(() => IsIdle());
+        yield return new WaitUntil(() => !IsIdle() && agent.isOnNavMesh && canEnableCarve);
         obstacle.carving = true;
+        canEnableCarve = false;
     }
     public bool TryPlaceBackOnNavMesh(float maxDistance = 0.1f)
     {
@@ -239,27 +242,27 @@ public class EnemyAI : MonoBehaviour
         Time.timeScale = 1; // Reanuda el juego
         player.GetComponent<FPSController>().GiveBackControlToPlayer(); // Reactiva el controlador del jugador
         if (!isDead) StartCoroutine(ChaseDelay());
+        SetAgentSpeed();
     }
 
     IEnumerator ChaseDelay()
     {
         yield return new WaitForSeconds(1f);
-
-        foreach (EnemyAI enemy in enemies)
+        if (this != null && !isDead)
         {
-            if (enemy != null && !enemy.isDead)
-            {
-                agent.Warp(transform.position);
-                yield return null;
-                if (!enemy.agent.isOnNavMesh) if (!enemy.TryPlaceBackOnNavMesh()) Debug.LogError("IS NOT ON NAVMESH");
-                yield return new WaitUntil(() => enemy.agent.isOnNavMesh);
-                enemy.CompletelyStopAgent(false); // Reactiva la navegacion
+            yield return new WaitUntil(() => !obstacle.carving);
+            canEnableCarve = true;
+            agent.Warp(transform.position);
+            yield return null;
+            if (!agent.isOnNavMesh) if (!TryPlaceBackOnNavMesh()) Debug.LogError("IS NOT ON NAVMESH");
+            yield return new WaitUntil(() => agent.isOnNavMesh);
+            CompletelyStopAgent(false); // Reactiva la navegacion
 
-                AttackState(false);
-                attackRange = 2f;
-                currentState = State.Chase;
-            }
+            AttackState(false);
+            attackRange = 2f;
+            currentState = State.Chase;
         }
+        
     }
 
     public void EndEncounter()
