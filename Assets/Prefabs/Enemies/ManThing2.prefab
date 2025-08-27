@@ -853,6 +853,7 @@ MonoBehaviour:
   navMeshAgent: {fileID: 5718338995167752000}
   enemyAI: {fileID: 6806435462161383078}
   anim: {fileID: 6742973562417594654}
+  atackFinished: 1
 --- !u!136 &1969379731784516143
 CapsuleCollider:
   m_ObjectHideFlags: 0

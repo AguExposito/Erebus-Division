@@ -66,7 +66,7 @@ public class PlayerStats : EntityInterface
 
             // 2. Eliminar al jugador del turnero
             //TurnManager.instance.RemoveTurn(this);
-            this.isItsTurn = false;
+            //this.isItsTurn = false;
 
             //Restaurar control al jugador
             fPSController.GiveBackControlToPlayer();

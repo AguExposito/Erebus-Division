@@ -158,7 +158,7 @@ public class FPSController : MonoBehaviour
                                 GameManagerDD.instance.bodyPartState.text = enemyPart.partStatus.ToString();
 
 
-                                if (interactInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled && playerStats.isItsTurn && isInCombat) 
+                                if (interactInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled && playerStats.isItsTurn && isInCombat && TurnManager.instance.AttackAnimEnded()) 
                                 {
                                     playerStats.Attack(entityInterface);
                                     playerInput.Encounter.Disable();
@@ -192,7 +192,7 @@ public class FPSController : MonoBehaviour
                 }
             }
 
-            if (fleeInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled && isInCombat && !isAttackHUD) 
+            if (fleeInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled && isInCombat && !isAttackHUD && playerStats.isItsTurn && TurnManager.instance.AttackAnimEnded()) 
             {
                 playerStats.Flee();
 

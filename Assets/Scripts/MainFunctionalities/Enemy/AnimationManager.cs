@@ -8,6 +8,7 @@ public class AnimationManager : MonoBehaviour
     public NavMeshAgent navMeshAgent;
     public EnemyAI enemyAI;
     public Animator anim;
+    public bool atackFinished=true;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -36,13 +37,15 @@ public class AnimationManager : MonoBehaviour
     {
         if (state == 0)
         {
+            atackFinished = true;
             RotatePositionateGently();
             anim.applyRootMotion = false;
             return;
         }
         else
         {
-            pos= transform.localPosition;
+            atackFinished = false;
+            pos = transform.localPosition;
             anim.applyRootMotion = true;
             return;
         }

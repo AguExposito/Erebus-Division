@@ -54,4 +54,18 @@ public class TurnManager : MonoBehaviour
         }
         return tempTlvl;
     }
+
+    public bool AttackAnimEnded() 
+    { 
+        foreach (var entity in entitiesTurns)
+        {
+            if (entity.TryGetComponent<EnemyAI>(out EnemyAI enemyAI))
+            {
+                if (!enemyAI.animationManager.atackFinished) { 
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
