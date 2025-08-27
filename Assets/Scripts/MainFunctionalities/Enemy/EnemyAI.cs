@@ -151,6 +151,7 @@ public class EnemyAI : MonoBehaviour
 
     IEnumerator WaitEndOfScream()
     {
+        obstacle.enabled = false; // Enable obstacle to avoid other agents while screaming
         AnimationClip screamClip = animationManager.GetAnimationClip("Scream");
         if (screamClip != null)
         {
@@ -163,6 +164,7 @@ public class EnemyAI : MonoBehaviour
             Debug.LogWarning("Scream animation not found!");
             yield return null;
         }
+        obstacle.enabled = true; // Disable obstacle after screaming
     }
 
     IEnumerator LookingForPlayer() {
@@ -216,12 +218,14 @@ public class EnemyAI : MonoBehaviour
     bool canEnableCarve=false;
     private IEnumerator HandleAgentObstacle() {
         obstacle.carving = false;
+        obstacle.enabled = false;
         yield return null;
         yield return new WaitUntil(()=> !obstacle.carving);
         agent.enabled = true;
         agent.Warp(gameObject.transform.position);
         yield return null;
         yield return new WaitUntil(() => !IsIdle() && agent.isOnNavMesh && canEnableCarve);
+        obstacle.enabled = true;
         obstacle.carving = true;
         canEnableCarve = false;
     }
@@ -241,11 +245,11 @@ public class EnemyAI : MonoBehaviour
     {
         Time.timeScale = 1; // Reanuda el juego
         player.GetComponent<FPSController>().GiveBackControlToPlayer(); // Reactiva el controlador del jugador
-        if (!isDead) StartCoroutine(ChaseDelay());
+        if (!isDead) StartCoroutine(PatrolDelay());
         SetAgentSpeed();
     }
 
-    IEnumerator ChaseDelay()
+    IEnumerator PatrolDelay()
     {
         yield return new WaitForSeconds(1f);
         if (this != null && !isDead)
@@ -260,7 +264,8 @@ public class EnemyAI : MonoBehaviour
 
             AttackState(false);
             attackRange = 2f;
-            currentState = State.Chase;
+            currentState = State.Patrol;
+            SetRandomDestination();
         }
         
     }

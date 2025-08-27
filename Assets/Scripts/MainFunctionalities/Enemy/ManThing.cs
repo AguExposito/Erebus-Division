@@ -11,19 +11,26 @@ public class ManThing : EntityInterface
     public EntityInterface playerEntityInterface;
     public Vector2 hitChanceMinMax;
     public Vector2 critChanceMinMax;
+    public Animator animator;
 
     private void Start()
     {
         playerEntityInterface = GameObject.FindGameObjectWithTag("Player").GetComponent<EntityInterface>();
         hitChance = (float)Math.Round(UnityEngine.Random.Range(hitChanceMinMax.x, hitChanceMinMax.y), 1);
         critChance = (float)Math.Round(UnityEngine.Random.Range(critChanceMinMax.x, critChanceMinMax.y), 1);
+        animator = GetComponent<Animator>();
     }
     public void CheckTurn()
     {
         if (isItsTurn)
         {
-            Attack(playerEntityInterface);
+            animator.Play("Attack");
         }
+    }
+
+    public void AnimationEvent_Attack()
+    {
+        Attack(playerEntityInterface);
     }
 
     public override void TakeDamage(float damage)

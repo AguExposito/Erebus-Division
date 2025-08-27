@@ -972,6 +972,7 @@ MonoBehaviour:
   playerEntityInterface: {fileID: 0}
   hitChanceMinMax: {x: 60, y: 100}
   critChanceMinMax: {x: 0, y: 20}
+  animator: {fileID: 0}
 --- !u!54 &4915632297881364137
 Rigidbody:
   m_ObjectHideFlags: 0

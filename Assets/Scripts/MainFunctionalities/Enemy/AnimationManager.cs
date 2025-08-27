@@ -29,4 +29,17 @@ public class AnimationManager : MonoBehaviour
         return null;
     }
 
+    public void RootMotionState(int state)
+    {
+        if (state == 0)
+        {
+            anim.applyRootMotion = false;
+            return;
+        }
+        else
+        {
+            anim.applyRootMotion = true;
+            return;
+        }
+    }
 }
