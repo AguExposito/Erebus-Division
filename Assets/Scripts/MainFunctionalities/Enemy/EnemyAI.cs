@@ -190,7 +190,7 @@ public class EnemyAI : MonoBehaviour
         ChaseState(false); // Desactiva el estado de Chase
 
         StartCoroutine(player.GetComponent<FPSController>().RotateCameraPlayer(transform)); // Desactiva el controlador del jugador
-        StartCoroutine(RotateEnemyToPlayer()); // Rotar hacia jugador
+        StartCoroutine(RotateEnemyToPlayer(rotationDuration)); // Rotar hacia jugador
         attackRange = 0;
 
         TurnManager.instance.AddTurn(GetComponent<EntityInterface>()); // Agrega este enemigo al turno del TurnManager
@@ -348,7 +348,7 @@ public class EnemyAI : MonoBehaviour
 
     
 
-    IEnumerator RotateEnemyToPlayer() {
+    public IEnumerator RotateEnemyToPlayer(float rotationDuration) {
 
         // Obtener la direcci�n hacia el objetivo
         Vector3 directionToTarget = player.position - transform.position;
