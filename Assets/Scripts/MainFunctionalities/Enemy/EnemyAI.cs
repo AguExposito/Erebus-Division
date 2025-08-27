@@ -47,7 +47,7 @@ public class EnemyAI : MonoBehaviour
 
     private float timeElapsed = 0f; // Tiempo transcurrido para la rotacin
     public NavMeshAgent agent;
-    public NavMeshObstacle obstacle;
+    //public NavMeshObstacle obstacle;
     private Vector3 tempPos;
 
     public static float attackers = 0; // Contador de enemigos atacantes
@@ -60,10 +60,10 @@ public class EnemyAI : MonoBehaviour
 
         //agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;  // Mejor evasi�n de obst�culos
         agent.avoidancePriority = Random.Range(0, 99); // Prioridad de evasi�n aleatoria
-        obstacle = GetComponent<NavMeshObstacle>();
-        obstacle.carving = true;
-        obstacle.carveOnlyStationary = true;
-        obstacle.enabled = false; // Initially off
+        //obstacle = GetComponent<NavMeshObstacle>();
+        //obstacle.carving = true;
+        //obstacle.carveOnlyStationary = true;
+        //obstacle.enabled = false; // Initially off
 
         enemies.Add(this); // Agregar este enemigo a la lista de enemigos
         Debug.Log("Enemigo agregado a la lista de enemigos: " + enemies.Count);
@@ -113,6 +113,7 @@ public class EnemyAI : MonoBehaviour
         if (!isChasing)
         {
             ChaseState(true); // Marcamos que se ha comenzado el Chase
+            agent.obstacleAvoidanceType=ObstacleAvoidanceType.LowQualityObstacleAvoidance; // Cambiamos el tipo de evasi�n de obst�culos para persecuci�n
             isScreaming = true; // Establecemos que est� gritando
             agent.speed = 0; // Detenemos el agente
             StartCoroutine(WaitEndOfScream()); // Iniciamos la corutina
@@ -151,7 +152,7 @@ public class EnemyAI : MonoBehaviour
 
     IEnumerator WaitEndOfScream()
     {
-        obstacle.enabled = false; // Enable obstacle to avoid other agents while screaming
+        //obstacle.enabled = false; // Enable obstacle to avoid other agents while screaming
         AnimationClip screamClip = animationManager.GetAnimationClip("Scream");
         if (screamClip != null)
         {
@@ -164,7 +165,7 @@ public class EnemyAI : MonoBehaviour
             Debug.LogWarning("Scream animation not found!");
             yield return null;
         }
-        obstacle.enabled = true; // Disable obstacle after screaming
+        //obstacle.enabled = true; // Disable obstacle after screaming
     }
 
     IEnumerator LookingForPlayer() {
@@ -211,24 +212,24 @@ public class EnemyAI : MonoBehaviour
     public void OnPlayerFled()
     {
         attackers = 0;
-        StartCoroutine(HandleAgentObstacle());
+        //StartCoroutine(HandleAgentObstacle());
         FinishedEncounter();
         //StartCoroutine(WaitForNavMeshRebakeAndResume());
     }
     bool canEnableCarve=false;
-    private IEnumerator HandleAgentObstacle() {
-        obstacle.carving = false;
-        obstacle.enabled = false;
-        yield return null;
-        yield return new WaitUntil(()=> !obstacle.carving);
-        agent.enabled = true;
-        agent.Warp(gameObject.transform.position);
-        yield return null;
-        yield return new WaitUntil(() => !IsIdle() && agent.isOnNavMesh && canEnableCarve);
-        obstacle.enabled = true;
-        obstacle.carving = true;
-        canEnableCarve = false;
-    }
+    //private IEnumerator HandleAgentObstacle() {
+    //    obstacle.carving = false;
+    //    obstacle.enabled = false;
+    //    yield return null;
+    //    yield return new WaitUntil(()=> !obstacle.carving);
+    //    agent.enabled = true;
+    //    agent.Warp(gameObject.transform.position);
+    //    yield return null;
+    //    yield return new WaitUntil(() => !IsIdle() && agent.isOnNavMesh && canEnableCarve);
+    //    obstacle.enabled = true;
+    //    obstacle.carving = true;
+    //    canEnableCarve = false;
+    //}
     public bool TryPlaceBackOnNavMesh(float maxDistance = 0.1f)
     {
         Debug.LogError("REPOSITIONING");
@@ -254,14 +255,14 @@ public class EnemyAI : MonoBehaviour
         yield return new WaitForSeconds(1f);
         if (this != null && !isDead)
         {
-            yield return new WaitUntil(() => !obstacle.carving);
-            canEnableCarve = true;
+            //yield return new WaitUntil(() => !obstacle.carving);
+            //canEnableCarve = true;
             agent.Warp(transform.position);
             yield return null;
             if (!agent.isOnNavMesh) if (!TryPlaceBackOnNavMesh()) Debug.LogError("IS NOT ON NAVMESH");
             yield return new WaitUntil(() => agent.isOnNavMesh);
             CompletelyStopAgent(false); // Reactiva la navegacion
-
+            agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance; // Cambiamos el tipo de evasi�n de obst�culos para patrulla
             AttackState(false);
             attackRange = 2f;
             currentState = State.Patrol;
@@ -327,19 +328,23 @@ public class EnemyAI : MonoBehaviour
             {
                 case 0:
                     enemy.multiplier = 1;
+                    enemy.agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance; // Cambiamos el tipo de evasi�n de obst�culos para patrulla
                     break;
                 case 1:
                     enemy.multiplier = 0.66f;
-
+                    enemy.agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance; // Cambiamos el tipo de evasi�n de obst�culos para patrulla
                     break;
                 case 2:
                     enemy.multiplier = 0.33f;
+                    enemy.agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance; // Cambiamos el tipo de evasi�n de obst�culos para patrulla
                     break;
                 case 3:
                     enemy.multiplier = 0;
+                    enemy.agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance; // Cambiamos el tipo de evasi�n de obst�culos para patrulla
                     break;
                 default:
                     enemy.multiplier = 1;
+                    enemy.agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance; // Cambiamos el tipo de evasi�n de obst�culos para patrulla
                     break;
             }
         }

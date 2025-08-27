@@ -262,7 +262,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 51.62
+      value: 38.2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
       propertyPath: m_LocalPosition.y
@@ -270,7 +270,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 52.83
+      value: 42.21
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
       propertyPath: m_LocalRotation.w
@@ -606,9 +606,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4915632297881364137}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6293112005902920705}
     - targetCorrespondingSourceObject: {fileID: -3168422337102530296, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8765404758490228345}
@@ -888,7 +885,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 2468558929277774888}
   m_Enabled: 0
   m_AgentTypeID: 0
-  m_Radius: 0.2
+  m_Radius: 0.6
   m_Speed: 5
   m_Acceleration: 1e+11
   avoidancePriority: 50
@@ -939,7 +936,6 @@ MonoBehaviour:
   isScreaming: 0
   isChasing: 0
   agent: {fileID: 0}
-  obstacle: {fileID: 0}
 --- !u!114 &4030781612172089812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1000,22 +996,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!208 &6293112005902920705
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2468558929277774888}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 0
-  m_Extents: {x: 0.3, y: 1, z: 0.3}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.1
 --- !u!4 &2957112234796922514 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}

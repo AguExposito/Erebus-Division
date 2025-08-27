@@ -42,7 +42,7 @@ public class AnimationManager : MonoBehaviour
         }
         else
         {
-            if(pos==null) pos= transform.position;
+            pos= transform.localPosition;
             anim.applyRootMotion = true;
             return;
         }
@@ -69,10 +69,10 @@ public class AnimationManager : MonoBehaviour
         {
             time += Time.deltaTime;
             float t = time / duration;
-            transform.position = Vector3.Lerp(ini, pos, t);
+            transform.localPosition = Vector3.Lerp(ini, pos, t);
             yield return null;
         }
 
-        transform.position = pos; // Asegurarse de terminar exactamente en el destino
+        transform.localPosition = pos; // Asegurarse de terminar exactamente en el destino
     }
 }
