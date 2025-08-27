@@ -7,6 +7,7 @@ public class TurnManager : MonoBehaviour
     public static TurnManager instance;
     public List<EntityInterface> entitiesTurns = new List<EntityInterface>();
     public float encounterThreathLevel;
+    public PlayerStats playerStats;
     private void Awake()
     {
         instance = this;
@@ -16,6 +17,7 @@ public class TurnManager : MonoBehaviour
         if (entitiesTurns.Contains(entity)) return;
         entitiesTurns.Add(entity);
         encounterThreathLevel=UpdateThreathLevel();
+        playerStats.CalculateFleePercentage();
     }
     public void RemoveTurn(EntityInterface entity)
     {
@@ -33,6 +35,7 @@ public class TurnManager : MonoBehaviour
             entitiesTurns.FindLast(e => e != entitiesTurns[0]).isItsTurn = false;
         }
         StartTurn(entitiesTurns[0]);
+        playerStats.CalculateFleePercentage();
     }
     public void StartTurn(EntityInterface entity)
     {

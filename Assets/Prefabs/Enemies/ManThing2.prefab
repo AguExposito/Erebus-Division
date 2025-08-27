@@ -938,6 +938,8 @@ MonoBehaviour:
   isAttacking: 0
   isScreaming: 0
   isChasing: 0
+  agent: {fileID: 0}
+  obstacle: {fileID: 0}
 --- !u!114 &4030781612172089812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1004,15 +1006,15 @@ NavMeshObstacle:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2468558929277774888}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Shape: 0
-  m_Extents: {x: 0.8, y: 1, z: 0.8}
+  m_Extents: {x: 0.3, y: 1, z: 0.3}
   m_MoveThreshold: 0.1
   m_Carve: 1
-  m_CarveOnlyStationary: 0
+  m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
+  m_TimeToStationary: 0.1
 --- !u!4 &2957112234796922514 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 44337882668b1594baf255c9f8f04ccf, type: 3}

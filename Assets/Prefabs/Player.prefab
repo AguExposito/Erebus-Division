@@ -95,7 +95,7 @@ MonoBehaviour:
   gravity: 9.81
   alteredMovement: 0
   lookSpeed: 70
-  rotationDuration: 0.5
+  rotationDuration: 0.2
   canMove: 1
   isRotatingJumpscare: 0
   isInCombat: 0

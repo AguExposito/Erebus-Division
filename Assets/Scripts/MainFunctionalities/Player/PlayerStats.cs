@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
@@ -34,15 +35,20 @@ public class PlayerStats : EntityInterface
         {
             health = 0;
             playerHealthBar.fillAmount = 0;
-        }    
+        }
+        CalculateFleePercentage();
     }
 
+    public void CalculateFleePercentage() {
+        float baseFleeChance = (health / maxHealth) * 100;
+        float threathLevel = TurnManager.instance.encounterThreathLevel;
+        fleeChance = (float)Math.Round(fleeChance > 0 ? baseFleeChance - threathLevel : 0,1);
+        GameManagerDD.instance.fleePercentage.text = $"{fleeChance}%";
+    }
     public void Flee()
     {
-        float fleeRandom = Random.Range(0, 100f);
-        float baseFleeChance = (health / maxHealth)*100;
-        float threathLevel = TurnManager.instance.encounterThreathLevel;
-        fleeChance = fleeChance>0? baseFleeChance- threathLevel:0;
+        float fleeRandom = UnityEngine.Random.Range(0, 100f);
+        CalculateFleePercentage();
         if (fleeRandom < fleeChance)
         {
             // 1. Eliminar todos los enemigos del turnero
@@ -54,13 +60,12 @@ public class PlayerStats : EntityInterface
                 if (entity.TryGetComponent<EnemyAI>(out EnemyAI enemy))
                 {
                     enemy.OnPlayerFled(); // O destruye al enemigo, etc.
+                    TurnManager.instance.RemoveTurn(entity);
                 }               
-
-                TurnManager.instance.RemoveTurn(entity);
             }
 
             // 2. Eliminar al jugador del turnero
-            TurnManager.instance.RemoveTurn(this);
+            //TurnManager.instance.RemoveTurn(this);
             this.isItsTurn = false;
 
             //Restaurar control al jugador

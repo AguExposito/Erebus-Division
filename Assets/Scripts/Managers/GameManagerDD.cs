@@ -24,6 +24,9 @@ public class GameManagerDD : MonoBehaviour
     public TextMeshProUGUI bodyPartState;
     public GameObject enemyInfo;
 
+    [Space]
+    public TextMeshProUGUI fleePercentage;
+
 
     private void Awake()
     {

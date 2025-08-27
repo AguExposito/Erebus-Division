@@ -1,4 +1,4 @@
-using NUnit.Framework;
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,17 +13,17 @@ public class EnemyAI : MonoBehaviour
     [Space]
     [Header("Target Settings")]
     public Transform player; // El jugador al que perseguir
-    public Vector3 targetPosition; // El siguiente punto al que se moverá el enemigo
+    public Vector3 targetPosition; // El siguiente punto al que se moverï¿½ el enemigo
     public float areaX = 50;
     public float areaZ = 50;
 
     [Space]
     [Header("Detection Settings")]
-    public float detectionRange = 2f; // Rango de detección
+    public float detectionRange = 2f; // Rango de detecciï¿½n
     public float attackRange = 2f; // Rango de ataque
-    public float visionDistance = 10f; // Rango de detección
-    public float visionAngle = 45f; // Ángulo del cono de visión
-    public float visionHeight = 1.5f; // Altura a la que el raycast verifica la visión
+    public float visionDistance = 10f; // Rango de detecciï¿½n
+    public float visionAngle = 45f; // ï¿½ngulo del cono de visiï¿½n
+    public float visionHeight = 1.5f; // Altura a la que el raycast verifica la visiï¿½n
 
     [Space]
     [Header("Movement Settings")]
@@ -33,7 +33,7 @@ public class EnemyAI : MonoBehaviour
     public float acceleration = 8f; 
     public float angularVelocity = 300f;
     public float multiplier = 1f; // Multiplicador para la velocidad del enemigo
-    public LayerMask obstacleLayer; // Capa de obstáculos para el raycast
+    public LayerMask obstacleLayer; // Capa de obstï¿½culos para el raycast
     public State currentState = State.Patrol;
 
     [Space]
@@ -45,8 +45,9 @@ public class EnemyAI : MonoBehaviour
 
     public enum State { Patrol, Chase, Attack }
 
-    private float timeElapsed = 0f; // Tiempo transcurrido para la rotación
-    private NavMeshAgent agent;
+    private float timeElapsed = 0f; // Tiempo transcurrido para la rotacin
+    public NavMeshAgent agent;
+    public NavMeshObstacle obstacle;
     private Vector3 tempPos;
 
     public static float attackers = 0; // Contador de enemigos atacantes
@@ -57,18 +58,22 @@ public class EnemyAI : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform; // Asignar el jugador por su etiqueta
         agent = GetComponent<NavMeshAgent>();
 
-        //agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;  // Mejor evasión de obstáculos
-        agent.avoidancePriority = Random.Range(0, 99); // Prioridad de evasión aleatoria
+        //agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;  // Mejor evasiï¿½n de obstï¿½culos
+        agent.avoidancePriority = Random.Range(0, 99); // Prioridad de evasiï¿½n aleatoria
+        obstacle = GetComponent<NavMeshObstacle>();
+        obstacle.carving = true;
+        obstacle.carveOnlyStationary = true;
+        obstacle.enabled = false; // Initially off
 
         enemies.Add(this); // Agregar este enemigo a la lista de enemigos
         Debug.Log("Enemigo agregado a la lista de enemigos: " + enemies.Count);
 
-        StartCoroutine(InitializeNavMeshAgent()); // Iniciar la corutina para inicializar el agente de navegación
+        StartCoroutine(InitializeNavMeshAgent()); // Iniciar la corutina para inicializar el agente de navegaciï¿½n
     }
 
     void Update()
     {
-        // Comprobar el estado actual y ejecutar la lógica correspondiente
+        // Comprobar el estado actual y ejecutar la lï¿½gica correspondiente
         switch (currentState)
         {
             case State.Patrol:
@@ -87,14 +92,14 @@ public class EnemyAI : MonoBehaviour
     {
         if (!NVIsRebaked() || !agent.isOnNavMesh) return;
         agent.speed = patrolSpeed * multiplier; // Velocidad de patrulla
-        // Si el enemigo está lo suficientemente cerca del jugador, comienza la persecución
+        // Si el enemigo estï¿½ lo suficientemente cerca del jugador, comienza la persecuciï¿½n
         if (Vector3.Distance(transform.position, player.position) < visionDistance && IsPlayerOnSight())
         {
             currentState = State.Chase;
             return;
         }
 
-        // Si el enemigo ha llegado al destino o ha chocado con un obstáculo, asigna un nuevo punto aleatorio dentro de la malla de navegación
+        // Si el enemigo ha llegado al destino o ha chocado con un obstï¿½culo, asigna un nuevo punto aleatorio dentro de la malla de navegaciï¿½n
         if (!agent.pathPending && agent.remainingDistance < agent.stoppingDistance+0.1f)
         {
             SetRandomDestination();
@@ -108,24 +113,24 @@ public class EnemyAI : MonoBehaviour
         if (!isChasing)
         {
             ChaseState(true); // Marcamos que se ha comenzado el Chase
-            isScreaming = true; // Establecemos que está gritando
+            isScreaming = true; // Establecemos que estï¿½ gritando
             agent.speed = 0; // Detenemos el agente
             StartCoroutine(WaitEndOfScream()); // Iniciamos la corutina
         }
 
-        // Después de que el grito haya terminado, el enemigo sigue al jugador
+        // Despuï¿½s de que el grito haya terminado, el enemigo sigue al jugador
         if (!isScreaming)
         {
             agent.SetDestination(player.position); // El enemigo sigue al jugador
-            agent.speed = chaseSpeed * multiplier; // Velocidad de persecución
+            agent.speed = chaseSpeed * multiplier; // Velocidad de persecuciï¿½n
 
-            // Si está dentro del rango de ataque, cambia al estado de ataque
+            // Si estï¿½ dentro del rango de ataque, cambia al estado de ataque
             if (Vector3.Distance(transform.position, player.position) < attackRange)
             {
                 currentState = State.Attack;
             }
 
-            // Si el enemigo pierde la línea de visión, vuelve a patrullar
+            // Si el enemigo pierde la lï¿½nea de visiï¿½n, vuelve a patrullar
             if (Vector3.Distance(transform.position, player.position) > visionDistance || !IsPlayerOnSight())
             {
                 if (tempPos == Vector3.zero)
@@ -195,37 +200,71 @@ public class EnemyAI : MonoBehaviour
         isAttacking = state; // Cambia el estado a atacando
         animationManager.anim.SetBool("InCombat", state);
     }
+    public bool IsIdle()
+    {
+        return agent.enabled && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance+0.05f && !agent.hasPath && Time.timeScale!=0;
+    }
 
     public void OnPlayerFled()
     {
         attackers = 0;
-        agent.GetComponent<NavMeshObstacle>().enabled = false;
-        RebakeNavmesh.Instance.RebakeNavMesh();
+        StartCoroutine(HandleAgentObstacle());
         FinishedEncounter();
-        StartCoroutine(ResumeMovementAfterDelay(1f));
+        //StartCoroutine(WaitForNavMeshRebakeAndResume());
+    }
+    private IEnumerator HandleAgentObstacle() {
+        obstacle.carving = false;
+        yield return null;
+        yield return new WaitUntil(()=> !obstacle.carving);
+        agent.enabled = true;
+        agent.Warp(gameObject.transform.position);
+        yield return null;
+        yield return new WaitUntil(() => IsIdle());
+        obstacle.carving = true;
+    }
+    public bool TryPlaceBackOnNavMesh(float maxDistance = 0.1f)
+    {
+        Debug.LogError("REPOSITIONING");
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(transform.position, out hit, maxDistance, NavMesh.AllAreas))
+        {
+            transform.position = hit.position;
+            return true;
+        }
+        return false;
     }
 
-    private IEnumerator ResumeMovementAfterDelay(float delay)
+    void FinishedEncounter()
     {
-        yield return new WaitForSeconds(delay);
+        Time.timeScale = 1; // Reanuda el juego
+        player.GetComponent<FPSController>().GiveBackControlToPlayer(); // Reactiva el controlador del jugador
+        if (!isDead) StartCoroutine(ChaseDelay());
+    }
+
+    IEnumerator ChaseDelay()
+    {
+        yield return new WaitForSeconds(1f);
 
         foreach (EnemyAI enemy in enemies)
         {
             if (enemy != null && !enemy.isDead)
             {
-                enemy.CompletelyStopAgent(false); // Reactiva la navegación
-                enemy.AttackState(false);         // Sale del modo combate
-                enemy.attackRange = 2f;
-                enemy.currentState = State.Patrol;
+                agent.Warp(transform.position);
+                yield return null;
+                if (!enemy.agent.isOnNavMesh) if (!enemy.TryPlaceBackOnNavMesh()) Debug.LogError("IS NOT ON NAVMESH");
+                yield return new WaitUntil(() => enemy.agent.isOnNavMesh);
+                enemy.CompletelyStopAgent(false); // Reactiva la navegacion
+
+                AttackState(false);
+                attackRange = 2f;
+                currentState = State.Chase;
             }
         }
     }
 
-
-
     public void EndEncounter()
     {
-        if (isDead) return; // Si el enemigo ya está muerto, no hacer nada
+        if (isDead) return; // Si el enemigo ya estï¿½ muerto, no hacer nada
         isDead = true; // Cambia el estado a muerto
         attackers--; // Decrementa el contador de atacantes
 
@@ -233,7 +272,7 @@ public class EnemyAI : MonoBehaviour
 
         if (attackers <= 0) 
         { 
-            FinishedEncounter(); // Termina el encuentro si no hay más atacantes
+            FinishedEncounter(); // Termina el encuentro si no hay mï¿½s atacantes
         }
 
         Destroy(gameObject);
@@ -241,27 +280,25 @@ public class EnemyAI : MonoBehaviour
 
     private void CompletelyStopAgent(bool isStop)
     {
-        if (agent == null) return; // Verifica si el agente de navegación está asignado
+        if (agent == null) return; // Verifica si el agente de navegacin est asignado
         if (isStop)
         {
-            agent.isStopped = true; // Detiene el agente de navegación
-            SetAgentSpeed();
+            agent.isStopped = true; // Detiene el agente de navegaciï¿½n
             agent.ResetPath(); // Resetea la ruta del agente
             agent.velocity = Vector3.zero; // Detiene el movimiento del agente
-            agent.angularSpeed = 0; // Detiene la rotación del agente
-            agent.acceleration = 0; // Detiene la aceleración del agente
-            agent.updateRotation = false; // Desactiva la rotación automática del agente
-            agent.updatePosition = false; // Desactiva la actualización de la posición del agente
-            agent.SetDestination(transform.position); // Establece la posición actual como destino para detener el movimiento
+            agent.angularSpeed = 0; // Detiene la rotaciï¿½n del agente
+            agent.acceleration = 0; // Detiene la aceleraciï¿½n del agente
+            agent.updateRotation = false; // Desactiva la rotaciï¿½n automï¿½tica del agente
+            agent.updatePosition = false; // Desactiva la actualizaciï¿½n de la posiciï¿½n del agente
+            agent.SetDestination(transform.position); // Establece la posiciï¿½n actual como destino para detener el movimiento
         }
         else 
         {
-            agent.isStopped = false; // Reanuda el agente de navegación
-            SetAgentSpeed();
-            agent.angularSpeed = angularVelocity; // Reanuda la rotación del agente
-            agent.acceleration = acceleration; // Reanuda la aceleración del agente
-            agent.updateRotation = true; // Reanuda la rotación automática del agente
-            agent.updatePosition = true; // Reanuda la actualización de la posición del agente
+            agent.isStopped = false; // Reanuda el agente de navegaciï¿½n
+            agent.angularSpeed = angularVelocity; // Reanuda la rotaciï¿½n del agente
+            agent.acceleration = acceleration; // Reanuda la aceleraciï¿½n del agente
+            agent.updateRotation = true; // Reanuda la rotaciï¿½n automï¿½tica del agente
+            agent.updatePosition = true; // Reanuda la actualizaciï¿½n de la posiciï¿½n del agente
         }
     }
 
@@ -271,7 +308,11 @@ public class EnemyAI : MonoBehaviour
         {
             if (enemy.isAttacking)
             {
-                agent.GetComponent<NavMeshObstacle>().enabled = true;
+                NavMeshObstacle obstacle = enemy.agent.GetComponent<NavMeshObstacle>();
+                if (obstacle != null)
+                {
+                    obstacle.enabled = true;
+                }
                 continue;
             }
             switch (attackers)
@@ -297,32 +338,21 @@ public class EnemyAI : MonoBehaviour
     }
 
 
-    void FinishedEncounter() {
-        Time.timeScale = 1; // Reanuda el juego
-        player.GetComponent<FPSController>().GiveBackControlToPlayer(); // Reactiva el controlador del jugador
-        if(!isDead) StartCoroutine(ChaseDelay());
-    }
-
-    IEnumerator ChaseDelay() { 
-        yield return new WaitForSeconds(2f);
-        AttackState(false);
-        attackRange = 2f;
-        currentState = State.Chase;
-    }
+    
 
     IEnumerator RotateEnemyToPlayer() {
 
-        // Obtener la dirección hacia el objetivo
+        // Obtener la direcciï¿½n hacia el objetivo
         Vector3 directionToTarget = player.position - transform.position;
-        directionToTarget.y = 0; // Mantener solo la dirección horizontal
+        directionToTarget.y = 0; // Mantener solo la direcciï¿½n horizontal
 
-        // Calcular el ángulo de rotación (solo en Y)
+        // Calcular el ï¿½ngulo de rotaciï¿½n (solo en Y)
         float targetPlayerAngle = Mathf.Atan2(directionToTarget.x, directionToTarget.z) * Mathf.Rad2Deg;
 
-        // Obtener la rotación inicial
+        // Obtener la rotaciï¿½n inicial
         float initialPlayerAngle = transform.eulerAngles.y;
 
-        // Normalizar los ángulos para evitar rotaciones largas
+        // Normalizar los ï¿½ngulos para evitar rotaciones largas
         float angleDifference = Mathf.DeltaAngle(initialPlayerAngle, targetPlayerAngle);
         targetPlayerAngle = initialPlayerAngle + angleDifference;
 
@@ -334,34 +364,34 @@ public class EnemyAI : MonoBehaviour
             timeElapsed += Time.unscaledDeltaTime;
             float t = timeElapsed / rotationDuration;
 
-            // Interpolar la rotación del player
+            // Interpolar la rotaciï¿½n del player
             float currentAngle = Mathf.LerpAngle(initialPlayerAngle, targetPlayerAngle, t);
             transform.rotation = Quaternion.Euler(0, currentAngle, 0);
 
             yield return null;
         }
 
-        // Asegurar que el player esté exactamente en la posición final
+        // Asegurar que el player estï¿½ exactamente en la posiciï¿½n final
         transform.rotation = Quaternion.Euler(0, targetPlayerAngle, 0);
     }
 
-    // Método para asignar un destino aleatorio dentro de la malla de navegación (mazmorras)
-    void SetRandomDestination()
+    // Mï¿½todo para asignar un destino aleatorio dentro de la malla de navegaciï¿½n (mazmorras)
+    public void SetRandomDestination()
     {
-        // Generamos un punto aleatorio dentro de los límites de la malla de navegación
+        // Generamos un punto aleatorio dentro de los lï¿½mites de la malla de navegaciï¿½n
         Vector3 randomPoint = new Vector3(
-            Random.Range(-areaX, areaX),  // Limita el área según el tamaño de la mazmorras, ajusta según tus necesidades
+            Random.Range(-areaX, areaX),  // Limita el ï¿½rea segï¿½n el tamaï¿½o de la mazmorras, ajusta segï¿½n tus necesidades
             transform.position.y,     // Mantener la misma altura
-            Random.Range(-areaZ, areaZ)   // Limita el área según el tamaño de la mazmorras, ajusta según tus necesidades
+            Random.Range(-areaZ, areaZ)   // Limita el ï¿½rea segï¿½n el tamaï¿½o de la mazmorras, ajusta segï¿½n tus necesidades
         );
 
-        // Usamos NavMesh.SamplePosition para asegurarnos de que el punto está dentro de la malla de navegación
+        // Usamos NavMesh.SamplePosition para asegurarnos de que el punto estï¿½ dentro de la malla de navegaciï¿½n
         NavMeshHit hit;
         if (NavMesh.SamplePosition(randomPoint, out hit, 10f, NavMesh.AllAreas))
         {
             if (!IsNearOtherTarget(hit.position))
             {
-                targetPosition = hit.position; // Asigna el punto válido dentro de la malla
+                targetPosition = hit.position; // Asigna el punto vï¿½lido dentro de la malla
                 agent.SetDestination(targetPosition); // Mueve al enemigo hacia el nuevo destino
             }
             else { 
@@ -383,7 +413,7 @@ public class EnemyAI : MonoBehaviour
         return false; // No hay otros enemigos cerca del destino
     }
 
-    // Método para comprobar si hay una línea de visión clara al jugador utilizando raycasting
+    // Mï¿½todo para comprobar si hay una lï¿½nea de visiï¿½n clara al jugador utilizando raycasting
     
     bool IsPlayerOnSight()
     {
@@ -414,47 +444,53 @@ public class EnemyAI : MonoBehaviour
         return false;
     }
     IEnumerator InitializeNavMeshAgent() { 
-        yield return new WaitUntil(()=> GameObject.FindAnyObjectByType<RebakeNavmesh>().rebaked);
-        agent.enabled = true; // Habilitar el agente de navegación una vez que la malla de navegación esté lista
-        SetRandomDestination(); // Iniciar con un destino aleatorio dentro de la malla de navegación
+        // Esperar a que RebakeNavmesh.Instance estÃ© disponible
+        while (RebakeNavmesh.Instance == null)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+        
+        yield return new WaitUntil(() => RebakeNavmesh.Instance.rebaked);
+        agent.enabled = true; // Habilitar el agente de navegacin una vez que la malla de navegacin est lista
+        SetRandomDestination(); // Iniciar con un destino aleatorio dentro de la malla de navegacin
     }
 
     bool NVIsRebaked() {
-        if (FindAnyObjectByType<RebakeNavmesh>().rebaked)
+        if (RebakeNavmesh.Instance != null && RebakeNavmesh.Instance.rebaked)
         {
-            return true; // La malla de navegación ha sido rebaked
+            return true; // La malla de navegaciï¿½n ha sido rebaked
         }
         else
         {
-            return false; // La malla de navegación no ha sido rebaked
+            return false; // La malla de navegaciï¿½n no ha sido rebaked
         }
     }
 
-    // Dibujar Gizmos para visualizar el área de detección, el cono de visión y el siguiente destino
+    // Dibujar Gizmos para visualizar el ï¿½rea de detecciï¿½n, el cono de visiï¿½n y el siguiente destino
     private void OnDrawGizmos()
     {
-        // Si el enemigo no tiene un agente de navegación, no dibujes los Gizmos
+        // Si el enemigo no tiene un agente de navegaciï¿½n, no dibujes los Gizmos
         if (agent == null) return;
 
-        // 1. Área de Detección: Círculo que muestra el rango de detección
+        // 1. ï¿½rea de Detecciï¿½n: Cï¿½rculo que muestra el rango de detecciï¿½n
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
 
         Gizmos.color = Color.magenta;
-        Gizmos.DrawWireCube(transform.position, new Vector3(areaX, 0.1f, areaZ)); // Área de patrullaje
+        Gizmos.DrawWireCube(transform.position, new Vector3(areaX, 0.1f, areaZ)); // ï¿½rea de patrullaje
 
 
-        // 2. Cono de visión: Representado como líneas que forman un triángulo
+        // 2. Cono de visiï¿½n: Representado como lï¿½neas que forman un triï¿½ngulo
         Gizmos.color = Color.yellow;
         Vector3 forward = transform.forward * visionDistance;
         Vector3 leftBound = Quaternion.Euler(0, -visionAngle / 2, 0) * forward;
         Vector3 rightBound = Quaternion.Euler(0, visionAngle / 2, 0) * forward;
 
-        Gizmos.DrawLine(transform.position, transform.position + leftBound);  // Línea izquierda
-        Gizmos.DrawLine(transform.position, transform.position + rightBound); // Línea derecha
-        Gizmos.DrawLine(transform.position + leftBound, transform.position + rightBound); // Línea de unión
+        Gizmos.DrawLine(transform.position, transform.position + leftBound);  // Lï¿½nea izquierda
+        Gizmos.DrawLine(transform.position, transform.position + rightBound); // Lï¿½nea derecha
+        Gizmos.DrawLine(transform.position + leftBound, transform.position + rightBound); // Lï¿½nea de uniï¿½n
 
-        // 3. Siguiente destino (punto de patrullaje o de persecución): Muestra el siguiente punto de movimiento
+        // 3. Siguiente destino (punto de patrullaje o de persecuciï¿½n): Muestra el siguiente punto de movimiento
         Gizmos.color = Color.blue;
         if (targetPosition != Vector3.zero)
         {
