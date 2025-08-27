@@ -62,7 +62,7 @@ public class AnimationManager : MonoBehaviour
 
     private IEnumerator PositionateGently(float duration)
     {
-        Vector3 ini = transform.position;
+        Vector3 ini = transform.localPosition;
         float time = 0f;
 
         while (time < duration)
