@@ -114,6 +114,7 @@ public class EnemyAI : MonoBehaviour
         {
             ChaseState(true); // Marcamos que se ha comenzado el Chase
             agent.obstacleAvoidanceType=ObstacleAvoidanceType.LowQualityObstacleAvoidance; // Cambiamos el tipo de evasi�n de obst�culos para persecuci�n
+            agent.avoidancePriority = 99; 
             isScreaming = true; // Establecemos que est� gritando
             agent.speed = 0; // Detenemos el agente
             StartCoroutine(WaitEndOfScream()); // Iniciamos la corutina
@@ -263,6 +264,7 @@ public class EnemyAI : MonoBehaviour
             yield return new WaitUntil(() => agent.isOnNavMesh);
             CompletelyStopAgent(false); // Reactiva la navegacion
             agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance; // Cambiamos el tipo de evasi�n de obst�culos para patrulla
+            agent.avoidancePriority = Random.Range(0, 99); // Prioridad de evasi�n aleatoria
             AttackState(false);
             attackRange = 2f;
             currentState = State.Patrol;
@@ -329,22 +331,27 @@ public class EnemyAI : MonoBehaviour
                 case 0:
                     enemy.multiplier = 1;
                     enemy.agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance; // Cambiamos el tipo de evasi�n de obst�culos para patrulla
+                    enemy.agent.avoidancePriority = Random.Range(0, 99); // Prioridad de evasi�n aleatoria
                     break;
                 case 1:
                     enemy.multiplier = 0.66f;
                     enemy.agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance; // Cambiamos el tipo de evasi�n de obst�culos para patrulla
+                    enemy.agent.avoidancePriority = 99;
                     break;
                 case 2:
                     enemy.multiplier = 0.33f;
                     enemy.agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance; // Cambiamos el tipo de evasi�n de obst�culos para patrulla
+                    enemy.agent.avoidancePriority = 99;
                     break;
                 case 3:
                     enemy.multiplier = 0;
                     enemy.agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance; // Cambiamos el tipo de evasi�n de obst�culos para patrulla
+                    enemy.agent.avoidancePriority = 99;
                     break;
                 default:
                     enemy.multiplier = 1;
                     enemy.agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance; // Cambiamos el tipo de evasi�n de obst�culos para patrulla
+                    enemy.agent.avoidancePriority = 99;
                     break;
             }
         }
