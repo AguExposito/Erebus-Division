@@ -8,10 +8,11 @@ public class Chest : MonoBehaviour
 {
     [Serialize]
     public List<ChestItem> items; // List of items contained in the chest
+    bool isOpen = false;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !isOpen)
         {
             GetComponent<Animator>().SetTrigger("Open");
             Debug.Log("Player entered the chest trigger area.");
@@ -29,6 +30,7 @@ public class Chest : MonoBehaviour
                     Debug.Log($"{item.itemName} did not spawn (rolled {roll}, needed <= {item.chanceToSpawn}).");
                 }
             }
+            isOpen = true;
         }
     }
 }

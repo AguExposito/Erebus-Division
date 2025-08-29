@@ -271,13 +271,16 @@ MonoBehaviour:
   items:
   - itemName: RedBiscuit
     quantityMinMax: {x: 1, y: 2}
-    chanceToSpawn: 33
+    chanceToSpawn: 25
   - itemName: BlueBiscuit
     quantityMinMax: {x: 1, y: 2}
-    chanceToSpawn: 33
+    chanceToSpawn: 25
+  - itemName: PurpleBiscuit
+    quantityMinMax: {x: 1, y: 2}
+    chanceToSpawn: 25
   - itemName: GoldenBiscuit
     quantityMinMax: {x: 1, y: 1}
-    chanceToSpawn: 10
+    chanceToSpawn: 5
 --- !u!135 &7993025343337115633
 SphereCollider:
   m_ObjectHideFlags: 0
