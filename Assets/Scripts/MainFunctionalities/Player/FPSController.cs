@@ -202,6 +202,19 @@ public class FPSController : MonoBehaviour
             {
                 playerInput.Encounter.Enable();
             }
+
+            if (playerInput.Encounter.enabled && isInCombat && playerStats.isItsTurn && TurnManager.instance.AttackAnimEnded()) 
+            {
+                if (satchelInput.action.WasPressedThisFrame())
+                {
+                    InventoryManager.Instance.scroller.ToggleSatchel();
+                }
+                if (interactInput.action.WasPressedThisFrame() && InventoryManager.Instance.scroller.isSatchelOpen) 
+                {
+                    InventoryManager.Instance.scroller.RemoveSelectedItem();
+                    Debug.Log("Used item from satchel");
+                }
+            }
         }
         #endregion
 

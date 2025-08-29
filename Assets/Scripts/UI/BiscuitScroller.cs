@@ -8,10 +8,13 @@ public class BiscuitScroller : MonoBehaviour
     public float spacing = -30f;
     public bool centerHorizontally = true;
     public float lerpSpeed = 5f;
+    public Animator animator;
+    public bool isSatchelOpen = false;
 
     private int currentIndex = 0;
     private float currentScrollValue = 0f;
     private float targetScrollValue = 0f;
+
 
     void Start()
     {
@@ -29,7 +32,8 @@ public class BiscuitScroller : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.E))
             Scroll(1);
 
-        currentScrollValue = Mathf.Lerp(currentScrollValue, targetScrollValue, Time.deltaTime * lerpSpeed);
+        currentScrollValue = Mathf.MoveTowards(currentScrollValue, targetScrollValue, Time.deltaTime * lerpSpeed);
+
         UpdateLayout(currentScrollValue);
     }
 
@@ -38,8 +42,9 @@ public class BiscuitScroller : MonoBehaviour
         if (items.Count == 0) return;
 
         currentIndex = (currentIndex + direction + items.Count) % items.Count;
-        targetScrollValue = IndexToT(currentIndex);
+        targetScrollValue += (float)direction / items.Count;
     }
+
 
     float IndexToT(int index)
     {
@@ -52,7 +57,8 @@ public class BiscuitScroller : MonoBehaviour
         if (items.Count == 0) return;
 
         float totalHeight = items.Count * spacing;
-        float offset = t * totalHeight;
+        float offset = (t % 1f) * totalHeight;
+
 
         for (int i = 0; i < items.Count; i++)
         {
@@ -96,6 +102,13 @@ public class BiscuitScroller : MonoBehaviour
         currentIndex = Mathf.Clamp(currentIndex, 0, items.Count - 1);
         targetScrollValue = IndexToT(currentIndex);
     }
+    public void RemoveSelectedItem()
+    {
+        if (items.Count == 0) return;
+
+        RectTransform selectedItem = items[currentIndex];
+        RemoveItem(selectedItem);
+    }
 
     public void ClearAllItems()
     {
@@ -109,5 +122,18 @@ public class BiscuitScroller : MonoBehaviour
         currentIndex = 0;
         currentScrollValue = 0f;
         targetScrollValue = 0f;
+    }
+
+
+    public void ToggleSatchel() 
+    {
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0); // capa 0
+        bool isPlaying = stateInfo.normalizedTime < 1f; // normalizedTime va de 0 a 1 en un clip sin loop
+        //bool isFinished = !isPlaying && stateInfo.IsName("NombreDeTuEstado");
+        if (!isPlaying)
+        {
+            animator.SetBool("Show", !animator.GetBool("Show"));
+            isSatchelOpen = animator.GetBool("Show");
+        }
     }
 }
