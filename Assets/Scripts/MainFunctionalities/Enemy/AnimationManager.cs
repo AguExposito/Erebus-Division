@@ -1,11 +1,14 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 public class AnimationManager : MonoBehaviour
 {
     public NavMeshAgent navMeshAgent;
     public EnemyAI enemyAI;
-    Animator anim;
+    public Animator anim;
+    public bool atackFinished=true;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -16,8 +19,7 @@ public class AnimationManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        anim.SetFloat("Speed", navMeshAgent.velocity.magnitude); 
-        anim.SetBool("Chasing", enemyAI.currentState == EnemyAI.State.Chase);
+        anim.SetFloat("Speed", navMeshAgent.velocity.magnitude);
     }
 
     public AnimationClip GetAnimationClip(string clipName)
@@ -30,4 +32,50 @@ public class AnimationManager : MonoBehaviour
         return null;
     }
 
+    Vector3 pos;
+    public void RootMotionState(int state)
+    {
+        if (state == 0)
+        {
+            atackFinished = true;
+            RotatePositionateGently();
+            anim.applyRootMotion = false;
+            return;
+        }
+        else
+        {
+            atackFinished = false;
+            pos = transform.localPosition;
+            anim.applyRootMotion = true;
+            return;
+        }
+    }
+    Coroutine rotateEnemyToPlayer;
+    Coroutine positionateGently;
+    public void RotatePositionateGently() {
+        if (rotateEnemyToPlayer != null || positionateGently != null)
+        {
+            StopCoroutine(rotateEnemyToPlayer);
+            StopCoroutine(positionateGently);
+        }
+
+        rotateEnemyToPlayer= StartCoroutine(enemyAI.RotateEnemyToPlayer(0.25f));
+        positionateGently=StartCoroutine(PositionateGently(0.25f));
+    }
+
+    private IEnumerator PositionateGently(float duration)
+    {
+        Vector3 ini = transform.localPosition;
+        float time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            float t = time / duration;
+            transform.localPosition = Vector3.Lerp(ini, pos, t);
+            yield return null;
+        }
+
+        transform.localPosition = pos; // Asegurarse de terminar exactamente en el destino
+    }
 }

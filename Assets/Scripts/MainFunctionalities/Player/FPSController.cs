@@ -13,7 +13,7 @@ using UnityEngine.UI;
 public class FPSController : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] PlayerStats playerStats;
+    [SerializeField] public PlayerStats playerStats;
 
     [Space]
     [Header("Camera References")]
@@ -49,7 +49,7 @@ public class FPSController : MonoBehaviour
     [Space]
     [Header("Camera Variables")]
     [SerializeField] public float lookSpeed;
-    [SerializeField] float rotationDuration=0.5f;
+    [SerializeField] float rotationDuration=0.1f;
 
     [Space]
     [Header("State Variables")]
@@ -110,6 +110,7 @@ public class FPSController : MonoBehaviour
         Cursor.visible = false;
 
         GameManagerDD.instance.encounterHUD.SetActive(false);
+        TurnManager.instance.playerStats = playerStats;
         TurnManager.instance.AddTurn(playerStats);
         playerStats.isItsTurn = true;
     }
@@ -157,7 +158,7 @@ public class FPSController : MonoBehaviour
                                 GameManagerDD.instance.bodyPartState.text = enemyPart.partStatus.ToString();
 
 
-                                if (interactInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled && playerStats.isItsTurn && isInCombat) 
+                                if (interactInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled && playerStats.isItsTurn && isInCombat && TurnManager.instance.AttackAnimEnded()) 
                                 {
                                     playerStats.Attack(entityInterface);
                                     playerInput.Encounter.Disable();
@@ -190,9 +191,29 @@ public class FPSController : MonoBehaviour
                     GameManagerDD.instance.enemyInfo.SetActive(false);
                 }
             }
+
+            if (fleeInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled && isInCombat && !isAttackHUD && playerStats.isItsTurn && TurnManager.instance.AttackAnimEnded()) 
+            {
+                playerStats.Flee();
+
+            }
+
             if (!playerInput.Encounter.enabled && playerStats.isItsTurn && isInCombat)
             {
                 playerInput.Encounter.Enable();
+            }
+
+            if (playerInput.Encounter.enabled && isInCombat && playerStats.isItsTurn && TurnManager.instance.AttackAnimEnded()) 
+            {
+                if (satchelInput.action.WasPressedThisFrame())
+                {
+                    InventoryManager.Instance.scroller.ToggleSatchel();
+                }
+                if (interactInput.action.WasPressedThisFrame() && InventoryManager.Instance.scroller.isSatchelOpen) 
+                {
+                    InventoryManager.Instance.scroller.RemoveSelectedItem();
+
+                }
             }
         }
         #endregion
@@ -394,6 +415,9 @@ public class FPSController : MonoBehaviour
         // Restaurar el control de movimiento
         canMove = true;
     }
+
+    
+
 
     public void ChangeMovementVariables(float walkSpeed, float runSpeed, float jumpPower, bool alteredMovement) { 
         this.walkSpeed = walkSpeed;
