@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b637136b05073014fa85bdaa25d18a42, type: 3}
+  m_Name: ActualSword
+  m_EditorClassIdentifier: 
+  costR1: 5
+  costR2: 1
+  costR3: 3
+  objSprite: {fileID: 1698113821, guid: f16cbd344fbbd8f478aaee7affbab29a, type: 3}
+  result: {fileID: 0}

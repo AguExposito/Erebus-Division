@@ -1,21 +1,27 @@
 using UnityEngine;
+using TMPro;
 
 public class GameManagerMS : MonoBehaviour
 {
-    [SerializeField] int Resource1;
-    [SerializeField] int Resource2;
-    [SerializeField] int Resource3;
-    [SerializeField] int Resource4;
+    public int Resource1;
+    public int Resource2;
+    public int Resource3;
+    [SerializeField] TextMeshProUGUI r1Display;
+    [SerializeField] TextMeshProUGUI r2Display;
+    [SerializeField] TextMeshProUGUI r3Display;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        r1Display.text = "" + Resource1;
+        r2Display.text = "" + Resource2;
+        r3Display.text = "" + Resource3;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void updateDisplays()
     {
-        
+        r1Display.text = "" + Resource1;
+        r2Display.text = "" + Resource2;
+        r3Display.text = "" + Resource3;
     }
 
 }
