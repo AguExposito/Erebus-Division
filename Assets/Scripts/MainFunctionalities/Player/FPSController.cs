@@ -13,7 +13,7 @@ using UnityEngine.UI;
 public class FPSController : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] PlayerStats playerStats;
+    [SerializeField] public PlayerStats playerStats;
 
     [Space]
     [Header("Camera References")]
@@ -212,7 +212,7 @@ public class FPSController : MonoBehaviour
                 if (interactInput.action.WasPressedThisFrame() && InventoryManager.Instance.scroller.isSatchelOpen) 
                 {
                     InventoryManager.Instance.scroller.RemoveSelectedItem();
-                    Debug.Log("Used item from satchel");
+
                 }
             }
         }

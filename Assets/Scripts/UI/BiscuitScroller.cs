@@ -14,6 +14,7 @@ public class BiscuitScroller : MonoBehaviour
     private int currentIndex = 0;
     private float currentScrollValue = 0f;
     private float targetScrollValue = 0f;
+    private FPSController player;
 
 
     void Start()
@@ -21,6 +22,7 @@ public class BiscuitScroller : MonoBehaviour
         currentScrollValue = IndexToT(currentIndex);
         targetScrollValue = currentScrollValue;
         UpdateLayout(currentScrollValue);
+        player = FindFirstObjectByType<FPSController>();
     }
 
     void Update()
@@ -108,6 +110,8 @@ public class BiscuitScroller : MonoBehaviour
 
         RectTransform selectedItem = items[currentIndex];
         RemoveItem(selectedItem);
+        string resourceName = selectedItem.gameObject.name;
+        InventoryManager.Instance.UseResource(resourceName);
     }
 
     public void ClearAllItems()
@@ -135,5 +139,15 @@ public class BiscuitScroller : MonoBehaviour
             animator.SetBool("Show", !animator.GetBool("Show"));
             isSatchelOpen = animator.GetBool("Show");
         }
+    }
+
+    public void BiscuitHeal(float percentage)
+    {
+        player.playerStats.Heal(player.playerStats.maxHealth*percentage);
+    }
+    public void BiscuitFear(float percentage)
+    {
+        player.playerStats.IncreaseFear(player.playerStats.maxFear * percentage);
+
     }
 }

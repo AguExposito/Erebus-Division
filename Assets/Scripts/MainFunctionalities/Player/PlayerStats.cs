@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class PlayerStats : EntityInterface
 {
+    [SerializeField] public float fear=0;
+    [SerializeField] public float maxFear=100;
     [SerializeField] FPSController fPSController;
     [SerializeField] Image playerHealthBar;
     [SerializeField] Image playerFear;
@@ -79,4 +81,40 @@ public class PlayerStats : EntityInterface
             Debug.LogWarning("Flee Failed!"); 
         }
     }
+
+    public void Heal(float healAmount)
+    {
+        health += healAmount;
+        if (health > maxHealth)
+        {
+            health = maxHealth;
+        }
+        playerHealthBar.fillAmount = health / maxHealth;
+        float alpha = 0.5f * (1f - (health / maxHealth));
+        GameManagerDD.instance.healthVignette.color = new Color(color.r, color.g, color.b, alpha);
+        Debug.Log($"{entityName} healed {healAmount}. Current health: {health}");
+        CalculateFleePercentage();
+    }
+
+    public void IncreaseFear(float fearAmount)
+    {
+        fear += fearAmount;
+        if (fear > maxFear)
+        {
+            fear = maxFear;
+        }
+        playerFear.fillAmount = fear / maxFear;
+        Debug.Log($"{entityName} increased fear by {fearAmount}. Current fear: {fear}");
+    }
+
+    public void DecreaseFear(float fearAmount)
+    {
+        fear -= fearAmount;
+        if (fear < 0)
+        {
+            fear = 0;
+        }
+        playerFear.fillAmount = fear / maxFear;
+        Debug.Log($"{entityName} decreased fear by {fearAmount}. Current fear: {fear}");
+    }   
 }
