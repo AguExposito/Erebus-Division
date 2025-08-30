@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/PAINSplashScreen.unity
     guid: e078c6e4327cdcd44a13121b2edf6c1c
   - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 12639cd95b11d294b911b5aab0047631
+  - enabled: 1
     path: Assets/Scenes/DeepDark.unity
     guid: 12c5a4a796e91b64880caf7fb3ef9c41
   m_configObjects:
