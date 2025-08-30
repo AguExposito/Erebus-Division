@@ -47,12 +47,12 @@ public abstract class EntityInterface : MonoBehaviour
     public void Attack(EntityInterface target)
     {
         float randHitChance = Random.Range(0f, 100f);
+        float attackPower = Random.Range(randomAttackPower.x, randomAttackPower.y);
         if (randHitChance <= hitChance)
         {
             float dodgeChance = Random.Range(0f, 100f);
             if (dodgeChance > target.baseDodgeChance)
             {
-                float attackPower = Random.Range(randomAttackPower.x, randomAttackPower.y);
 
                 if (targetEnemyPart != null) { 
                     baseAttackPower = attackPower * targetEnemyPart.damageMultiplier;
@@ -78,6 +78,10 @@ public abstract class EntityInterface : MonoBehaviour
             Debug.LogWarning("Attack Missed!");
         }
         TurnManager.instance.EndTurn(this);
+
+        if (target is PlayerStats ps) { 
+            ps.IncreaseFear(attackPower); // Aumenta el miedo al recibir daño, ajusta el divisor según sea necesario
+        }
     }
 
 

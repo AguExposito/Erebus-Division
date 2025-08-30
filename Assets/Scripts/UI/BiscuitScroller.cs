@@ -147,7 +147,7 @@ public class BiscuitScroller : MonoBehaviour
     }
     public void BiscuitFear(float percentage)
     {
-        player.playerStats.IncreaseFear(player.playerStats.maxFear * percentage);
+        player.playerStats.DecreaseFear(player.playerStats.maxFear * percentage);
 
     }
 }

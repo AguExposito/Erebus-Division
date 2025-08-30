@@ -149,7 +149,7 @@ public class FPSController : MonoBehaviour
                             if (enemyPart != null)
                             {
                                 playerStats.critChance = (float)Math.Round(enemyPart.critChanceMultiplier * playerStats.baseCritChance, 1);
-                                playerStats.hitChance = (float)Math.Round(enemyPart.hitChanceMultiplier * playerStats.baseHitChance, 1);
+                                playerStats.hitChance = (float)Math.Round(enemyPart.hitChanceMultiplier * playerStats.baseHitChance * playerStats.GetFearMult(), 1);
                                 playerStats.targetEnemyPart = enemyPart;
 
                                 GameManagerDD.instance.critChance.text = playerStats.critChance + "%";

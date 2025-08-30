@@ -859,8 +859,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   partType: 3
-  partStatus: 0
-  hitChanceMultMinMax: {x: 0.6, y: 0.75}
+  partStatus: 1
+  hitChanceMultMinMax: {x: 0.6, y: 0.95}
   hitChanceMultiplier: 1
   critChanceMultMinMax: {x: 0.1, y: 0.3}
   critChanceMultiplier: 1
@@ -1150,7 +1150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partType: 2
   partStatus: 1
-  hitChanceMultMinMax: {x: 0.6, y: 0.8}
+  hitChanceMultMinMax: {x: 0.7, y: 0.95}
   hitChanceMultiplier: 1
   critChanceMultMinMax: {x: 0, y: 0.2}
   critChanceMultiplier: 1
@@ -1217,8 +1217,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   partType: 1
-  partStatus: 1
-  hitChanceMultMinMax: {x: 0.5, y: 0.8}
+  partStatus: 0
+  hitChanceMultMinMax: {x: 0.75, y: 1}
   hitChanceMultiplier: 1
   critChanceMultMinMax: {x: 0.25, y: 0.8}
   critChanceMultiplier: 1
@@ -1287,7 +1287,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partType: 2
   partStatus: 1
-  hitChanceMultMinMax: {x: 0.6, y: 0.8}
+  hitChanceMultMinMax: {x: 0.7, y: 0.95}
   hitChanceMultiplier: 1
   critChanceMultMinMax: {x: 0, y: 0.2}
   critChanceMultiplier: 1
@@ -1478,8 +1478,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   partType: 3
-  partStatus: 0
-  hitChanceMultMinMax: {x: 0.6, y: 0.75}
+  partStatus: 1
+  hitChanceMultMinMax: {x: 0.6, y: 0.95}
   hitChanceMultiplier: 1
   critChanceMultMinMax: {x: 0.1, y: 0.3}
   critChanceMultiplier: 1
