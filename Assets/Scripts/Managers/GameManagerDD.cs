@@ -25,6 +25,10 @@ public class GameManagerDD : MonoBehaviour
     public GameObject enemyInfo;
 
     [Space]
+    public GameObject enemyDialogue;
+    public TextMeshProUGUI dialogueNumber;
+
+    [Space]
     public TextMeshProUGUI fleePercentage;
 
 

@@ -38,9 +38,22 @@ public class PlayerStats : EntityInterface
             health = 0;
             playerHealthBar.fillAmount = 0;
         }
+        if (health <= 0)
+        {
+            Debug.Log($"{entityName} has been defeated!");
+            // Aquí puedes agregar lógica adicional para cuando el jugador muere, como reiniciar el nivel o mostrar una pantalla de "Game Over".
+        }
         CalculateFleePercentage();
+        IncreaseFear(damage * 2); // Aumenta el miedo al recibir daño, ajusta el divisor según sea necesario
     }
+    public float GetFearMult ()
+    {
+        fear = Mathf.Clamp(fear, 0f, 100f);
+        float t = fear / 100f;
+        float result = Mathf.Lerp(0.5f, 1.0f, 1f - t);
 
+        return result;
+    }
     public void CalculateFleePercentage() {
         float baseFleeChance = (health / maxHealth) * 100;
         float threathLevel = TurnManager.instance.encounterThreathLevel;
@@ -116,5 +129,10 @@ public class PlayerStats : EntityInterface
         }
         playerFear.fillAmount = fear / maxFear;
         Debug.Log($"{entityName} decreased fear by {fearAmount}. Current fear: {fear}");
-    }   
+    }
+
+    public void UpdateBaseCritChance(float chance) 
+    { 
+        baseCritChance = chance;
+    }
 }

@@ -59,7 +59,6 @@ public class FPSController : MonoBehaviour
     [SerializeField] bool isAttackHUD = false;
     [SerializeField] bool isSatchelHUD = false;
     [SerializeField] bool isDialogueHUD = false;
-    [SerializeField] bool isFleeHUD = false;
 
     [Space]
     [Header("Read Only Variables"), ReadOnly]
@@ -113,6 +112,7 @@ public class FPSController : MonoBehaviour
         TurnManager.instance.playerStats = playerStats;
         TurnManager.instance.AddTurn(playerStats);
         playerStats.isItsTurn = true;
+        EntityLogManager.Instance.GetEntityLog("ManThing").UpdateDialogueNumber();
     }
 
     void Update()
@@ -140,7 +140,7 @@ public class FPSController : MonoBehaviour
                         Debug.LogWarning("EntityInterface not found on the hit object.");
                     }
 
-                    if (isAttackHUD && entityInterface!=null && isInCombat)
+                    if (isAttackHUD && entityInterface!=null && isInCombat && !isDialogueHUD)
                     {
                         if(hit.collider.TryGetComponent<EnemyPart>(out EnemyPart enemyPart))
                         {
@@ -149,7 +149,7 @@ public class FPSController : MonoBehaviour
                             if (enemyPart != null)
                             {
                                 playerStats.critChance = (float)Math.Round(enemyPart.critChanceMultiplier * playerStats.baseCritChance, 1);
-                                playerStats.hitChance = (float)Math.Round(enemyPart.hitChanceMultiplier * playerStats.baseHitChance, 1);
+                                playerStats.hitChance = (float)Math.Round(enemyPart.hitChanceMultiplier * playerStats.baseHitChance * playerStats.GetFearMult(), 1);
                                 playerStats.targetEnemyPart = enemyPart;
 
                                 GameManagerDD.instance.critChance.text = playerStats.critChance + "%";
@@ -167,6 +167,19 @@ public class FPSController : MonoBehaviour
                             }
                         }
                     }
+                    if (isDialogueHUD && entityInterface != null && isInCombat && !isAttackHUD)
+                    {
+                        if (hit.collider.TryGetComponent<EnemyPart>(out EnemyPart enemyPart))
+                        {
+                            entityInterface = hit.transform.GetComponentInParent<EntityInterface>(true);
+                            if (interactInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled && playerStats.isItsTurn && isInCombat && TurnManager.instance.AttackAnimEnded())
+                            {
+                                EntityLogManager.Instance.GetEntityLog(entityInterface.entityName).IncrementDialogueCount(1);
+                                EntityLogManager.Instance.GetEntityLog("ManThing").UpdateDialogueNumber();
+                                TurnManager.instance.EndTurn(playerStats);
+                            }
+                        }
+                    }
                 }
 
                 
@@ -179,7 +192,7 @@ public class FPSController : MonoBehaviour
                 encounterHUDActive = false;
             }
 
-            if (attackInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled && isInCombat)
+            if (attackInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled && isInCombat && !InventoryManager.Instance.scroller.isSatchelOpen && !isDialogueHUD)
             {
                 if (!isAttackHUD && encounterHUDActive)
                 {
@@ -192,10 +205,24 @@ public class FPSController : MonoBehaviour
                 }
             }
 
-            if (fleeInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled && isInCombat && !isAttackHUD && playerStats.isItsTurn && TurnManager.instance.AttackAnimEnded()) 
+            if (fleeInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled && isInCombat && !isAttackHUD && playerStats.isItsTurn && TurnManager.instance.AttackAnimEnded() && !isDialogueHUD) 
             {
                 playerStats.Flee();
 
+            }
+            if (dialogueInput.action.WasPressedThisFrame() && playerInput.Encounter.enabled && isInCombat && !isAttackHUD && playerStats.isItsTurn && TurnManager.instance.AttackAnimEnded()) 
+            {
+                if (!isDialogueHUD && encounterHUDActive)
+                {
+                    isDialogueHUD = true;
+                    GameManagerDD.instance.enemyDialogue.SetActive(true);
+                    EntityLogManager.Instance.GetEntityLog("ManThing").UpdateDialogueNumber();
+                }
+                else
+                {
+                    isDialogueHUD = false;
+                    GameManagerDD.instance.enemyDialogue.SetActive(false);
+                }
             }
 
             if (!playerInput.Encounter.enabled && playerStats.isItsTurn && isInCombat)
@@ -203,7 +230,7 @@ public class FPSController : MonoBehaviour
                 playerInput.Encounter.Enable();
             }
 
-            if (playerInput.Encounter.enabled && isInCombat && playerStats.isItsTurn && TurnManager.instance.AttackAnimEnded()) 
+            if (playerInput.Encounter.enabled && isInCombat && playerStats.isItsTurn && TurnManager.instance.AttackAnimEnded() && !isAttackHUD && !isDialogueHUD) 
             {
                 if (satchelInput.action.WasPressedThisFrame())
                 {
