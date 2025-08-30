@@ -319,11 +319,8 @@ public class EnemyAI : MonoBehaviour
         {
             if (enemy.isAttacking)
             {
-                NavMeshObstacle obstacle = enemy.agent.GetComponent<NavMeshObstacle>();
-                if (obstacle != null)
-                {
-                    obstacle.enabled = true;
-                }
+                enemy.agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
+                enemy.agent.avoidancePriority = 99;
                 continue;
             }
             switch (attackers)
@@ -336,22 +333,18 @@ public class EnemyAI : MonoBehaviour
                 case 1:
                     enemy.multiplier = 0.66f;
                     enemy.agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance; // Cambiamos el tipo de evasi�n de obst�culos para patrulla
-                    enemy.agent.avoidancePriority = 99;
                     break;
                 case 2:
                     enemy.multiplier = 0.33f;
                     enemy.agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance; // Cambiamos el tipo de evasi�n de obst�culos para patrulla
-                    enemy.agent.avoidancePriority = 99;
                     break;
                 case 3:
                     enemy.multiplier = 0;
                     enemy.agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance; // Cambiamos el tipo de evasi�n de obst�culos para patrulla
-                    enemy.agent.avoidancePriority = 99;
                     break;
                 default:
                     enemy.multiplier = 1;
                     enemy.agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance; // Cambiamos el tipo de evasi�n de obst�culos para patrulla
-                    enemy.agent.avoidancePriority = 99;
                     break;
             }
         }
