@@ -129,5 +129,10 @@ public class PlayerStats : EntityInterface
         }
         playerFear.fillAmount = fear / maxFear;
         Debug.Log($"{entityName} decreased fear by {fearAmount}. Current fear: {fear}");
-    }   
+    }
+
+    public void UpdateBaseCritChance(float chance) 
+    { 
+        baseCritChance = chance;
+    }
 }
