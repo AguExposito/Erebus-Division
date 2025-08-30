@@ -1,1 +1,1 @@
-{"slotused1":true,"agentName1":"Alex","health1":4,"dmg1":1,"dodge1":1,"stressMax1":3,"slotused2":true,"agentName2":"Muffin","health2":5,"dmg2":1,"dodge2":1,"stressMax2":1}
+{"slotused1":true,"agentName1":"Cheese","health1":4,"dmg1":4,"dodge1":1,"stressMax1":2,"slotused2":true,"agentName2":"Muffin","health2":2,"dmg2":1,"dodge2":4,"stressMax2":1}
