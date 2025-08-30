@@ -43,6 +43,11 @@ public class EnemyAI : MonoBehaviour
     public bool isScreaming = false; // Estado de grito del enemigo
     public bool isChasing = false; // Flag para verificar si se ha iniciado el Chase
 
+    [Space]
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public List<AudioClip> screamClips = new List<AudioClip>();
+
     public enum State { Patrol, Chase, Attack }
 
     private float timeElapsed = 0f; // Tiempo transcurrido para la rotacin
@@ -106,6 +111,13 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    public void PlayScreamAudio() 
+    { 
+        int randomAudioIndex = Random.Range(0, screamClips.Count);
+        float randomPitch = Random.Range(0.8f, 1.2f);
+        audioSource.pitch = randomPitch;
+        audioSource.PlayOneShot(screamClips[randomAudioIndex]);
+    }
 
     void Chase()
     {
@@ -116,6 +128,7 @@ public class EnemyAI : MonoBehaviour
             agent.obstacleAvoidanceType=ObstacleAvoidanceType.LowQualityObstacleAvoidance; // Cambiamos el tipo de evasi�n de obst�culos para persecuci�n
             agent.avoidancePriority = 99; 
             isScreaming = true; // Establecemos que est� gritando
+            PlayScreamAudio();
             agent.speed = 0; // Detenemos el agente
             StartCoroutine(WaitEndOfScream()); // Iniciamos la corutina
         }

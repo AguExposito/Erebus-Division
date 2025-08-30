@@ -122,6 +122,10 @@ public class FPSController : MonoBehaviour
         {
             GameManagerDD.instance.flashlight.SetActive(!GameManagerDD.instance.flashlight.activeInHierarchy);
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            AlternatePauseMenu();
+        }
 
         #region Handles HUDs
         if (isInCombat || isInElevator)
@@ -305,6 +309,13 @@ public class FPSController : MonoBehaviour
         characterController.Move(finalMove * Time.deltaTime);
 
         #endregion
+    }
+
+    public void AlternatePauseMenu()
+    {
+        GameManagerDD.instance.pauseMenu.SetActive(!GameManagerDD.instance.pauseMenu.activeInHierarchy);
+        canMove = !GameManagerDD.instance.pauseMenu.activeInHierarchy;
+        cinemachineInputAxisController.enabled = !GameManagerDD.instance.pauseMenu.activeInHierarchy;
     }
 
     public IEnumerator RotateCameraPlayer(Transform targetTransform)

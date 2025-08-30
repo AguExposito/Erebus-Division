@@ -3,6 +3,7 @@ using UnityEngine;
 public class ElevatorController : MonoBehaviour
 {
     public GameObject player;
+    public AudioSource audioSource;
     public GameObject playerInstance;
     public Animator animator;
     private Vector3 initialPosition;
@@ -23,6 +24,7 @@ public class ElevatorController : MonoBehaviour
     }
 
     public void OpenCLoseDoor() {
+        audioSource.Play();
         animator.SetTrigger("Change");
     }
 

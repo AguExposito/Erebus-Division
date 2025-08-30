@@ -99,10 +99,10 @@ MonoBehaviour:
   canMove: 1
   isRotatingJumpscare: 0
   isInCombat: 0
+  isInElevator: 0
   isAttackHUD: 0
   isSatchelHUD: 0
   isDialogueHUD: 0
-  isFleeHUD: 0
   moveDirection: {x: 0, y: 0, z: 0}
   rotationX: 0
   characterController: {fileID: 5621329319332908308}
@@ -136,9 +136,13 @@ MonoBehaviour:
   encounterHUD: {fileID: 0}
   enemyHealthBar: []
   isItsTurn: 0
+  failAttack: {fileID: 8300000, guid: bbb6d8313d268bb4386fd3a5bdcafe4f, type: 3}
+  fear: 0
+  maxFear: 100
   fPSController: {fileID: 1425115995545481009}
   playerHealthBar: {fileID: 0}
   playerFear: {fileID: 0}
+  takeDamage: {fileID: 8300000, guid: a6bb2c35ba569f6428dd8ded42aad4cc, type: 3}
   fleeChance: 100
 --- !u!1 &4198323653780529454
 GameObject:

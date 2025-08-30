@@ -12,6 +12,7 @@ public class ManThing : EntityInterface
     public Vector2 hitChanceMinMax;
     public Vector2 critChanceMinMax;
     public Animator animator;
+    public AudioClip takeDamage;
 
     private void Start()
     {
@@ -35,6 +36,7 @@ public class ManThing : EntityInterface
 
     public override void TakeDamage(float damage)
     {
+        AudioSource.PlayClipAtPoint(takeDamage, transform.position);
         health -= damage;
         Debug.Log($"{entityName} took {damage} damage. Remaining health: {health}");
         for (int i = 0; i < enemyHealthBar.Count; i++)

@@ -32,6 +32,9 @@ public abstract class EntityInterface : MonoBehaviour
     [Space]
     public bool isItsTurn = false;
 
+    [Space]
+    public AudioClip failAttack;
+
     private void Start()
     {
         encounterHUD = GameManagerDD.instance.encounterHUD;
@@ -71,11 +74,13 @@ public abstract class EntityInterface : MonoBehaviour
             else
             {
                 Debug.LogWarning("Attack Dodged!");
+                AudioSource.PlayClipAtPoint(failAttack, transform.position);
             }
         }
         else
         {
             Debug.LogWarning("Attack Missed!");
+            AudioSource.PlayClipAtPoint(failAttack, transform.position);
         }
         TurnManager.instance.EndTurn(this);
 

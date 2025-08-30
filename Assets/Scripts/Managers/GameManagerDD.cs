@@ -7,6 +7,9 @@ using UnityEngine.UI;
 public class GameManagerDD : MonoBehaviour
 {
     public static GameManagerDD instance;
+    public MusicManager musicManager;
+    public MusicManager hearthSFXManager;
+    public GameObject pauseMenu;
 
     [Header("HUD References")]
     public GameObject encounterHUD;

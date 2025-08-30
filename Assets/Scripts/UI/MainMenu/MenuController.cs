@@ -5,9 +5,11 @@ using UnityEngine;
 public class MenuController : MonoBehaviour
 {
     float lookSpeed;
+    FPSController player;
     private void Start()
     {
         gameObject.SetActive(false);
+        player = FindAnyObjectByType<FPSController>();
     }
     private void OnEnable()
     {
@@ -20,5 +22,9 @@ public class MenuController : MonoBehaviour
         //Cursor Lock
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+
+    public void PauseMenu() {
+        player.AlternatePauseMenu();
     }
 }

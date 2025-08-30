@@ -12,6 +12,7 @@ public class PlayerStats : EntityInterface
     [SerializeField] FPSController fPSController;
     [SerializeField] Image playerHealthBar;
     [SerializeField] Image playerFear;
+    [SerializeField] AudioClip takeDamage;
     Color color;
     float alphaColor;
     public float fleeChance = 100;
@@ -24,7 +25,8 @@ public class PlayerStats : EntityInterface
         color = GameManagerDD.instance.healthVignette.color;
     }
     public override void TakeDamage(float damage)
-    {          
+    {
+        AudioSource.PlayClipAtPoint(takeDamage, transform.position);
         health -= damage;
         Debug.Log($"{entityName} took {damage} damage. Remaining health: {health}");
         playerHealthBar.fillAmount = health / maxHealth;
