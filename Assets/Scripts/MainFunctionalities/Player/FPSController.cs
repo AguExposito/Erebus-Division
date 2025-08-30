@@ -56,6 +56,7 @@ public class FPSController : MonoBehaviour
     [SerializeField] bool canMove = true;
     [SerializeField] bool isRotatingJumpscare = false;
     [SerializeField] bool isInCombat = false;
+    [SerializeField] public bool isInElevator = false;
     [SerializeField] bool isAttackHUD = false;
     [SerializeField] bool isSatchelHUD = false;
     [SerializeField] bool isDialogueHUD = false;
@@ -117,8 +118,13 @@ public class FPSController : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R)) 
+        {
+            GameManagerDD.instance.flashlight.SetActive(!GameManagerDD.instance.flashlight.activeInHierarchy);
+        }
+
         #region Handles HUDs
-        if (isInCombat)
+        if (isInCombat || isInElevator)
         {
             RaycastHit[] hits= Physics.RaycastAll(cameraTransform.position, cameraTransform.forward, 10f, LayerMask.GetMask("Enemy"));
 
@@ -182,8 +188,18 @@ public class FPSController : MonoBehaviour
                     }
                 }
 
-                
-                
+                if (isInElevator && hit.transform.CompareTag("ElevatorButton")) 
+                {
+                    GameManagerDD.instance.exitHUD.SetActive(true);
+                    if (interactInput.action.WasPressedThisFrame())
+                    {
+                        hit.collider.TryGetComponent<ElevatorButtonController>(out ElevatorButtonController elevatorButton);
+                        elevatorButton.onButtonPress.Invoke();
+                        hit.transform.gameObject.layer = LayerMask.NameToLayer("Default");
+                        canMove = false;
+                        GameManagerDD.instance.exitHUD.SetActive(false);
+                    }
+                }
             }
 
             if (GameManagerDD.instance.encounterHUD != null && hits.Length==0 && isInCombat)
@@ -242,6 +258,9 @@ public class FPSController : MonoBehaviour
 
                 }
             }
+
+            if (GameManagerDD.instance.exitHUD.activeInHierarchy && hits.Length==0) GameManagerDD.instance.exitHUD.SetActive(false);
+
         }
         #endregion
 

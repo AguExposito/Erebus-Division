@@ -52,7 +52,7 @@ MonoBehaviour:
     flooring:
     - gameObject: {fileID: 8761019777689142071, guid: 4bf04e05eaa130a49a62a559eb2a0a96, type: 3}
       name: Floor3
-    player: {fileID: 28599014315746945, guid: ee45ab2275d212043bc0e851ceaaed22, type: 3}
+    player: {fileID: 7005259060364047754, guid: ba2f7572b8b24cd42ad29d3f9b6271df, type: 3}
     minEnemiesPerRoom: 0
     maxEnemiesPerRoom: 2
     enemies:

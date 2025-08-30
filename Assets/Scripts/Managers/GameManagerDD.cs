@@ -10,12 +10,14 @@ public class GameManagerDD : MonoBehaviour
 
     [Header("HUD References")]
     public GameObject encounterHUD;
+    public GameObject exitHUD;
     public List<Image> enemyHealthBar = new List<Image>();
     public Image healthVignette;
     public TextMeshProUGUI entityNameTMP;
     [Space]
     public Image playerHealth;
     public Image playerFear;
+    public GameObject flashlight;
 
     [Space]
     public TextMeshProUGUI critChance;

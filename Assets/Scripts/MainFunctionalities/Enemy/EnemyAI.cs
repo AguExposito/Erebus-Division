@@ -127,7 +127,7 @@ public class EnemyAI : MonoBehaviour
             agent.speed = chaseSpeed * multiplier; // Velocidad de persecuci�n
 
             // Si est� dentro del rango de ataque, cambia al estado de ataque
-            if (Vector3.Distance(transform.position, player.position) < attackRange)
+            if (Vector3.Distance(transform.position, player.position) < attackRange && !player.GetComponent<FPSController>().isInElevator)
             {
                 currentState = State.Attack;
             }
@@ -180,7 +180,7 @@ public class EnemyAI : MonoBehaviour
 
     void Attack()
     {
-        if (isAttacking) return;
+        if (isAttacking || player.GetComponent<FPSController>().isInElevator) return;
 
         gameObject.tag = "AttackingEnemy";
         AttackState(true);

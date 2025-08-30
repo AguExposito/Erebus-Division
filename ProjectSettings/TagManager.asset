@@ -17,6 +17,8 @@ TagManager:
   - Legs
   - Head
   - Arms
+  - Lift
+  - ElevatorButton
   layers:
   - Default
   - TransparentFX
@@ -32,7 +34,7 @@ TagManager:
   - EnemyMesh
   - HUD
   - Room
-  - 
+  - Lift
   - 
   - 
   - 
