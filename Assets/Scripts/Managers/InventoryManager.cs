@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [Serializable]
@@ -150,4 +151,44 @@ public class InventoryManager : MonoBehaviour
     { 
         scroller = FindFirstObjectByType<BiscuitScroller>();
     }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        UpdateReferences();
+        RefreshResourceDisplay();
+    }
+
+    public void GoldenBiscuit() 
+    {
+        scroller.BiscuitHeal(1);
+        scroller.BiscuitFear(1);
+    }
+    public void RedBiscuit() 
+    { 
+        scroller.BiscuitHeal(0.5f);
+
+    }
+    public void BlueBiscuit() 
+    { 
+        scroller.BiscuitFear(0.5f);
+
+    }
+    public void PurpleBiscuit() 
+    { 
+        scroller.BiscuitHeal(0.25f);
+        scroller.BiscuitFear(0.25f);
+
+    }
+
 }
+

@@ -23,6 +23,11 @@ public class BiscuitScroller : MonoBehaviour
         targetScrollValue = currentScrollValue;
         UpdateLayout(currentScrollValue);
         player = FindFirstObjectByType<FPSController>();
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.scroller = this;
+            InventoryManager.Instance.RefreshResourceDisplay();
+        }
     }
 
     void Update()

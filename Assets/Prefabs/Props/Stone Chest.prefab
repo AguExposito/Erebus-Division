@@ -271,10 +271,10 @@ MonoBehaviour:
   items:
   - itemName: RedBiscuit
     quantityMinMax: {x: 1, y: 2}
-    chanceToSpawn: 25
+    chanceToSpawn: 40
   - itemName: BlueBiscuit
     quantityMinMax: {x: 1, y: 2}
-    chanceToSpawn: 25
+    chanceToSpawn: 40
   - itemName: PurpleBiscuit
     quantityMinMax: {x: 1, y: 2}
     chanceToSpawn: 25
