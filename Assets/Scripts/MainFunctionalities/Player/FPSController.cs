@@ -126,7 +126,7 @@ public class FPSController : MonoBehaviour
         LoadPlayerContext();
     }
 
-    private void LoadPlayerContext()
+    public void LoadPlayerContext()
     {
         InventoryManager.Instance.UpdateReferences();
         playerStats.baseAttackPower = InventoryManager.Instance.baseAttackPower;
@@ -214,6 +214,13 @@ public class FPSController : MonoBehaviour
                 if (isInElevator && hit.transform.CompareTag("ElevatorButton")) 
                 {
                     GameManagerDD.instance.exitHUD.SetActive(true);
+                    if (!interactInput.action.enabled || !playerInput.Player.enabled)
+                    {
+                        playerInput.Enable();
+                        playerInput.Encounter.Disable();
+                        playerInput.Player.Enable();
+                        interactInput.action.Enable();
+                    }
                     if (interactInput.action.WasPressedThisFrame())
                     {
                         hit.collider.TryGetComponent<ElevatorButtonController>(out ElevatorButtonController elevatorButton);
@@ -224,11 +231,9 @@ public class FPSController : MonoBehaviour
                     }
                 }
 
-                Debug.LogWarning(isInShop + "" + hit.transform.tag);
 
                 if (isInShop && hit.transform.CompareTag("Shop")) 
                 {
-                    Debug.LogWarning("AAAAAAAAAAAAAAAAAAAAAA");
                     if (!interactInput.action.enabled || !playerInput.Player.enabled) 
                     {
                         playerInput.Enable();
@@ -238,7 +243,6 @@ public class FPSController : MonoBehaviour
                     }
                     if (interactInput.action.WasPressedThisFrame() && !isShopHUD)
                     {
-                        Debug.LogWarning("BBBBBBBBBBBBBBBBBBBBBBBBBBB");
                         OpenShopMenu();
                     }
                 }

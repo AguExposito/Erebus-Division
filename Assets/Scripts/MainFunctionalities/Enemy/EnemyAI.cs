@@ -69,7 +69,6 @@ public class EnemyAI : MonoBehaviour
         //obstacle.carving = true;
         //obstacle.carveOnlyStationary = true;
         //obstacle.enabled = false; // Initially off
-
         enemies.Add(this); // Agregar este enemigo a la lista de enemigos
         Debug.Log("Enemigo agregado a la lista de enemigos: " + enemies.Count);
 

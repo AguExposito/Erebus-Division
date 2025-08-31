@@ -34,29 +34,33 @@ public class MenuController : MonoBehaviour
     public void ShopRedBiscuit() {
         InventoryManager.Instance.resources.TryGetValue("RedBiscuit", out int val);
         if (val <= 0) return;
-        player.playerStats.baseHitChance += 1;
+        InventoryManager.Instance.baseHitChance += 1;
         InventoryManager.Instance.RemoveResource("RedBiscuit", 1);
+        player.LoadPlayerContext();
     }
     public void ShopBlueBiscuit() {
         InventoryManager.Instance.resources.TryGetValue("BlueBiscuit", out int val);
         if (val <= 0) return;
-        player.playerStats.baseDodgeChance += 1;
+        InventoryManager.Instance.baseDodgeChance += 1;
         InventoryManager.Instance.RemoveResource("BlueBiscuit", 1);
+        player.LoadPlayerContext();
     }
     public void ShopPurpleBiscuit() {
         InventoryManager.Instance.resources.TryGetValue("PurpleBiscuit", out int val);
         if (val <= 0) return;
-        player.playerStats.baseCritChance += 2;
+        InventoryManager.Instance.baseCritChance += 2;
         InventoryManager.Instance.RemoveResource("PurpleBiscuit", 1);
+        player.LoadPlayerContext();
     }
     public void ShopGoldenBiscuit()
     {
         InventoryManager.Instance.resources.TryGetValue("GoldenBiscuit", out int val);
         if (val <= 0) return;
-        player.playerStats.baseCritChance += 5;
-        player.playerStats.baseHitChance += 5;
-        player.playerStats.baseDodgeChance += 5;
-        player.playerStats.baseAttackPower += 5;
+        InventoryManager.Instance.baseCritChance += 5;
+        InventoryManager.Instance.baseHitChance += 5;
+        InventoryManager.Instance.baseDodgeChance += 5;
+        InventoryManager.Instance.baseAttackPower += 5;
         InventoryManager.Instance.RemoveResource("GoldenBiscuit", 1);
+        player.LoadPlayerContext();
     }
 }

@@ -36,7 +36,7 @@ public class ManThing : EntityInterface
 
     public override void TakeDamage(float damage)
     {
-        AudioSource.PlayClipAtPoint(takeDamage, transform.position);
+        audioSource.PlayOneShot(takeDamage);
         health -= damage;
         Debug.Log($"{entityName} took {damage} damage. Remaining health: {health}");
         for (int i = 0; i < enemyHealthBar.Count; i++)

@@ -33,6 +33,7 @@ public class ElevatorController : MonoBehaviour
         FPSController playerfpscontroller = playerInstance.GetComponent<FPSController>();
         playerfpscontroller.playerInput.Player.Disable();
         playerfpscontroller.playerInput.Encounter.Disable();
+        EnemyAI.enemies.Clear();
         Invoke("LoadShop", 2);
     }
     public void LoadShop() {
@@ -43,7 +44,8 @@ public class ElevatorController : MonoBehaviour
         FPSController playerfpscontroller = playerInstance.GetComponent<FPSController>();
         playerfpscontroller.playerInput.Player.Disable();
         playerfpscontroller.playerInput.Encounter.Disable();
-        Invoke("LoadShop", 2);
+        EnemyAI.enemies.Clear();
+        Invoke("LoadNewDD", 2);
     }
     public void LoadNewDD() {
         GetComponent<MainMenu>().LoadScene(2);

@@ -41,6 +41,7 @@ public abstract class EntityInterface : MonoBehaviour
         encounterHUD = GameManagerDD.instance.encounterHUD;
         enemyHealthBar = GameManagerDD.instance.enemyHealthBar;
         entityNameTMP = GameManagerDD.instance.entityNameTMP;
+        if (audioSource == null) { audioSource = GetComponent<AudioSource>(); }
     }
     private void OnEnable()
     {
