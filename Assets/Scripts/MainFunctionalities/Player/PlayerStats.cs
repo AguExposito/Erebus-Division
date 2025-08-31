@@ -16,6 +16,7 @@ public class PlayerStats : EntityInterface
     [SerializeField] AudioClip takeDamage;
     Color color;
     float alphaColor;
+    bool isDead;
     public float fleeChance = 100;
 
     private void Start()
@@ -37,14 +38,13 @@ public class PlayerStats : EntityInterface
         float alpha = 0.5f * (1f - (health / maxHealth));
         GameManagerDD.instance.healthVignette.color = new Color(color.r, color.g, color.b, alpha);
 
-        if (health < 0)
+        if (health <= 0 && !isDead)
         {
+            isDead = true;
             health = 0;
             playerHealthBar.fillAmount = 0;
-        }
-        if (health <= 0)
-        {
             Debug.Log($"{entityName} has been defeated!");
+            FindAnyObjectByType<GameOverController>().GameOver();
             // Aquí puedes agregar lógica adicional para cuando el jugador muere, como reiniciar el nivel o mostrar una pantalla de "Game Over".
         }
         CalculateFleePercentage();

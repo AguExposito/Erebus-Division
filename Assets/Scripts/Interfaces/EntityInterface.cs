@@ -76,12 +76,14 @@ public abstract class EntityInterface : MonoBehaviour
             else
             {
                 Debug.LogWarning("Attack Dodged!");
+                audioSource = GetComponent<AudioSource>();
                 audioSource.PlayOneShot(failAttack);
             }
         }
         else
         {
             Debug.LogWarning("Attack Missed!");
+            audioSource = GetComponent<AudioSource>();
             audioSource.PlayOneShot(failAttack);
         }
         TurnManager.instance.EndTurn(this);

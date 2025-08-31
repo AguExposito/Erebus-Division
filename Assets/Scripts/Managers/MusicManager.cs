@@ -10,8 +10,8 @@ public class MusicManager : MonoBehaviour
     public List<AudioClip> hearthClips; // Lista de canciones
     public float fadeTime = 2f;        // Tiempo de transición en segundos
 
-    private AudioSource audioSource;
-    private AudioSource hearthAudioSource;
+    public AudioSource audioSource;
+    public AudioSource hearthAudioSource;
     public int currentTrack = 0;
     private Coroutine transitionCoroutine;
 

@@ -36,6 +36,7 @@ public class ManThing : EntityInterface
 
     public override void TakeDamage(float damage)
     {
+        if (audioSource == null) { audioSource = GetComponent<AudioSource>(); }
         audioSource.PlayOneShot(takeDamage);
         health -= damage;
         Debug.Log($"{entityName} took {damage} damage. Remaining health: {health}");
