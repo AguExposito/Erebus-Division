@@ -73,9 +73,12 @@ public class FPSController : MonoBehaviour
     private float timeElapsed;
     private CameraTarget cameraTarget = new CameraTarget();
     public bool encounterHUDActive = false;
-    void Start()
+    private void Awake()
     {
         playerInput = new InputSystem_Actions();
+    }
+    void Start()
+    {
         playerInput.Enable();
         playerInput.Encounter.Disable();
         playerInput.Player.Enable();
@@ -116,7 +119,7 @@ public class FPSController : MonoBehaviour
         EntityLogManager.Instance.GetEntityLog("ManThing").UpdateDialogueNumber();
 
 
-        if (SceneManager.GetActiveScene().name == "Shop") { isInShop = true; }
+        if (SceneManager.GetActiveScene().name == "Shop" || SceneManager.GetActiveScene().name == "FinalBiscuit") { isInShop = true; }
         else
         {
             TurnManager.instance.playerStats = playerStats;
@@ -228,6 +231,26 @@ public class FPSController : MonoBehaviour
                         hit.transform.gameObject.layer = LayerMask.NameToLayer("Default");
                         canMove = false;
                         GameManagerDD.instance.exitHUD.SetActive(false);
+                    }
+                }
+
+                if (hit.transform.CompareTag("Biscuit"))
+                {
+                    GameManagerDD.instance.exitHUD.SetActive(true);
+                    if (!interactInput.action.enabled || !playerInput.Player.enabled)
+                    {
+                        playerInput.Enable();
+                        playerInput.Encounter.Disable();
+                        playerInput.Player.Enable();
+                        interactInput.action.Enable();
+                    }
+                    if (interactInput.action.WasPressedThisFrame())
+                    {
+                        GameObject mm = GameObject.Find("MusicManager");
+                        mm.GetComponent<AudioSource>().Stop();
+                        GameObject black = mm.transform.GetChild(0).gameObject;
+                        black.SetActive(true);
+                        black.GetComponent<MainMenu>().TitleScreen(2f);
                     }
                 }
 
@@ -543,6 +566,7 @@ public class FPSController : MonoBehaviour
 
     private void OnEnable()
     {
+        playerInput.UI.Enable();
         // Habilitar inputs según el modo actual
         if (!isInCombat)
         {
@@ -565,6 +589,8 @@ public class FPSController : MonoBehaviour
     
     private void OnDisable()
     {
+        playerInput.UI.Disable();
+
         if (jumpInput?.action != null) jumpInput.action.Disable();
         if (runInput?.action != null) runInput.action.Disable();
         if (moveInput?.action != null) moveInput.action.Disable();

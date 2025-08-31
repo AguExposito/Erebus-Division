@@ -7,6 +7,7 @@ public class ElevatorController : MonoBehaviour
     public GameObject playerInstance;
     public Animator animator;
     private Vector3 initialPosition;
+    public static float count;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
@@ -36,8 +37,17 @@ public class ElevatorController : MonoBehaviour
         EnemyAI.enemies.Clear();
         Invoke("LoadShop", 2);
     }
-    public void LoadShop() {
-        GetComponent<MainMenu>().LoadScene(3);
+    public void LoadShop()
+    {
+        count++;
+        if (count >= 3)
+        {
+            GetComponent<MainMenu>().LoadScene(4);
+        }
+        else
+        {
+            GetComponent<MainMenu>().LoadScene(3);
+        }
     }
     public void NextDD() 
     {

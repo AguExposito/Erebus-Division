@@ -342,6 +342,7 @@ public class EnemyAI : MonoBehaviour
     {
         foreach (var enemy in enemies)
         {
+            if (enemy.agent == null) { enemy.agent = GetComponent<NavMeshAgent>(); }
             if (enemy.isAttacking)
             {
                 enemy.agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;

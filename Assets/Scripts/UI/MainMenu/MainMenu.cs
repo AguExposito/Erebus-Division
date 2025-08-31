@@ -62,4 +62,17 @@ public class MainMenu : MonoBehaviour
     {
         Application.Quit();
     }
+
+    public void TitleScreen(float time) {
+        Invoke("GoBackToTitleScreen", time);
+    }
+    public void GoBackToTitleScreen()
+    {
+        SceneManager.LoadSceneAsync(0);
+        ElevatorController.count = 0;
+        EnemyAI.attackers = 0;
+        EnemyAI.enemies.Clear();
+        Destroy(InventoryManager.Instance);
+        Destroy(EntityLogManager.Instance);
+    }
 }

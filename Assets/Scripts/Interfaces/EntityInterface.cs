@@ -53,6 +53,7 @@ public abstract class EntityInterface : MonoBehaviour
     {
         float randHitChance = Random.Range(0f, 100f);
         float attackPower = Random.Range(randomAttackPower.x, randomAttackPower.y);
+        Debug.LogError(randHitChance + "vs" + hitChance);
         if (randHitChance <= hitChance)
         {
             float dodgeChance = Random.Range(0f, 100f);

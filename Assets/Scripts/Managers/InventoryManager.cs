@@ -71,7 +71,10 @@ public class InventoryManager : MonoBehaviour
     }
     public void RefreshResourceDisplay()
     {
-        scroller.ClearAllItems();
+        if (scroller != null)
+        {
+            scroller.ClearAllItems();
+        }
 
         foreach (var kvp in resources)
         {
