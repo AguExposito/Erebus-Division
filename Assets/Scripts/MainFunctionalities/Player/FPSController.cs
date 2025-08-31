@@ -7,6 +7,7 @@ using Unity.Cinemachine;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(CharacterController))]
@@ -57,6 +58,8 @@ public class FPSController : MonoBehaviour
     [SerializeField] bool isRotatingJumpscare = false;
     [SerializeField] bool isInCombat = false;
     [SerializeField] public bool isInElevator = false;
+    [SerializeField] public bool isInShop = false;
+    [SerializeField] public bool isShopHUD = false;
     [SerializeField] bool isAttackHUD = false;
     [SerializeField] bool isSatchelHUD = false;
     [SerializeField] bool isDialogueHUD = false;
@@ -70,19 +73,18 @@ public class FPSController : MonoBehaviour
     private float timeElapsed;
     private CameraTarget cameraTarget = new CameraTarget();
     public bool encounterHUDActive = false;
-
     void Start()
     {
         playerInput = new InputSystem_Actions();
         playerInput.Enable();
         playerInput.Encounter.Disable();
         playerInput.Player.Enable();
-        
+
         // Inicializar los InputActionReference del modo Player (modo inicial)
         if (moveInput?.action != null) moveInput.action.Enable();
         if (runInput?.action != null) runInput.action.Enable();
         if (jumpInput?.action != null) jumpInput.action.Enable();
-        
+
         // Deshabilitar los InputActionReference del modo Encounter
         if (attackInput?.action != null) attackInput.action.Disable();
         if (satchelInput?.action != null) satchelInput.action.Disable();
@@ -110,10 +112,27 @@ public class FPSController : MonoBehaviour
         Cursor.visible = false;
 
         GameManagerDD.instance.encounterHUD.SetActive(false);
-        TurnManager.instance.playerStats = playerStats;
-        TurnManager.instance.AddTurn(playerStats);
         playerStats.isItsTurn = true;
         EntityLogManager.Instance.GetEntityLog("ManThing").UpdateDialogueNumber();
+
+
+        if (SceneManager.GetActiveScene().name == "Shop") { isInShop = true; }
+        else
+        {
+            TurnManager.instance.playerStats = playerStats;
+            TurnManager.instance.AddTurn(playerStats);
+        }
+
+        LoadPlayerContext();
+    }
+
+    private void LoadPlayerContext()
+    {
+        InventoryManager.Instance.UpdateReferences();
+        playerStats.baseAttackPower = InventoryManager.Instance.baseAttackPower;
+        playerStats.baseCritChance = InventoryManager.Instance.baseCritChance;
+        playerStats.baseDodgeChance = InventoryManager.Instance.baseDodgeChance;
+        playerStats.baseHitChance = InventoryManager.Instance.baseHitChance;
     }
 
     void Update()
@@ -128,10 +147,10 @@ public class FPSController : MonoBehaviour
         }
 
         #region Handles HUDs
-        if (isInCombat || isInElevator)
+        if (isInCombat || isInElevator || isInShop)
         {
             RaycastHit[] hits= Physics.RaycastAll(cameraTransform.position, cameraTransform.forward, 10f, LayerMask.GetMask("Enemy"));
-
+            
             foreach (var hit in hits)
             {
                 if (hit.transform.CompareTag("AttackingEnemy") && isInCombat)
@@ -202,6 +221,25 @@ public class FPSController : MonoBehaviour
                         hit.transform.gameObject.layer = LayerMask.NameToLayer("Default");
                         canMove = false;
                         GameManagerDD.instance.exitHUD.SetActive(false);
+                    }
+                }
+
+                Debug.LogWarning(isInShop + "" + hit.transform.tag);
+
+                if (isInShop && hit.transform.CompareTag("Shop")) 
+                {
+                    Debug.LogWarning("AAAAAAAAAAAAAAAAAAAAAA");
+                    if (!interactInput.action.enabled || !playerInput.Player.enabled) 
+                    {
+                        playerInput.Enable();
+                        playerInput.Encounter.Disable();
+                        playerInput.Player.Enable();
+                        interactInput.action.Enable();
+                    }
+                    if (interactInput.action.WasPressedThisFrame() && !isShopHUD)
+                    {
+                        Debug.LogWarning("BBBBBBBBBBBBBBBBBBBBBBBBBBB");
+                        OpenShopMenu();
                     }
                 }
             }
@@ -316,6 +354,22 @@ public class FPSController : MonoBehaviour
         GameManagerDD.instance.pauseMenu.SetActive(!GameManagerDD.instance.pauseMenu.activeInHierarchy);
         canMove = !GameManagerDD.instance.pauseMenu.activeInHierarchy;
         cinemachineInputAxisController.enabled = !GameManagerDD.instance.pauseMenu.activeInHierarchy;
+    }
+    public void OpenShopMenu ()
+    {
+        GameManagerDD.instance.shopMenu.SetActive(true);
+        canMove = false;
+        cinemachineInputAxisController.enabled = false;
+        InventoryManager.Instance.scroller.ToggleSatchel();
+        isShopHUD = true;
+    }
+    public void CloseShopMenu ()
+    {
+        GameManagerDD.instance.shopMenu.SetActive(false);
+        canMove = true;
+        cinemachineInputAxisController.enabled = true;
+        InventoryManager.Instance.scroller.ToggleSatchel();
+        isShopHUD = false;
     }
 
     public IEnumerator RotateCameraPlayer(Transform targetTransform)

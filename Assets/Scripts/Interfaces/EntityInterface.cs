@@ -16,6 +16,7 @@ public abstract class EntityInterface : MonoBehaviour
     public float baseHitChance;
     public float baseDodgeChance;
     public float threathLevel;
+    public AudioSource audioSource;
 
     [Space]
     public float critChance;
@@ -74,13 +75,13 @@ public abstract class EntityInterface : MonoBehaviour
             else
             {
                 Debug.LogWarning("Attack Dodged!");
-                AudioSource.PlayClipAtPoint(failAttack, transform.position);
+                audioSource.PlayOneShot(failAttack);
             }
         }
         else
         {
             Debug.LogWarning("Attack Missed!");
-            AudioSource.PlayClipAtPoint(failAttack, transform.position);
+            audioSource.PlayOneShot(failAttack);
         }
         TurnManager.instance.EndTurn(this);
 

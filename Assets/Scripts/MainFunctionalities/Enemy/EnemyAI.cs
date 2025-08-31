@@ -129,6 +129,10 @@ public class EnemyAI : MonoBehaviour
             agent.avoidancePriority = 99; 
             isScreaming = true; // Establecemos que est� gritando
             PlayScreamAudio();
+            if (MusicManager.Instance.currentTrack != 1)
+            {
+                MusicManager.Instance.PlaySong(1); // Cambiamos la música a la de persecución
+            }
             agent.speed = 0; // Detenemos el agente
             StartCoroutine(WaitEndOfScream()); // Iniciamos la corutina
         }
@@ -262,6 +266,10 @@ public class EnemyAI : MonoBehaviour
         player.GetComponent<FPSController>().GiveBackControlToPlayer(); // Reactiva el controlador del jugador
         if (!isDead) StartCoroutine(PatrolDelay());
         SetAgentSpeed();
+        if (MusicManager.Instance.currentTrack != 0)
+        {
+            MusicManager.Instance.PlaySong(0); // Cambiamos la música a la de persecución
+        }
     }
 
     IEnumerator PatrolDelay()
@@ -297,6 +305,11 @@ public class EnemyAI : MonoBehaviour
         if (attackers <= 0) 
         { 
             FinishedEncounter(); // Termina el encuentro si no hay m�s atacantes
+            if (MusicManager.Instance.currentTrack != 0)
+            {
+                MusicManager.Instance.PlaySong(0); // Cambiamos la música a la de persecución
+            }
+
         }
 
         Destroy(gameObject);

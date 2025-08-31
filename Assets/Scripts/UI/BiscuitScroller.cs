@@ -131,6 +131,10 @@ public class BiscuitScroller : MonoBehaviour
 
     public void ToggleSatchel() 
     {
+        if (animator == null) 
+        {
+            animator= GetComponent<Animator>();
+        }
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0); // capa 0
         bool isPlaying = stateInfo.normalizedTime < 1f; // normalizedTime va de 0 a 1 en un clip sin loop
         //bool isFinished = !isPlaying && stateInfo.IsName("NombreDeTuEstado");

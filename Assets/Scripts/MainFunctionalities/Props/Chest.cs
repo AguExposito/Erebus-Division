@@ -9,6 +9,7 @@ public class Chest : MonoBehaviour
     [Serialize]
     public List<ChestItem> items; // List of items contained in the chest
     bool isOpen = false;
+    public AudioClip openAC;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -31,6 +32,7 @@ public class Chest : MonoBehaviour
                 }
             }
             isOpen = true;
+            AudioSource.PlayClipAtPoint(openAC, transform.position);
         }
     }
 }

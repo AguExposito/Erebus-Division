@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class PlayerStats : EntityInterface
@@ -23,10 +24,11 @@ public class PlayerStats : EntityInterface
         playerHealthBar =GameManagerDD.instance.playerHealth;
         playerFear = GameManagerDD.instance.playerFear;
         color = GameManagerDD.instance.healthVignette.color;
+        audioSource = GetComponent<AudioSource>();
     }
     public override void TakeDamage(float damage)
     {
-        AudioSource.PlayClipAtPoint(takeDamage, transform.position);
+        audioSource.PlayOneShot(takeDamage);
         health -= damage;
         Debug.Log($"{entityName} took {damage} damage. Remaining health: {health}");
         playerHealthBar.fillAmount = health / maxHealth;

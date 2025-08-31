@@ -19,6 +19,7 @@ TagManager:
   - Arms
   - Lift
   - ElevatorButton
+  - Shop
   layers:
   - Default
   - TransparentFX

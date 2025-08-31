@@ -32,6 +32,12 @@ public class InventoryManager : MonoBehaviour
     private Dictionary<string, UnityEvent> resourceActions = new Dictionary<string, UnityEvent>();
 
     public Dictionary<string, int> resources = new Dictionary<string, int>();
+
+    [Space]
+    public float baseAttackPower = 10;
+    public float baseCritChance = 10;
+    public float baseHitChance = 85;
+    public float baseDodgeChance = 15;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
@@ -140,5 +146,8 @@ public class InventoryManager : MonoBehaviour
         RefreshResourceDisplay();
     }
 
-
+    public void UpdateReferences() 
+    { 
+        scroller = FindFirstObjectByType<BiscuitScroller>();
+    }
 }

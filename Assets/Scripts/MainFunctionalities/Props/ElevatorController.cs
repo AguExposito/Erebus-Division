@@ -33,7 +33,20 @@ public class ElevatorController : MonoBehaviour
         FPSController playerfpscontroller = playerInstance.GetComponent<FPSController>();
         playerfpscontroller.playerInput.Player.Disable();
         playerfpscontroller.playerInput.Encounter.Disable();
-
+        Invoke("LoadShop", 2);
+    }
+    public void LoadShop() {
+        GetComponent<MainMenu>().LoadScene(3);
+    }
+    public void NextDD() 
+    {
+        FPSController playerfpscontroller = playerInstance.GetComponent<FPSController>();
+        playerfpscontroller.playerInput.Player.Disable();
+        playerfpscontroller.playerInput.Encounter.Disable();
+        Invoke("LoadShop", 2);
+    }
+    public void LoadNewDD() {
+        GetComponent<MainMenu>().LoadScene(2);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -45,5 +58,14 @@ public class ElevatorController : MonoBehaviour
     {
         if (other.TryGetComponent<FPSController>(out FPSController playerFPSController))
             playerFPSController.isInElevator = false;
+    }
+
+    public void SavePlayerContext()
+    {
+        FPSController playerfpscontroller = playerInstance.GetComponent<FPSController>();
+        InventoryManager.Instance.baseAttackPower = playerfpscontroller.playerStats.baseAttackPower;
+        InventoryManager.Instance.baseCritChance = playerfpscontroller.playerStats.baseCritChance;
+        InventoryManager.Instance.baseDodgeChance = playerfpscontroller.playerStats.baseDodgeChance;
+        InventoryManager.Instance.baseHitChance = playerfpscontroller.playerStats.baseHitChance;
     }
 }
